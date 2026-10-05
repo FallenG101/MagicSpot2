@@ -6,9 +6,19 @@ maintainer. No additional shell/navigation redesign is included.
 
 ## Sidebar
 
-- A compact cover, song title and artist header above the words.
+- A larger rounded cover, song title, artist and album card above the words.
 - Responsive 24–32 point bold lyrics, generous line spacing, a bright active
   line and quiet surrounding lines. Font metrics stay fixed when a line changes.
+- Inter, System and Monospace font choices in Settings > Appearance. System uses
+  the platform font when available and falls back to bundled Inter. Font choices
+  change only the lyrics sidebar and preserve fallback support for other scripts.
+- A subtle optional glow behind the current timed line, without changing wrapping.
+  Untimed lyrics never receive a false current-line glow.
+- The current song's blurred cover provides the sidebar background. Artwork is
+  fetched and blurred through the existing asynchronous cache; the previous cover
+  stays until the next is ready. Glow and artwork are enabled by default and can
+  be turned off in Appearance. Without artwork, the selected theme supplies the
+  background, including pure black for OLED Blue.
 - Smooth following and gentle scroll-edge fades. Manual wheel/drag scrolling
   releases following; Follow and click-to-seek remain available.
 - Loading, missing, instrumental, error/retry and untimed content retain their
@@ -36,14 +46,15 @@ with theme, size and state selectors. Before is commit `225a65c`, using the same
 demo data, inner window size and six-second capture delay. OLED Blue is new and
 is compared with the old Dark appearance. Native captures are Windows only.
 
-The release/demo Windows test suite passed 971 tests, with one native-store test
+The release/demo Windows test suite passed 974 tests, with one native-store test
 ignored in the main suite. That dummy-grant native-store round trip passed
 separately. Strict clippy passed. Regression coverage includes stable wrapped
 line metrics, manual scroll and Follow, full-window transitions, theme persistence,
 custom-palette switching, text contrast and rendering of pages/dialogs/states.
+Font persistence and old settings defaults, glow on/off layout, untimed lyrics,
+and changing appearance while manually reading are covered by focused tests.
 The autoscroll test now locates the actual panel instead of clicking the old
 lyrics-header coordinate, which the new song header occupies.
 
-No
-startup, memory, CPU or playback-speed improvement is claimed. No dependencies,
+No startup, memory, CPU or playback-speed improvement is claimed. No dependencies,
 network services, Spotify grants or profile paths are changed by this UI work.

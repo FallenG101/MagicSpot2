@@ -36,6 +36,7 @@ No dependency changes or code from discontinued MagicSpot v3 have been imported.
 | Build validation | `.github/workflows/ci.yml` | Retain upstream checks and add release/demo compilation on each supported OS |
 | Upstream drift reporting | `.github/workflows/upstream-drift.yml`, `.github/scripts/upstream-drift.py` | Report upstream movement and overlapping changes without merging, publishing or posting comments |
 | Lyrics sidebar | `src/ui/lyrics.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Larger stable text, song header, soft edges and action-based follow/seek behavior |
+| Lyrics appearance options | `src/ui/lyrics.rs`, `src/ui/settings.rs`, `src/settings.rs`, `src/theme.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Persisted font choices, subtle active-line glow, larger cover card and cached artwork background |
 | OLED Blue | `src/theme.rs`, `src/settings.rs`, `src/app.rs`, `src/demo.rs`, `src/entrypoint.rs` | Persisted built-in black/blue palette and deterministic demo coverage |
 | App identity and release | `src/identity.rs`, profile/credential/IPC/update and shell modules, Cargo metadata, macOS/Nix metadata, `packaging/magicspot/` | Separate MagicSpot 2 from both previous apps and package normal Windows/macOS downloads |
 

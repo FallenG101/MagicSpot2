@@ -399,6 +399,21 @@ fn install_fonts(ctx: &egui::Context) {
     let mut fonts = fastframe_fonts::FontSetup::default()
         .companion("noto_emoji", std::sync::Arc::new(emoji))
         .definitions();
+    // Reuse fastframe's cached platform face and the existing script fallbacks.
+    // The lyrics family stays independent of the rest of the interface.
+    let system = fastframe_fonts::FontSetup::default()
+        .primary(fastframe_fonts::Primary::System)
+        .definitions();
+    if let Some(data) = system.font_data.get(fastframe_fonts::Weight::Bold.name()) {
+        fonts
+            .font_data
+            .insert("lyrics-system-bold".into(), data.clone());
+        let mut family = fonts.families[&fastframe_fonts::Weight::Bold.family()].clone();
+        family.insert(0, "lyrics-system-bold".into());
+        fonts
+            .families
+            .insert(egui::FontFamily::Name("lyrics-system-bold".into()), family);
+    }
     text_rendering().apply_to(&mut fonts);
     ctx.set_fonts(fonts);
 }

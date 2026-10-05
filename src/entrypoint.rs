@@ -47,7 +47,8 @@ struct Cli {
     /// `windows-taskbar`, `german`, `lyrics`, `lyrics-fullscreen`, `collection-loading`,
     /// `shuffle-selected`, `shuffle-started`, `undated-mix`, `signed-out`, `connecting`, `library-list`,
     /// `library-list-narrow`, `library-list-wide`, `library-grid`, `library-grid-narrow`,
-    /// `library-grid-wide`, or `oled`.
+    /// `library-grid-wide`, `oled`, `lyrics-system`, `lyrics-mono`, `lyrics-solid`,
+    /// `lyrics-no-glow`, or `appearance` (filter the demo settings page).
     #[cfg(feature = "demo")]
     #[arg(long)]
     demo_show: Option<String>,
@@ -543,6 +544,12 @@ pub(crate) fn run() -> eframe::Result<()> {
     #[cfg(feature = "demo")]
     let demo_inner = cli.demo_size;
     #[cfg(feature = "demo")]
+    let demo_appearance = demo
+        && cli
+            .demo_show
+            .as_deref()
+            .is_some_and(|show| show.split(',').any(|flag| flag == "appearance"));
+    #[cfg(feature = "demo")]
     spotifast::window::set_fixed_size(demo_inner.is_some());
     #[cfg(feature = "demo")]
     let demo_storage = app.dirs.cache.join("demo-window.ron");
@@ -595,6 +602,15 @@ pub(crate) fn run() -> eframe::Result<()> {
                         }
                     }
                     let mut app = lease.take(&cc.egui_ctx);
+                    #[cfg(feature = "demo")]
+                    if demo_appearance {
+                        cc.egui_ctx.data_mut(|data| {
+                            data.insert_temp(
+                                egui::Id::new("settings-filter"),
+                                spotifast::i18n::gettext(app.locale, "Appearance").into_owned(),
+                            );
+                        });
+                    }
                     // Built once per window, before the first frame; the
                     // handler wakes the loop so a menu pick is not held until
                     // the next repaint.

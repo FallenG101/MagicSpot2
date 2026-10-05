@@ -49,6 +49,38 @@ pub enum ThemeChoice {
     System,
 }
 
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LyricsFont {
+    System,
+    Monospace,
+    #[default]
+    #[serde(other)]
+    Inter,
+}
+
+impl LyricsFont {
+    pub const ALL: [Self; 3] = [Self::Inter, Self::System, Self::Monospace];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Inter => "Inter",
+            Self::System => "System",
+            Self::Monospace => "Monospace",
+        }
+    }
+
+    pub fn font_id(self, size: f32) -> egui::FontId {
+        match self {
+            Self::Inter => crate::theme::bold(size),
+            Self::System => {
+                egui::FontId::new(size, egui::FontFamily::Name("lyrics-system-bold".into()))
+            }
+            Self::Monospace => egui::FontId::monospace(size),
+        }
+    }
+}
+
 /// Whether a Home shelf is drawn. Hidden shelves still refresh normally.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
@@ -279,6 +311,9 @@ pub struct Settings {
     pub sidebar_grid: bool,
     pub sidebar_width: f32,
     pub lyrics_width: f32,
+    pub lyrics_font: LyricsFont,
+    pub lyrics_glow: bool,
+    pub lyrics_art_background: bool,
     pub queue_width: f32,
     /// Use compact single-line rows without cover art in track lists.
     pub tracklist_compact: bool,
@@ -442,6 +477,9 @@ impl Default for Settings {
             sidebar_grid: false,
             sidebar_width: 250.0,
             lyrics_width: 360.0,
+            lyrics_font: LyricsFont::default(),
+            lyrics_glow: true,
+            lyrics_art_background: true,
             queue_width: 360.0,
             tracklist_compact: false,
             middle_click_autoscroll: false,
@@ -906,6 +944,33 @@ impl ManualProxy {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn lyrics_preferences_survive_save_and_old_files_keep_defaults() {
+        let path = std::env::temp_dir().join(format!(
+            "magicspot2-lyrics-prefs-{}.json",
+            std::process::id()
+        ));
+        let older: super::Settings = serde_json::from_str(r#"{"volume":37}"#).unwrap();
+        assert_eq!(older.volume, 37);
+        assert_eq!(older.lyrics_font, super::LyricsFont::Inter);
+        assert!(older.lyrics_glow && older.lyrics_art_background);
+        let future: super::Settings =
+            serde_json::from_str(r#"{"lyrics_font":"future_font","volume":37}"#).unwrap();
+        assert_eq!(future.volume, 37);
+        assert_eq!(future.lyrics_font, super::LyricsFont::Inter);
+        for font in super::LyricsFont::ALL {
+            let settings = super::Settings {
+                lyrics_font: font,
+                lyrics_glow: false,
+                lyrics_art_background: false,
+                volume: 37,
+                ..Default::default()
+            };
+            settings.save(&path);
+            assert_eq!(super::Settings::load(&path), settings);
+        }
+        std::fs::remove_file(path).unwrap();
+    }
     use super::Settings;
 
     #[test]

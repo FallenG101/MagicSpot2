@@ -9090,6 +9090,22 @@ impl App {
                 ctx.set_theme(self.theme_preference());
                 self.apply_theme(ctx);
             }
+            Action::SetLyricsFont(font) => {
+                self.settings.lyrics_font = font;
+                self.lyrics_line_shown = None;
+                self.mark_settings_dirty();
+                ctx.request_repaint();
+            }
+            Action::SetLyricsGlow(enabled) => {
+                self.settings.lyrics_glow = enabled;
+                self.mark_settings_dirty();
+                ctx.request_repaint();
+            }
+            Action::SetLyricsArtBackground(enabled) => {
+                self.settings.lyrics_art_background = enabled;
+                self.mark_settings_dirty();
+                ctx.request_repaint();
+            }
             Action::SetLanguage(choice) => {
                 self.settings.language = choice;
                 self.locale = choice.resolve();
@@ -10456,6 +10472,31 @@ mod radio;
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn lyrics_appearance_actions_keep_playback_and_manual_reading() {
+        let ctx = egui::Context::default();
+        let mut app = test_app("lyrics-appearance-actions");
+        crate::demo::populate(&mut app);
+        app.lyrics_following = false;
+        app.lyrics_line_shown = Some(Some(3));
+        let playing = app.control_snapshot();
+        app.apply(
+            Action::SetLyricsFont(crate::settings::LyricsFont::System),
+            &ctx,
+        );
+        app.apply(Action::SetLyricsGlow(false), &ctx);
+        app.apply(Action::SetLyricsArtBackground(false), &ctx);
+        assert_eq!(
+            app.settings.lyrics_font,
+            crate::settings::LyricsFont::System
+        );
+        assert!(!app.settings.lyrics_glow && !app.settings.lyrics_art_background);
+        assert_eq!(app.lyrics_line_shown, None);
+        assert!(!app.lyrics_following);
+        assert_eq!(app.control_snapshot(), playing);
+        assert!(app.settings_dirty);
+        app.backend.shutdown();
+    }
     use std::sync::Arc;
 
     use super::*;

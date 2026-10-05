@@ -47,7 +47,21 @@ fn blend(from: egui::Color32, to: egui::Color32, t: f32) -> egui::Color32 {
 }
 
 pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
-    let palette = app.palette;
+    let art = app
+        .settings
+        .lyrics_art_background
+        .then(|| {
+            app.now_playing()
+                .and_then(|now| preferred_backdrop_art(now.art_small, now.art_url))
+        })
+        .flatten();
+    let mut palette = app.palette;
+    if art.is_some() {
+        palette = theme::Palette::dark();
+        palette.accent = app.palette.accent;
+        palette.accent_hover = app.palette.accent_hover;
+        palette.on_accent = app.palette.on_accent;
+    }
     let fit = super::yielding_panel(
         ui.ctx(),
         "lyrics-panel",
@@ -66,6 +80,10 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
                 .inner_margin(Margin::symmetric(20, 16)),
         );
     let response = panel.show(ui, |ui| {
+        if let Some(art) = art.as_deref() {
+            sidebar_background(app, ui, art);
+        }
+        theme::apply_local(ui, &palette);
         let window_controls = super::window_controls_reservation(
             ui.ctx(),
             app.show_queue_panel,
@@ -122,9 +140,9 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
             });
         });
         ui.add_space(18.0);
-        sidebar_track_heading(app, ui);
+        sidebar_track_heading(app, ui, &palette);
         ui.add_space(18.0);
-        contents(app, ui);
+        contents(app, ui, &palette, art.is_some());
     });
     let current_width = response.response.rect.width();
     if (app.settings.lyrics_width - current_width).abs() > 1.0
@@ -135,19 +153,43 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
     }
 }
 
-fn sidebar_track_heading(app: &App, ui: &mut egui::Ui) {
+fn sidebar_background(app: &mut App, ui: &mut egui::Ui, art: &str) {
+    let rect = ui.max_rect().expand2(vec2(20.0, 16.0));
+    let painter = ui.painter().with_clip_rect(rect);
+    if let Some(texture) = app
+        .lyrics_backdrop
+        .texture(ui.ctx(), app.backend.art(), Some(art))
+    {
+        painter.image(
+            texture.id(),
+            rect,
+            cover_uv(rect.size(), texture.size_vec2()),
+            Color32::from_gray(180),
+        );
+    }
+    // Keep even a white cover dark enough for the large inactive words.
+    painter.rect_filled(rect, 0.0, Color32::from_black_alpha(160));
+    widgets::paint_vertical_gradient(
+        ui,
+        rect,
+        Color32::TRANSPARENT,
+        Color32::from_black_alpha(95),
+    );
+}
+
+fn sidebar_track_heading(app: &App, ui: &mut egui::Ui, palette: &theme::Palette) {
     let Some(now) = app.now_playing() else {
         return;
     };
-    let palette = app.palette;
     ui.horizontal(|ui| {
-        let (cover, _) = ui.allocate_exact_size(vec2(40.0, 40.0), Sense::hover());
+        let size = (ui.available_width() * 0.4).clamp(88.0, 144.0);
+        let (cover, _) = ui.allocate_exact_size(vec2(size, size), Sense::hover());
         widgets::paint_cover(
             ui,
-            &palette,
-            now.art_small.as_deref().or(now.art_url.as_deref()),
+            palette,
+            now.art_url.as_deref().or(now.art_small.as_deref()),
             cover,
-            6.0,
+            12.0,
             Icon::Music,
             Some(app.backend.art()),
         );
@@ -156,7 +198,7 @@ fn sidebar_track_heading(app: &App, ui: &mut egui::Ui) {
             ui.add(
                 egui::Label::new(
                     egui::RichText::new(&now.title)
-                        .font(theme::semibold(15.0))
+                        .font(theme::bold(18.0))
                         .color(palette.text),
                 )
                 .truncate(),
@@ -164,17 +206,27 @@ fn sidebar_track_heading(app: &App, ui: &mut egui::Ui) {
             ui.add(
                 egui::Label::new(
                     egui::RichText::new(&now.subtitle)
-                        .font(theme::regular(12.0))
+                        .font(theme::regular(14.0))
                         .color(palette.secondary),
                 )
                 .truncate(),
             );
+            if !now.album_name.is_empty() {
+                ui.add(
+                    egui::Label::new(
+                        egui::RichText::new(&now.album_name)
+                            .font(theme::regular(12.0))
+                            .color(palette.secondary),
+                    )
+                    .truncate(),
+                );
+            }
         });
     });
 }
 
-fn contents(app: &mut App, ui: &mut egui::Ui) {
-    let palette = app.palette;
+fn contents(app: &mut App, ui: &mut egui::Ui, palette: &theme::Palette, art_background: bool) {
+    let palette = *palette;
     let Some(now) = app.now_playing() else {
         widgets::empty_state(
             ui,
@@ -289,7 +341,7 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                 } else {
                     palette.text
                 };
-                let font = theme::bold(size);
+                let font = app.settings.lyrics_font.font_id(size);
                 // A timed line with no words is the band playing on.
                 let text = if line.text.is_empty() && lyrics.synced {
                     "\u{266a}"
@@ -301,8 +353,8 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                 } else {
                     Sense::hover()
                 };
-                let response = if crate::bidi::is_rtl(text) {
-                    let galley = crate::bidi::layout(
+                let galley = if crate::bidi::is_rtl(text) {
+                    crate::bidi::layout(
                         ui.painter(),
                         text,
                         font,
@@ -310,14 +362,44 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                         ui.available_width(),
                         usize::MAX,
                         None,
-                    );
-                    ui.add(egui::Label::new(galley).sense(sense))
-                } else {
-                    ui.add(
-                        egui::Label::new(egui::RichText::new(text).font(font).color(color))
-                            .sense(sense),
                     )
+                } else {
+                    ui.painter()
+                        .layout(text.to_owned(), font, color, ui.available_width())
                 };
+                // Reserve a paint slot behind the sharp, accessible label.
+                let glow_slot = ui.painter().add(egui::Shape::Noop);
+                let response = ui.add(egui::Label::new(galley.clone()).sense(sense));
+                if app.settings.lyrics_glow
+                    && lyrics.synced
+                    && lit > 0.01
+                    && ui.is_rect_visible(response.rect)
+                {
+                    let glow = palette.text.gamma_multiply(0.09 * lit);
+                    let shapes = [
+                        vec2(-1.5, 0.0),
+                        vec2(1.5, 0.0),
+                        vec2(0.0, -1.5),
+                        vec2(0.0, 1.5),
+                        vec2(-1.0, -1.0),
+                        vec2(1.0, -1.0),
+                        vec2(-1.0, 1.0),
+                        vec2(1.0, 1.0),
+                    ]
+                    .into_iter()
+                    .map(|offset| {
+                        egui::Shape::Text(
+                            egui::epaint::TextShape::new(
+                                response.rect.min + offset,
+                                galley.clone(),
+                                glow,
+                            )
+                            .with_override_text_color(glow),
+                        )
+                    })
+                    .collect();
+                    ui.painter().set(glow_slot, egui::Shape::Vec(shapes));
+                }
                 crate::autoscroll::row(ui, &response);
                 let rect = response.rect;
                 if lyrics.synced
@@ -364,24 +446,31 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
         app.actions.push(Action::PauseLyricsFollow);
     }
     let fade = 28.0_f32.min(scroll.inner_rect.height() * 0.1);
-    let clear = palette.panel.gamma_multiply(0.0);
+    let edge = if art_background {
+        Color32::from_black_alpha(70)
+    } else {
+        palette.panel
+    };
+    let left = scroll.inner_rect.left() - if art_background { 20.0 } else { 0.0 };
+    let right = scroll.inner_rect.right() + if art_background { 20.0 } else { 0.0 };
+    let clear = Color32::TRANSPARENT;
     widgets::paint_vertical_gradient(
         ui,
         Rect::from_min_max(
-            scroll.inner_rect.min,
-            pos2(scroll.inner_rect.right(), scroll.inner_rect.top() + fade),
+            pos2(left, scroll.inner_rect.top()),
+            pos2(right, scroll.inner_rect.top() + fade),
         ),
-        palette.panel,
+        edge,
         clear,
     );
     widgets::paint_vertical_gradient(
         ui,
         Rect::from_min_max(
-            pos2(scroll.inner_rect.left(), scroll.inner_rect.bottom() - fade),
-            scroll.inner_rect.max,
+            pos2(left, scroll.inner_rect.bottom() - fade),
+            pos2(right, scroll.inner_rect.bottom()),
         ),
         clear,
-        palette.panel,
+        edge,
     );
 }
 

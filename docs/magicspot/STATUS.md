@@ -15,12 +15,14 @@ Maintain the small lyrics/theme improvements and keep current with Spotifast. Ai
 - Retained upstream CI, added normal release/demo builds on all three targets, and restricted inherited publishing/packaging/triage to its original owner.
 - Added report-only upstream drift reporting, including changed-file overlap.
 - Implemented the lyrics/OLED pass in its own commit, `e252ee0`.
+- Added the requested font options, subtle active-line glow, larger song card and
+  artwork-derived sidebar background as a separate UI adjustment.
 - Separated executable, profile, secure-store, window state, IPC, tray, media, Connect name and updater identities. See `IDENTITY.md`.
 - Prepared `2.0.0-preview.1`: normal Windows x64 ZIP and universal macOS DMG, both without demo data or MilkDrop. Retained all license notices.
 
 ## Validation
 
-The Windows release/demo suite passed 971 tests with one ignored native-store round trip; that exact dummy-grant native-store test passed separately. Strict clippy passed. Packaging regression suites passed four tests each. Native Windows captures cover light, dark and OLED Blue, normal/narrow windows and lyrics states. See `UI_NOTES.md` and the historical `BASELINE.md`.
+The Windows release/demo suite passed 974 tests with one ignored native-store round trip; that exact dummy-grant native-store test passed separately. Strict clippy passed. Packaging regression suites passed four tests each. Native Windows captures cover light, dark and OLED Blue, normal/narrow windows, lyrics states and appearance options. See `UI_NOTES.md` and the historical `BASELINE.md`.
 
 The normal release build and release-commit CI/package verification are the final publication checks. macOS runs on GitHub's native runner; the DMG check mounts the image and verifies bundle identity, version, signature and both architectures. No local macOS or Linux interactive session is claimed.
 

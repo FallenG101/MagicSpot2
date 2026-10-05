@@ -969,6 +969,10 @@ pub fn apply_flags(app: &mut App, page: Option<&str>, show: Option<&str>) {
                 app.settings.theme = crate::settings::ThemeChoice::OledBlue;
                 app.actions.push(Action::SettingsChanged);
             }
+            "lyrics-system" => app.settings.lyrics_font = crate::settings::LyricsFont::System,
+            "lyrics-mono" => app.settings.lyrics_font = crate::settings::LyricsFont::Monospace,
+            "lyrics-solid" => app.settings.lyrics_art_background = false,
+            "lyrics-no-glow" => app.settings.lyrics_glow = false,
             "song-top-result" => {
                 if let Loadable::Loaded(results) = &mut app.search.results {
                     results.artists = None;
@@ -6304,6 +6308,73 @@ mod tests {
         );
         assert!(app.lyrics_following, "Follow resumes the song");
         app.backend.shutdown();
+    }
+
+    #[test]
+    fn sidebar_font_choices_and_glow_preserve_line_layout_and_plain_lyrics() {
+        for font in crate::settings::LyricsFont::ALL {
+            let (ctx, mut app) = accessible_app(&format!("lyrics-font-{}", font.label()));
+            app.show_lyrics_panel = true;
+            app.settings.lyrics_font = font;
+            app.settings.lyrics_art_background = false;
+            app.lyrics = Loadable::Loaded(Some(sample_lyrics()));
+            let remote = app.remote.as_mut().unwrap();
+            remote.state.is_playing = false;
+            remote.state.progress_ms = Some(41_000);
+            let mut sizes = Vec::new();
+            for (step, glow) in [false, true].into_iter().enumerate() {
+                app.settings.lyrics_glow = glow;
+                for frame in 0..40 {
+                    let mut output = ctx.run_ui(
+                        egui::RawInput {
+                            screen_rect: Some(egui::Rect::from_min_size(
+                                egui::Pos2::ZERO,
+                                egui::vec2(1280.0, 800.0),
+                            )),
+                            time: Some(step as f64 + f64::from(frame) / 40.0),
+                            ..Default::default()
+                        },
+                        |ui| app.frame_ui(ui),
+                    );
+                    output.textures_delta.clear();
+                    if frame == 39 {
+                        let text = "Streetlights blinking down the river road";
+                        let line = output
+                            .shapes
+                            .iter()
+                            .find_map(|shape| match &shape.shape {
+                                egui::Shape::Text(line) if line.galley.job.text == text => {
+                                    Some(line)
+                                }
+                                _ => None,
+                            })
+                            .expect("the active line is visible");
+                        let size = line.galley.job.sections[0].format.font_id.size;
+                        assert_eq!(
+                            line.galley.job.sections[0].format.font_id,
+                            font.font_id(size)
+                        );
+                        sizes.push(line.galley.size());
+                        let halo = output.shapes.iter().any(|shape| match &shape.shape {
+                            egui::Shape::Vec(shapes) => shapes.iter().any(|shape| matches!(shape,
+                                egui::Shape::Text(line) if line.galley.job.text == text && line.override_text_color.is_some())),
+                            _ => false,
+                        });
+                        assert_eq!(halo, glow, "{}", font.label());
+                    }
+                }
+            }
+            assert_eq!(sizes[0], sizes[1], "glow must not change wrapping");
+            let mut plain = sample_lyrics();
+            plain.synced = false;
+            app.lyrics = Loadable::Loaded(Some(plain));
+            let mut output = ctx.run_ui(egui::RawInput::default(), |ui| app.frame_ui(ui));
+            assert!(!output.shapes.iter().any(|shape| matches!(&shape.shape, egui::Shape::Vec(shapes)
+                if shapes.iter().any(|shape| matches!(shape, egui::Shape::Text(line) if line.override_text_color.is_some())))),
+                "plain lyrics have no active-line glow");
+            output.textures_delta.clear();
+            app.backend.shutdown();
+        }
     }
 
     #[test]

@@ -882,10 +882,72 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                 "Show the song moving behind the player bar's controls while it plays here.",
             ),
         ),
+        RowText::new("Lyrics font", "Choose the sidebar's typeface without changing the rest of the app."),
+        RowText::new("Current-line glow", "A subtle halo behind the words being sung."),
+        RowText::new("Lyrics album-art background", "Use softened cover colours behind the lyrics. Turn off for a solid theme background."),
     ];
     if section_matches(&needle, &appearance, &appearance_rows) {
         any_visible = true;
         section(ui, &palette, &appearance, |ui| {
+            filtered_row(
+                ui,
+                &palette,
+                &needle,
+                &appearance,
+                &appearance_rows[9],
+                |ui| {
+                    let selected = app.settings.lyrics_font;
+                    egui::ComboBox::from_id_salt("lyrics_font")
+                        .selected_text(selected.label())
+                        .width(160.0_f32.min(ui.available_width()))
+                        .show_ui(ui, |ui| {
+                            for font in crate::settings::LyricsFont::ALL {
+                                if ui
+                                    .selectable_label(font == selected, font.label())
+                                    .clicked()
+                                {
+                                    app.actions.push(Action::SetLyricsFont(font));
+                                }
+                            }
+                        })
+                        .response
+                        .widget_info(|| {
+                            egui::WidgetInfo::labeled(
+                                egui::WidgetType::ComboBox,
+                                ui.is_enabled(),
+                                "Lyrics font",
+                            )
+                        });
+                },
+            );
+            filtered_row(
+                ui,
+                &palette,
+                &needle,
+                &appearance,
+                &appearance_rows[10],
+                |ui| {
+                    let mut enabled = app.settings.lyrics_glow;
+                    if widgets::switch(ui, &palette, "Current-line glow", &mut enabled).changed() {
+                        app.actions.push(Action::SetLyricsGlow(enabled));
+                    }
+                },
+            );
+            filtered_row(
+                ui,
+                &palette,
+                &needle,
+                &appearance,
+                &appearance_rows[11],
+                |ui| {
+                    let mut enabled = app.settings.lyrics_art_background;
+                    if widgets::switch(ui, &palette, "Lyrics album-art background", &mut enabled)
+                        .changed()
+                    {
+                        app.actions.push(Action::SetLyricsArtBackground(enabled));
+                    }
+                },
+            );
             // Wide enough for the theme's two buttons side by side.
             let theme_buttons_width = theme::soft_button_width(ui, &theme_guide)
                 + theme::soft_button_width(ui, &themes_folder)
