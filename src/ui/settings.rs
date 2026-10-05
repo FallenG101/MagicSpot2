@@ -885,6 +885,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
         RowText::new("Lyrics font", "Choose the sidebar's typeface without changing the rest of the app."),
         RowText::new("Current-line glow", "A subtle halo behind the words being sung."),
         RowText::new("Lyrics album-art background", "Use softened cover colours behind the lyrics. Turn off for a solid theme background."),
+        RowText::new("Lyrics font size", "Auto fits the sidebar. Turn Auto off to choose a size in points."),
     ];
     if section_matches(&needle, &appearance, &appearance_rows) {
         any_visible = true;
@@ -918,6 +919,47 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                                 "Lyrics font",
                             )
                         });
+                },
+            );
+            filtered_row(
+                ui,
+                &palette,
+                &needle,
+                &appearance,
+                &appearance_rows[12],
+                |ui| {
+                    let automatic = app.settings.lyrics_font_size.is_none();
+                    ui.horizontal(|ui| {
+                        if theme::soft_button(ui, &palette, None, "Auto", automatic)
+                            .on_hover_text("Automatically fit the sidebar")
+                            .clicked()
+                        {
+                            app.actions
+                                .push(Action::SetLyricsFontSize(automatic.then_some(28)));
+                        }
+                        ui.add_enabled_ui(!automatic, |ui| {
+                            ui.spacing_mut().slider_width = 90.0;
+                            let mut size = app.settings.lyrics_font_size.unwrap_or(28);
+                            let response = setting_slider(
+                                ui,
+                                &palette,
+                                &mut size,
+                                18..=48,
+                                |slider| slider,
+                                |value| value.suffix(" pt"),
+                            );
+                            response.widget_info(|| {
+                                egui::WidgetInfo::labeled(
+                                    egui::WidgetType::Slider,
+                                    ui.is_enabled(),
+                                    "Lyrics font size",
+                                )
+                            });
+                            if response.changed() {
+                                app.actions.push(Action::SetLyricsFontSize(Some(size)));
+                            }
+                        });
+                    });
                 },
             );
             filtered_row(

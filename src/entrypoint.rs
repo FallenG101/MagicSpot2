@@ -48,7 +48,8 @@ struct Cli {
     /// `shuffle-selected`, `shuffle-started`, `undated-mix`, `signed-out`, `connecting`, `library-list`,
     /// `library-list-narrow`, `library-list-wide`, `library-grid`, `library-grid-narrow`,
     /// `library-grid-wide`, `oled`, `lyrics-system`, `lyrics-mono`, `lyrics-solid`,
-    /// `lyrics-no-glow`, or `appearance` (filter the demo settings page).
+    /// `lyrics-no-glow`, `lyrics-wide`, `lyrics-large`, or `appearance` (filter
+    /// the demo settings page).
     #[cfg(feature = "demo")]
     #[arg(long)]
     demo_show: Option<String>,

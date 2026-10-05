@@ -182,7 +182,7 @@ fn sidebar_track_heading(app: &App, ui: &mut egui::Ui, palette: &theme::Palette)
         return;
     };
     ui.horizontal(|ui| {
-        let size = (ui.available_width() * 0.4).clamp(88.0, 144.0);
+        let size = (ui.available_width() * 0.4).clamp(88.0, 240.0);
         let (cover, _) = ui.allocate_exact_size(vec2(size, size), Sense::hover());
         widgets::paint_cover(
             ui,
@@ -297,7 +297,11 @@ fn contents(app: &mut App, ui: &mut egui::Ui, palette: &theme::Palette, art_back
         });
     let following = app.lyrics_following && !manual_scroll;
     let follow = following && app.lyrics_line_shown != Some(active);
-    let size = sidebar_line_size(ui.available_width());
+    let size = app
+        .settings
+        .lyrics_font_size
+        .map(|size| f32::from(size.clamp(18, 48)))
+        .unwrap_or_else(|| sidebar_line_size(ui.available_width()));
     // All lines keep identical font metrics; only color changes when sung.
     let quiet = if palette.dark {
         blend(palette.panel, palette.text, 0.5)

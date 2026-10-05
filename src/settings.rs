@@ -312,6 +312,8 @@ pub struct Settings {
     pub sidebar_width: f32,
     pub lyrics_width: f32,
     pub lyrics_font: LyricsFont,
+    /// None fits the sidebar; a chosen size is in points.
+    pub lyrics_font_size: Option<u8>,
     pub lyrics_glow: bool,
     pub lyrics_art_background: bool,
     pub queue_width: f32,
@@ -478,6 +480,7 @@ impl Default for Settings {
             sidebar_width: 250.0,
             lyrics_width: 360.0,
             lyrics_font: LyricsFont::default(),
+            lyrics_font_size: None,
             lyrics_glow: true,
             lyrics_art_background: true,
             queue_width: 360.0,
@@ -953,6 +956,7 @@ mod tests {
         let older: super::Settings = serde_json::from_str(r#"{"volume":37}"#).unwrap();
         assert_eq!(older.volume, 37);
         assert_eq!(older.lyrics_font, super::LyricsFont::Inter);
+        assert_eq!(older.lyrics_font_size, None);
         assert!(older.lyrics_glow && older.lyrics_art_background);
         let future: super::Settings =
             serde_json::from_str(r#"{"lyrics_font":"future_font","volume":37}"#).unwrap();
@@ -961,6 +965,7 @@ mod tests {
         for font in super::LyricsFont::ALL {
             let settings = super::Settings {
                 lyrics_font: font,
+                lyrics_font_size: Some(34),
                 lyrics_glow: false,
                 lyrics_art_background: false,
                 volume: 37,

@@ -1096,6 +1096,7 @@ pub enum Action {
     SettingsChanged,
     SetTheme(crate::settings::ThemeChoice),
     SetLyricsFont(crate::settings::LyricsFont),
+    SetLyricsFontSize(Option<u8>),
     SetLyricsGlow(bool),
     SetLyricsArtBackground(bool),
     /// Draw the interface in this language from the next frame on.

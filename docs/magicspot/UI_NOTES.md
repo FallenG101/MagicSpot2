@@ -7,11 +7,14 @@ maintainer. No additional shell/navigation redesign is included.
 ## Sidebar
 
 - A larger rounded cover, song title, artist and album card above the words.
+  The cover scales with the sidebar width, up to 240 points in an expanded panel.
 - Responsive 24–32 point bold lyrics, generous line spacing, a bright active
   line and quiet surrounding lines. Font metrics stay fixed when a line changes.
 - Inter, System and Monospace font choices in Settings > Appearance. System uses
   the platform font when available and falls back to bundled Inter. Font choices
   change only the lyrics sidebar and preserve fallback support for other scripts.
+- Font size can be set from 18 to 48 points. Auto (the default) keeps the
+  responsive 24–32 point sizing. Turn Auto off to use the size slider; it is saved.
 - A subtle optional glow behind the current timed line, without changing wrapping.
   Untimed lyrics never receive a false current-line glow.
 - The current song's blurred cover provides the sidebar background. Artwork is
@@ -53,6 +56,9 @@ line metrics, manual scroll and Follow, full-window transitions, theme persisten
 custom-palette switching, text contrast and rendering of pages/dialogs/states.
 Font persistence and old settings defaults, glow on/off layout, untimed lyrics,
 and changing appearance while manually reading are covered by focused tests.
+The final width/size adjustment also has native captures of the expanded cover,
+40-point lyrics and the Appearance controls. Its demo flags are `lyrics-wide`
+and `lyrics-large`; final cross-platform compilation remains a CI gate.
 The autoscroll test now locates the actual panel instead of clicking the old
 lyrics-header coordinate, which the new song header occupies.
 

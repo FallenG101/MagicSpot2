@@ -9101,6 +9101,12 @@ impl App {
                 self.mark_settings_dirty();
                 ctx.request_repaint();
             }
+            Action::SetLyricsFontSize(size) => {
+                self.settings.lyrics_font_size = size.map(|size| size.clamp(18, 48));
+                self.lyrics_line_shown = None;
+                self.mark_settings_dirty();
+                ctx.request_repaint();
+            }
             Action::SetLyricsArtBackground(enabled) => {
                 self.settings.lyrics_art_background = enabled;
                 self.mark_settings_dirty();
@@ -10485,16 +10491,24 @@ mod tests {
             &ctx,
         );
         app.apply(Action::SetLyricsGlow(false), &ctx);
+        app.apply(Action::SetLyricsFontSize(Some(42)), &ctx);
         app.apply(Action::SetLyricsArtBackground(false), &ctx);
         assert_eq!(
             app.settings.lyrics_font,
             crate::settings::LyricsFont::System
         );
         assert!(!app.settings.lyrics_glow && !app.settings.lyrics_art_background);
+        assert_eq!(app.settings.lyrics_font_size, Some(42));
         assert_eq!(app.lyrics_line_shown, None);
         assert!(!app.lyrics_following);
         assert_eq!(app.control_snapshot(), playing);
         assert!(app.settings_dirty);
+        app.apply(Action::SetLyricsFontSize(Some(0)), &ctx);
+        assert_eq!(app.settings.lyrics_font_size, Some(18));
+        app.apply(Action::SetLyricsFontSize(Some(255)), &ctx);
+        assert_eq!(app.settings.lyrics_font_size, Some(48));
+        app.apply(Action::SetLyricsFontSize(None), &ctx);
+        assert_eq!(app.settings.lyrics_font_size, None);
         app.backend.shutdown();
     }
     use std::sync::Arc;

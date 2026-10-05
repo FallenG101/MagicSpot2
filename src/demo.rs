@@ -86,7 +86,7 @@ const TRACKS: &[&str] = &[
 
 /// Invented Hebrew and Arabic titles for `--demo-show rtl`: whole lines,
 /// lines mixed with English, numbers, brackets, and punctuation.
-#[cfg(feature = "demo")]
+#[cfg(any(feature = "demo", test))]
 const RTL_TRACKS: &[(&str, &str, &str)] = &[
     ("שיר ישן (גרסה חיה)", "להקת הים", "גלים, 2024"),
     ("Song 12 שיר ישן, part 3", "Kasia & נועה", "Sessions: חלק ב"),
@@ -654,7 +654,7 @@ fn sample_lyrics() -> crate::lyrics::Lyrics {
 /// Applies `--demo-page` and `--demo-show`.
 /// Makes the displayed song this computer's playback, with that song's own
 /// metadata, so the player bar draws the same as without it.
-#[cfg(feature = "demo")]
+#[cfg(any(feature = "demo", test))]
 fn play_here(app: &mut App) {
     app.local_ready = true;
     let now = app.now_playing();
@@ -687,7 +687,7 @@ fn play_here(app: &mut App) {
 /// through the mids and highs, a bright hi-hat hiss and pink noise
 /// beneath, so a visualizer shows peaks across the whole range rather
 /// than a slope from the bass.
-#[cfg(feature = "demo")]
+#[cfg(any(feature = "demo", test))]
 fn demo_sound() -> Vec<f64> {
     // Frequency and level of each partial, uneven on purpose so
     // neighbouring bands stand at different heights.
@@ -748,7 +748,7 @@ fn demo_sound() -> Vec<f64> {
         .collect()
 }
 
-#[cfg(feature = "demo")]
+#[cfg(any(feature = "demo", test))]
 pub fn apply_flags(app: &mut App, page: Option<&str>, show: Option<&str>) {
     // Default screenshots to the main window regardless of saved settings.
     app.settings.winamp_window = false;
@@ -973,6 +973,8 @@ pub fn apply_flags(app: &mut App, page: Option<&str>, show: Option<&str>) {
             "lyrics-mono" => app.settings.lyrics_font = crate::settings::LyricsFont::Monospace,
             "lyrics-solid" => app.settings.lyrics_art_background = false,
             "lyrics-no-glow" => app.settings.lyrics_glow = false,
+            "lyrics-wide" => app.settings.lyrics_width = 640.0,
+            "lyrics-large" => app.settings.lyrics_font_size = Some(40),
             "song-top-result" => {
                 if let Loadable::Loaded(results) = &mut app.search.results {
                     results.artists = None;
@@ -6316,6 +6318,7 @@ mod tests {
             let (ctx, mut app) = accessible_app(&format!("lyrics-font-{}", font.label()));
             app.show_lyrics_panel = true;
             app.settings.lyrics_font = font;
+            app.settings.lyrics_font_size = Some(34);
             app.settings.lyrics_art_background = false;
             app.lyrics = Loadable::Loaded(Some(sample_lyrics()));
             let remote = app.remote.as_mut().unwrap();
@@ -6350,6 +6353,7 @@ mod tests {
                             })
                             .expect("the active line is visible");
                         let size = line.galley.job.sections[0].format.font_id.size;
+                        assert_eq!(size, 34.0);
                         assert_eq!(
                             line.galley.job.sections[0].format.font_id,
                             font.font_id(size)
