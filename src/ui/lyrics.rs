@@ -9,8 +9,12 @@ use crate::theme::{self, Icon};
 
 use super::widgets;
 
-const LINE_SIZE: f32 = 19.0;
-const LINE_GAP: f32 = 10.0;
+const LINE_GAP: f32 = 22.0;
+const SIDEBAR_SUNG_LINE_AT: f32 = 0.28;
+
+fn sidebar_line_size(width: f32) -> f32 {
+    (width * 0.085).clamp(24.0, 32.0)
+}
 /// Where the line being sung sits, as a fraction of the visible lyrics from
 /// the top: high up, so the lines to come fill most of the view.
 const SUNG_LINE_AT: f32 = 0.2;
@@ -18,7 +22,16 @@ const SUNG_LINE_AT: f32 = 0.2;
 /// Scrolls so the middle of `line` sits `SUNG_LINE_AT` of the way down the
 /// visible lyrics.
 fn show_sung_line(ui: &egui::Ui, line: Rect, animation: Option<egui::style::ScrollAnimation>) {
-    let above = (ui.clip_rect().height() * SUNG_LINE_AT - line.height() / 2.0).max(0.0);
+    show_sung_line_at(ui, line, animation, SUNG_LINE_AT);
+}
+
+fn show_sung_line_at(
+    ui: &egui::Ui,
+    line: Rect,
+    animation: Option<egui::style::ScrollAnimation>,
+    fraction: f32,
+) {
+    let above = (ui.clip_rect().height() * fraction - line.height() / 2.0).max(0.0);
     let target = Rect::from_min_max(pos2(line.left(), line.top() - above), line.max);
     match animation {
         Some(animation) => ui.scroll_to_rect_animation(target, Some(Align::Min), animation),
@@ -26,7 +39,7 @@ fn show_sung_line(ui: &egui::Ui, line: Rect, animation: Option<egui::style::Scro
     }
 }
 /// How long a line takes to light up or fade.
-const LIGHT_UP_SECONDS: f32 = 0.22;
+const LIGHT_UP_SECONDS: f32 = 0.3;
 
 fn blend(from: egui::Color32, to: egui::Color32, t: f32) -> egui::Color32 {
     let t = t.clamp(0.0, 1.0);
@@ -50,7 +63,7 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
         .frame(
             Frame::new()
                 .fill(palette.panel)
-                .inner_margin(Margin::symmetric(12, 12)),
+                .inner_margin(Margin::symmetric(20, 16)),
         );
     let response = panel.show(ui, |ui| {
         let window_controls = super::window_controls_reservation(
@@ -104,12 +117,13 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
                     )
                     .clicked()
                 {
-                    app.lyrics_following = true;
-                    app.lyrics_line_shown = None;
+                    app.actions.push(Action::FollowLyrics);
                 }
             });
         });
-        ui.add_space(8.0);
+        ui.add_space(18.0);
+        sidebar_track_heading(app, ui);
+        ui.add_space(18.0);
         contents(app, ui);
     });
     let current_width = response.response.rect.width();
@@ -119,6 +133,44 @@ pub fn side_panel(app: &mut App, ui: &mut egui::Ui) {
         app.settings.lyrics_width = current_width;
         app.actions.push(Action::SettingsChanged);
     }
+}
+
+fn sidebar_track_heading(app: &App, ui: &mut egui::Ui) {
+    let Some(now) = app.now_playing() else {
+        return;
+    };
+    let palette = app.palette;
+    ui.horizontal(|ui| {
+        let (cover, _) = ui.allocate_exact_size(vec2(40.0, 40.0), Sense::hover());
+        widgets::paint_cover(
+            ui,
+            &palette,
+            now.art_small.as_deref().or(now.art_url.as_deref()),
+            cover,
+            6.0,
+            Icon::Music,
+            Some(app.backend.art()),
+        );
+        ui.add_space(4.0);
+        ui.vertical(|ui| {
+            ui.add(
+                egui::Label::new(
+                    egui::RichText::new(&now.title)
+                        .font(theme::semibold(15.0))
+                        .color(palette.text),
+                )
+                .truncate(),
+            );
+            ui.add(
+                egui::Label::new(
+                    egui::RichText::new(&now.subtitle)
+                        .font(theme::regular(12.0))
+                        .color(palette.secondary),
+                )
+                .truncate(),
+            );
+        });
+    });
 }
 
 fn contents(app: &mut App, ui: &mut egui::Ui) {
@@ -150,7 +202,7 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
             ui.add_space(8.0);
             if theme::pill_button(ui, &palette, &gettext(app.locale, "Try again"), false).clicked()
             {
-                app.request_lyrics();
+                app.actions.push(Action::RetryLyrics);
             }
             return;
         }
@@ -178,15 +230,36 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
     };
 
     let active = lyrics.active_line(now.position_ms);
-    let follow = app.lyrics_following && app.lyrics_line_shown != Some(active);
-    // The line being sung is bold and in the accent colour; every other
-    // line is quiet, regular text, the same before and after it has been
-    // sung. A line takes 220 ms to light up or fade, as in omarchy-lyrics.
-    let quiet = palette.text.gamma_multiply(0.45);
+    if !app
+        .actions
+        .iter()
+        .any(|action| matches!(action, Action::FollowLyrics))
+    {
+        app.actions.push(Action::SidebarLyricsLineShown(active));
+    }
+    let viewport = ui.available_rect_before_wrap();
+    let manual_scroll = ui.rect_contains_pointer(viewport)
+        && ui.input(|input| {
+            input.smooth_scroll_delta.y != 0.0
+                || (input.pointer.primary_down() && input.pointer.delta().y != 0.0)
+        });
+    let following = app.lyrics_following && !manual_scroll;
+    let follow = following && app.lyrics_line_shown != Some(active);
+    let size = sidebar_line_size(ui.available_width());
+    // All lines keep identical font metrics; only color changes when sung.
+    let quiet = if palette.dark {
+        blend(palette.panel, palette.text, 0.5)
+    } else {
+        palette.secondary
+    };
+    let animation = app
+        .lyrics_line_shown
+        .map(|_| egui::style::ScrollAnimation::duration(0.38));
+    ui.spacing_mut().scroll.fade.strength = 0.0;
     let scroll = crate::autoscroll::show(
         ui,
         egui::ScrollArea::vertical()
-            .id_salt("lyrics-scroll")
+            .id_salt(("lyrics-scroll", &now.uri))
             .auto_shrink([false, false]),
         egui::Vec2b::new(false, true),
         |ui| {
@@ -199,20 +272,24 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                     Some(Align::Min),
                 );
             }
-            ui.add_space(12.0);
+            ui.add_space(if lyrics.synced {
+                (viewport.height() * SIDEBAR_SUNG_LINE_AT - size).max(12.0)
+            } else {
+                12.0
+            });
             for (index, line) in lyrics.lines.iter().enumerate() {
                 let is_active = active == Some(index);
                 let lit = ui.ctx().animate_bool_with_time(
-                    egui::Id::new("lyric-line").with(index),
+                    egui::Id::new("lyric-line").with(("sidebar", &now.uri, index)),
                     is_active,
                     LIGHT_UP_SECONDS,
                 );
-                let color = blend(quiet, palette.accent, lit);
-                let font = if lit > 0.5 {
-                    theme::bold(LINE_SIZE)
+                let color = if lyrics.synced {
+                    blend(quiet, palette.text, lit)
                 } else {
-                    theme::regular(LINE_SIZE)
+                    palette.text
                 };
+                let font = theme::bold(size);
                 // A timed line with no words is the band playing on.
                 let text = if line.text.is_empty() && lyrics.synced {
                     "\u{266a}"
@@ -248,16 +325,16 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                     && let Some(at_ms) = line.at_ms
                 {
                     app.actions.push(Action::Seek(at_ms));
-                    app.lyrics_following = true;
+                    app.actions.push(Action::FollowLyrics);
                 }
                 if is_active && follow {
-                    show_sung_line(ui, rect, None);
+                    show_sung_line_at(ui, rect, animation, SIDEBAR_SUNG_LINE_AT);
                 }
                 ui.add_space(LINE_GAP);
             }
             // Words without timing can only be followed by the clock: sit
             // at the part of the text the song is probably at.
-            if app.lyrics_following && !lyrics.synced && now.duration_ms > 0 {
+            if following && !lyrics.synced && now.duration_ms > 0 {
                 let fraction =
                     (f64::from(now.position_ms) / f64::from(now.duration_ms)).clamp(0.0, 1.0);
                 let content = ui.min_rect();
@@ -271,18 +348,41 @@ fn contents(app: &mut App, ui: &mut egui::Ui) {
                 );
             }
             // Room for the last line to rise to where a sung line sits.
-            ui.add_space((ui.clip_rect().height() * (1.0 - SUNG_LINE_AT)).max(60.0));
+            ui.add_space((ui.clip_rect().height() * (1.0 - SIDEBAR_SUNG_LINE_AT)).max(60.0));
         },
     );
     crate::autoscroll::lyrics(ui, scroll.id);
     // Scrolling by hand means the reader wants to look elsewhere; the
     // Follow button in the header picks the song back up.
-    if ui.rect_contains_pointer(scroll.inner_rect)
-        && ui.input(|input| input.smooth_scroll_delta.y != 0.0)
+    if manual_scroll
+        && app.lyrics_following
+        && !app
+            .actions
+            .iter()
+            .any(|action| matches!(action, Action::FollowLyrics))
     {
-        app.lyrics_following = false;
+        app.actions.push(Action::PauseLyricsFollow);
     }
-    app.lyrics_line_shown = Some(active);
+    let fade = 28.0_f32.min(scroll.inner_rect.height() * 0.1);
+    let clear = palette.panel.gamma_multiply(0.0);
+    widgets::paint_vertical_gradient(
+        ui,
+        Rect::from_min_max(
+            scroll.inner_rect.min,
+            pos2(scroll.inner_rect.right(), scroll.inner_rect.top() + fade),
+        ),
+        palette.panel,
+        clear,
+    );
+    widgets::paint_vertical_gradient(
+        ui,
+        Rect::from_min_max(
+            pos2(scroll.inner_rect.left(), scroll.inner_rect.bottom() - fade),
+            scroll.inner_rect.max,
+        ),
+        clear,
+        palette.panel,
+    );
 }
 
 pub fn fullscreen(app: &mut App, ui: &mut egui::Ui) {

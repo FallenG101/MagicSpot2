@@ -43,6 +43,8 @@ impl LibrarySort {
 pub enum ThemeChoice {
     Dark,
     Light,
+    #[serde(rename = "oled_blue")]
+    OledBlue,
     #[default]
     System,
 }
@@ -152,7 +154,7 @@ impl<'de> Deserialize<'de> for LanguageChoice {
 }
 
 impl ThemeChoice {
-    pub const ALL: [ThemeChoice; 3] = [Self::System, Self::Light, Self::Dark];
+    pub const ALL: [ThemeChoice; 4] = [Self::System, Self::Light, Self::Dark, Self::OledBlue];
 
     pub fn label(self, locale: crate::i18n::Locale) -> std::borrow::Cow<'static, str> {
         use crate::i18n::{gettext, pgettext};
@@ -160,6 +162,7 @@ impl ThemeChoice {
             Self::Dark => pgettext(locale, "theme", "Dark"),
             Self::Light => pgettext(locale, "theme", "Light"),
             Self::System => gettext(locale, "Follow system"),
+            Self::OledBlue => "OLED Blue".into(),
         }
     }
 }
@@ -500,6 +503,9 @@ fn default_buffer_ms() -> u32 {
 
 impl Settings {
     pub(crate) fn cached_palette(&self) -> Option<crate::theme::Palette> {
+        if self.custom_theme.is_none() && self.theme == ThemeChoice::OledBlue {
+            return Some(crate::theme::Palette::oled_blue());
+        }
         let theme = if self.custom_theme.is_some() {
             self.custom_theme_cache.as_ref()
         } else if self.theme == ThemeChoice::System {
@@ -909,7 +915,11 @@ mod tests {
         assert_eq!(ThemeChoice::default(), ThemeChoice::System);
         let empty: Settings = serde_json::from_str("{}").unwrap();
         assert_eq!(empty.theme, ThemeChoice::System);
-        for (json, choice) in [("dark", ThemeChoice::Dark), ("light", ThemeChoice::Light)] {
+        for (json, choice) in [
+            ("dark", ThemeChoice::Dark),
+            ("light", ThemeChoice::Light),
+            ("oled_blue", ThemeChoice::OledBlue),
+        ] {
             let settings: Settings =
                 serde_json::from_value(serde_json::json!({"theme": json, "volume": 37})).unwrap();
             assert_eq!(settings.theme, choice);
@@ -922,6 +932,28 @@ mod tests {
         assert!(settings.system_theme_cache.is_none());
         assert_eq!(settings.theme, ThemeChoice::Dark);
         assert_eq!(settings.volume, 37);
+    }
+
+    #[test]
+    fn oled_blue_is_saved_and_restores_its_palette_without_a_theme_file() {
+        let path = std::env::temp_dir().join(format!("spotifast-oled-{}.json", std::process::id()));
+        let settings = Settings {
+            theme: super::ThemeChoice::OledBlue,
+            volume: 37,
+            ..Settings::default()
+        };
+        settings.save(&path);
+        let saved = std::fs::read_to_string(&path).unwrap();
+        assert!(saved.contains("\"oled_blue\""));
+        let restored = Settings::load(&path);
+        assert_eq!(restored.theme, super::ThemeChoice::OledBlue);
+        assert_eq!(restored.volume, 37);
+        assert_eq!(
+            restored.cached_palette(),
+            Some(crate::theme::Palette::oled_blue())
+        );
+        assert!(restored.custom_theme.is_none());
+        std::fs::remove_file(path).unwrap();
     }
 
     #[test]

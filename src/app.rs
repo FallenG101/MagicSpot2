@@ -3206,7 +3206,7 @@ impl App {
             };
         }
         match self.settings.theme {
-            ThemeChoice::Dark => egui::ThemePreference::Dark,
+            ThemeChoice::Dark | ThemeChoice::OledBlue => egui::ThemePreference::Dark,
             ThemeChoice::Light => egui::ThemePreference::Light,
             ThemeChoice::System => egui::ThemePreference::System,
         }
@@ -8968,6 +8968,11 @@ impl App {
                     self.lyrics_line_shown = Some(line);
                 }
             }
+            Action::SidebarLyricsLineShown(line) => {
+                if self.lyrics_fullscreen.is_none() && self.show_lyrics_panel {
+                    self.lyrics_line_shown = Some(line);
+                }
+            }
             Action::FollowLyrics => {
                 self.lyrics_following = true;
                 self.lyrics_line_shown = None;
@@ -10750,7 +10755,10 @@ mod tests {
                     .rect
                     .center()
             } else {
-                egui::pos2(1120.0, 100.0)
+                egui::containers::panel::PanelState::load(&ctx, egui::Id::new("lyrics-panel"))
+                    .expect("the lyrics panel is open")
+                    .outer_rect
+                    .center()
             };
             let press = |button, pressed| egui::Event::PointerButton {
                 pos: anchor,
@@ -15600,9 +15608,54 @@ mod tests {
             assert!(app.settings.custom_theme.is_none());
             assert!(app.settings.custom_theme_cache.is_none());
             if choice != ThemeChoice::System {
-                assert_eq!(app.palette.dark, choice == ThemeChoice::Dark);
+                assert_eq!(app.palette.dark, choice != ThemeChoice::Light);
             }
         }
+    }
+
+    #[test]
+    fn oled_blue_sets_native_dark_controls_and_overrides_custom_palettes() {
+        let mut app = test_app("oled-blue-theme");
+        let ctx = egui::Context::default();
+        let custom = theme::CustomTheme {
+            filename: "light.json".into(),
+            palette: Palette::light(),
+        };
+        app.custom_themes = theme::Catalog::preview(vec![custom], false);
+        app.apply(Action::SetCustomTheme("light.json".into()), &ctx);
+        assert!(!app.palette.dark);
+        app.apply(Action::SetTheme(ThemeChoice::OledBlue), &ctx);
+        ctx.options_mut(|options| options.fallback_theme = egui::Theme::Light);
+        app.apply_theme(&ctx);
+        assert_eq!(ctx.theme(), egui::Theme::Dark);
+        assert_eq!(app.palette, Palette::oled_blue());
+        assert_eq!(ctx.global_style().visuals.panel_fill, egui::Color32::BLACK);
+        assert_eq!(
+            ctx.global_style().visuals.selection.stroke.color,
+            app.palette.accent
+        );
+        assert!(app.settings.custom_theme.is_none());
+        assert!(app.settings.custom_theme_cache.is_none());
+        app.apply(Action::SetTheme(ThemeChoice::Light), &ctx);
+        assert_eq!(app.palette, Palette::light());
+    }
+
+    #[test]
+    fn sidebar_line_observations_do_not_override_fullscreen_or_follow_actions() {
+        let mut app = test_app("sidebar-lyrics-line");
+        let ctx = egui::Context::default();
+        app.show_lyrics_panel = true;
+        app.apply(Action::SidebarLyricsLineShown(Some(3)), &ctx);
+        assert_eq!(app.lyrics_line_shown, Some(Some(3)));
+        app.apply(Action::FollowLyrics, &ctx);
+        assert_eq!(app.lyrics_line_shown, None);
+        app.lyrics_fullscreen = Some(false);
+        app.apply(Action::SidebarLyricsLineShown(Some(3)), &ctx);
+        assert_eq!(app.lyrics_line_shown, None);
+        app.lyrics_fullscreen = None;
+        app.show_lyrics_panel = false;
+        app.apply(Action::SidebarLyricsLineShown(Some(3)), &ctx);
+        assert_eq!(app.lyrics_line_shown, None);
     }
 
     #[test]

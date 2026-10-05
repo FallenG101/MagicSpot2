@@ -12,6 +12,11 @@ See [upstream provenance](UPSTREAM.md), [bootstrap status](docs/magicspot/STATUS
 and [baseline validation](docs/magicspot/BASELINE.md). MagicSpot v3 remains in the
 separate [discontinued repository](https://github.com/FallenG101/MagicSpot).
 
+The development UI now includes a refreshed lyrics sidebar with larger type,
+smooth following and a compact song header. **Settings > Appearance > Theme >
+OLED Blue** selects black main surfaces with blue accents. See
+[UI notes](docs/magicspot/UI_NOTES.md) for the demo command and validation scope.
+
 ## Inherited Spotifast documentation
 
 The following describes upstream Spotifast. Its downloads and performance claims

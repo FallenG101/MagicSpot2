@@ -35,9 +35,12 @@ No dependency changes or code from discontinued MagicSpot v3 have been imported.
 | Publishing and triage guards | `.github/workflows/` except `ci.yml` and `upstream-drift.yml` | Keep inherited deployment, release, packaging and external triage jobs restricted to their upstream repository |
 | Build validation | `.github/workflows/ci.yml` | Retain upstream checks and add release/demo compilation on each supported OS |
 | Upstream drift reporting | `.github/workflows/upstream-drift.yml`, `.github/scripts/upstream-drift.py` | Report upstream movement and overlapping changes without merging, publishing or posting comments |
+| Lyrics sidebar | `src/ui/lyrics.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Larger stable text, song header, soft edges and action-based follow/seek behavior |
+| OLED Blue | `src/theme.rs`, `src/settings.rs`, `src/app.rs`, `src/demo.rs`, `src/entrypoint.rs` | Persisted built-in black/blue palette and deterministic demo coverage |
 
-The application source and its identities are initially unchanged for baseline
-validation. Do not install these initial builds alongside Spotifast or v3 using
+The untouched application baseline is commit `225a65c`. UI work follows that
+baseline; application identities remain inherited. Do not install development
+builds alongside Spotifast or v3 using
 the inherited packaging. See `docs/magicspot/STATUS.md` for the identity gate.
 
 ## Sync procedure

@@ -52,6 +52,10 @@ verify those flows. No MagicSpot speed claim is made.
 
 ## Next implementation gates
 
+The maintainer requested the lyrics/OLED visual pass before the identity
+milestone. That work is described in `UI_NOTES.md`; app/data identity separation
+and account-backed validation remain pending.
+
 1. Separate application identity in one focused change, including executable,
    package, bundle/desktop IDs, secure-store service, settings/cache/log/window
    paths, IPC, protocol registrations, update repository and installer identity.

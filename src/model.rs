@@ -1083,6 +1083,7 @@ pub enum Action {
     ToggleLyricsPanel,
     SetLyricsFullscreen(bool),
     LyricsLineShown(Option<usize>),
+    SidebarLyricsLineShown(Option<usize>),
     FollowLyrics,
     PauseLyricsFollow,
     RetryLyrics,

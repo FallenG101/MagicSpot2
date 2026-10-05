@@ -965,6 +965,10 @@ pub fn apply_flags(app: &mut App, page: Option<&str>, show: Option<&str>) {
                 app.settings.theme = crate::settings::ThemeChoice::Dark;
                 app.actions.push(Action::SettingsChanged);
             }
+            "oled" => {
+                app.settings.theme = crate::settings::ThemeChoice::OledBlue;
+                app.actions.push(Action::SettingsChanged);
+            }
             "song-top-result" => {
                 if let Loadable::Loaded(results) = &mut app.search.results {
                     results.artists = None;
@@ -6199,6 +6203,148 @@ mod tests {
             sizes[0], sizes[1],
             "highlighting must not rewrap or resize a line"
         );
+    }
+
+    #[test]
+    fn sidebar_lyrics_highlighting_keeps_wrapped_line_metrics_in_every_theme() {
+        for (name, theme) in [
+            ("dark", crate::settings::ThemeChoice::Dark),
+            ("light", crate::settings::ThemeChoice::Light),
+            ("oled", crate::settings::ThemeChoice::OledBlue),
+        ] {
+            for width in [760.0, 1280.0] {
+                let (ctx, mut app) =
+                    accessible_app(&format!("sidebar-line-metrics-{name}-{width}"));
+                app.settings.theme = theme;
+                app.actions.push(Action::SettingsChanged);
+                app.show_lyrics_panel = true;
+                app.settings.lyrics_width = crate::theme::SIDE_PANEL_MIN_WIDTH;
+                app.lyrics = Loadable::Loaded(Some(sample_lyrics()));
+                app.lyrics_following = false;
+                let mut sizes = Vec::new();
+                for (step, position) in [0, 41_000].into_iter().enumerate() {
+                    let remote = app.remote.as_mut().unwrap();
+                    remote.state.is_playing = false;
+                    remote.state.progress_ms = Some(position);
+                    for frame in 0..30 {
+                        let mut output = ctx.run_ui(
+                            egui::RawInput {
+                                time: Some(step as f64 + f64::from(frame) / 30.0),
+                                screen_rect: Some(egui::Rect::from_min_size(
+                                    egui::Pos2::ZERO,
+                                    egui::vec2(width, 800.0),
+                                )),
+                                ..Default::default()
+                            },
+                            |ui| app.frame_ui(ui),
+                        );
+                        output.textures_delta.clear();
+                        if frame == 29 {
+                            let line = output
+                                .shapes
+                                .iter()
+                                .find_map(|shape| match &shape.shape {
+                                    egui::Shape::Text(text)
+                                        if text.galley.job.text
+                                            == "Streetlights blinking down the river road" =>
+                                    {
+                                        Some(&text.galley)
+                                    }
+                                    _ => None,
+                                })
+                                .expect("the wrapped line is drawn");
+                            assert!(line.job.sections[0].format.font_id.size >= 24.0);
+                            assert!(line.rows.len() > 1, "the minimum-width line wraps");
+                            sizes.push(line.size());
+                        }
+                    }
+                }
+                assert_eq!(
+                    sizes[0], sizes[1],
+                    "highlighting must not rewrap: {name}, {width}"
+                );
+                app.backend.shutdown();
+            }
+        }
+    }
+
+    #[test]
+    fn sidebar_scroll_pauses_follow_and_the_follow_button_resumes_it() {
+        use egui::accesskit::{Action as AccessibleAction, Role};
+        let (ctx, mut app) = accessible_app("sidebar-manual-scroll");
+        apply_flags(&mut app, None, Some("lyrics"));
+        accessible_frame(&ctx, &mut app, vec![]);
+        accessible_frame(&ctx, &mut app, vec![]);
+        let panel = egui::containers::panel::PanelState::load(&ctx, egui::Id::new("lyrics-panel"))
+            .unwrap()
+            .outer_rect;
+        accessible_frame(
+            &ctx,
+            &mut app,
+            vec![
+                egui::Event::PointerMoved(panel.center()),
+                egui::Event::MouseWheel {
+                    unit: egui::MouseWheelUnit::Point,
+                    delta: egui::vec2(0.0, -90.0),
+                    modifiers: egui::Modifiers::default(),
+                    phase: egui::TouchPhase::Move,
+                },
+            ],
+        );
+        assert!(
+            !app.lyrics_following,
+            "manual scrolling must release following"
+        );
+        let tree = accessible_frame(&ctx, &mut app, vec![]);
+        let follow = accessible_node(&tree, "Follow", Role::Button);
+        accessible_frame(
+            &ctx,
+            &mut app,
+            vec![accessible_action(follow, AccessibleAction::Click, None)],
+        );
+        assert!(app.lyrics_following, "Follow resumes the song");
+        app.backend.shutdown();
+    }
+
+    #[test]
+    fn oled_blue_renders_main_pages_dialogs_and_lyrics_states() {
+        let (ctx, mut app) = accessible_app("oled-main-views");
+        apply_flags(&mut app, None, Some("oled"));
+        for page in [
+            Page::Home,
+            Page::Search,
+            Page::LikedSongs,
+            Page::Playlist("pl1".into()),
+            Page::Settings,
+        ] {
+            app.open(page);
+            for _ in 0..3 {
+                frame(&ctx, &mut app);
+            }
+            assert_eq!(app.palette, crate::theme::Palette::oled_blue());
+        }
+        app.dialog = Some(Dialog::Shortcuts);
+        frame(&ctx, &mut app);
+        app.dialog = Some(Dialog::CreatePlaylist {
+            name: "test".into(),
+            public: false,
+            add_uris: vec![],
+        });
+        frame(&ctx, &mut app);
+        app.dialog = None;
+        for surface in [
+            "lyrics",
+            "lyrics-follow",
+            "lyrics-empty",
+            "lyrics-loading",
+            "lyrics-error",
+            "lyrics-instrumental",
+        ] {
+            apply_flags(&mut app, None, Some(surface));
+            frame(&ctx, &mut app);
+            assert_eq!(app.palette, crate::theme::Palette::oled_blue());
+        }
+        app.backend.shutdown();
     }
 
     /// Every page, panel, and dialog lays out without panicking.

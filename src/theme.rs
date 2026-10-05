@@ -79,6 +79,29 @@ impl Palette {
         }
     }
 
+    /// True-black primary surfaces with blue controls and cool neutral text.
+    pub fn oled_blue() -> Self {
+        Self {
+            dark: true,
+            window: Color32::BLACK,
+            panel: Color32::BLACK,
+            surface: Color32::from_rgb(0x09, 0x0d, 0x14),
+            surface_hover: Color32::from_rgb(0x12, 0x1c, 0x2b),
+            surface_active: Color32::from_rgb(0x19, 0x2d, 0x46),
+            outline: Color32::from_rgb(0x21, 0x2b, 0x3b),
+            text: Color32::from_rgb(0xf5, 0xf7, 0xfa),
+            secondary: Color32::from_rgb(0xad, 0xb7, 0xc6),
+            dim: Color32::from_rgb(0x79, 0x88, 0xa0),
+            accent: Color32::from_rgb(0x4d, 0x9e, 0xff),
+            accent_hover: Color32::from_rgb(0x80, 0xba, 0xff),
+            on_accent: Color32::from_rgb(0x02, 0x0b, 0x16),
+            danger: Color32::from_rgb(0xff, 0x75, 0x8a),
+            warning: Color32::from_rgb(0xff, 0xc6, 0x6d),
+            overlay: Color32::from_rgb(0x09, 0x0d, 0x14),
+            shadow: Color32::from_black_alpha(200),
+        }
+    }
+
     /// A colour derived from album art, softened so it can sit behind text.
     pub fn tint_from_art(&self, rgb: [u8; 3]) -> Color32 {
         let [r, g, b] = rgb.map(|c| c as f32 / 255.0);
@@ -947,6 +970,42 @@ mod tests {
         assert!(!light.dark);
         assert_eq!(light.accent, Color32::from_rgb(140, 63, 165));
         assert_eq!(light.window, Palette::light().window);
+    }
+
+    #[test]
+    fn oled_blue_keeps_primary_surfaces_black_and_text_legible() {
+        fn luminance(color: Color32) -> f32 {
+            let [r, g, b, _] = color.to_srgba_unmultiplied();
+            let linear = |channel: u8| {
+                let channel = f32::from(channel) / 255.0;
+                if channel <= 0.04045 {
+                    channel / 12.92
+                } else {
+                    ((channel + 0.055) / 1.055).powf(2.4)
+                }
+            };
+            0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b)
+        }
+        let palette = Palette::oled_blue();
+        assert!(palette.dark);
+        assert_eq!(palette.window, Color32::BLACK);
+        assert_eq!(palette.panel, Color32::BLACK);
+        assert!(palette.accent.b() > palette.accent.g());
+        for (foreground, background) in [
+            (palette.text, palette.panel),
+            (palette.secondary, palette.surface),
+            (palette.dim, palette.panel),
+            (palette.on_accent, palette.accent),
+            (palette.on_accent, palette.accent_hover),
+        ] {
+            let a = luminance(foreground);
+            let b = luminance(background);
+            let contrast = (a.max(b) + 0.05) / (a.min(b) + 0.05);
+            assert!(
+                contrast >= 4.5,
+                "text contrast {contrast}: {foreground:?} on {background:?}"
+            );
+        }
     }
 
     /// Compared line by line: a Windows checkout may turn the files' line
