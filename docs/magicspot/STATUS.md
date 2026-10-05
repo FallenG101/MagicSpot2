@@ -17,6 +17,8 @@ Maintain the small lyrics/theme improvements and keep current with Spotifast. Ai
 - Implemented the lyrics/OLED pass in its own commit, `e252ee0`.
 - Added the requested font options, subtle active-line glow, larger song card and
   artwork-derived sidebar background as a separate UI adjustment.
+- Added a saved 18–48 point lyric size with Auto mode, and a cover that grows as
+  the sidebar is widened.
 - Separated executable, profile, secure-store, window state, IPC, tray, media, Connect name and updater identities. See `IDENTITY.md`.
 - Prepared `2.0.0-preview.1`: normal Windows x64 ZIP and universal macOS DMG, both without demo data or MilkDrop. Retained all license notices.
 
@@ -24,7 +26,7 @@ Maintain the small lyrics/theme improvements and keep current with Spotifast. Ai
 
 The Windows release/demo suite passed 974 tests with one ignored native-store round trip; that exact dummy-grant native-store test passed separately. Strict clippy passed. Packaging regression suites passed four tests each. Native Windows captures cover light, dark and OLED Blue, normal/narrow windows, lyrics states and appearance options. See `UI_NOTES.md` and the historical `BASELINE.md`.
 
-The normal release build and release-commit CI/package verification are the final publication checks. macOS runs on GitHub's native runner; the DMG check mounts the image and verifies bundle identity, version, signature and both architectures. No local macOS or Linux interactive session is claimed.
+The normal release build and release-commit CI/package verification are the final publication checks. At the maintainer's request, GitHub is left to complete those builds. The Preview 1 publication workflow requires successful CI on the current main commit, verifies both CI download checksums, and publishes that commit with the written notes. It authorizes only `2.0.0-preview.1`, not future releases. macOS runs on GitHub's native runner; the DMG check mounts the image and verifies bundle identity, version, signature and both architectures. No local macOS or Linux interactive session is claimed.
 
 Live Spotify sign-in, local playback, Connect and relaunch have not been exercised with an account in this session. The inherited flows are enabled and unchanged; demo coverage does not establish live-account behavior. The Windows binary has no publisher signature; macOS uses ad-hoc signing without notarization.
 

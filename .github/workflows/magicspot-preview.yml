@@ -1,0 +1,74 @@
+name: Publish MagicSpot preview
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: magicspot-preview-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    # Only the maintainer's main push and its successful CI may publish.
+    if: >-
+      github.repository == 'FallenG101/MagicSpot2' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+      CI_RUN: ${{ github.event.workflow_run.id }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Check this is the requested first preview
+        id: candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(python3 -c 'import tomllib; print(tomllib.load(open("Cargo.toml", "rb"))["package"]["version"])')
+          # This authorization covers Preview 1, not future versions.
+          if [ "$version" != '2.0.0-preview.1' ]; then exit 0; fi
+          current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
+          if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
+          if gh release view "v$version" >/dev/null 2>&1; then exit 0; fi
+          existing=$(gh api "repos/$GH_REPO/git/ref/tags/v$version" --jq .object.sha 2>/dev/null || true)
+          if [ -n "$existing" ] && [ "$existing" != "$RELEASE_SHA" ]; then
+            echo '::error::The preview tag already identifies a different commit.'
+            exit 1
+          fi
+          test -s "packaging/release-notes/v$version.md"
+          echo 'publish=true' >> "$GITHUB_OUTPUT"
+      - name: Download the verified normal Windows and Mac builds
+        if: steps.candidate.outputs.publish == 'true'
+        run: |
+          gh run download "$CI_RUN" --name MagicSpot-Windows-x64 --dir dist/windows
+          gh run download "$CI_RUN" --name MagicSpot-macos-universal --dir dist/macos
+      - name: Verify every download and prepare combined checksums
+        if: steps.candidate.outputs.publish == 'true'
+        run: python3 packaging/magicspot/prepare-preview.py dist
+      - name: Publish the requested preview
+        if: steps.candidate.outputs.publish == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          # A newer push must not let an older successful run publish.
+          current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
+          if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
+          gh release create v2.0.0-preview.1 \
+            --target "$RELEASE_SHA" --prerelease \
+            --title 'MagicSpot 2.0 Preview 1' \
+            --notes-file packaging/release-notes/v2.0.0-preview.1.md \
+            dist/release/*.zip dist/release/*.dmg dist/release/checksums.txt
