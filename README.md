@@ -1,77 +1,45 @@
 # MagicSpot 2.0
 
-MagicSpot 2.0 is starting from a fresh fork of current
-[Spotifast](https://github.com/crmne/spotifast). The first priorities are polished
-lyrics, cohesive themes, measured performance and manageable upstream updates.
+A native Spotify desktop app based on the latest [Spotifast](https://github.com/crmne/spotifast) foundation, with an Apple Music-inspired lyrics sidebar and OLED Blue.
 
-This repository is in its bootstrap stage. Application identities and packaging
-are still inherited from Spotifast. Use isolated demo mode while the new identity
-is established; there is no MagicSpot 2.0 download or preview release yet.
+**[Download MagicSpot for Windows and macOS](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1).** On Windows, extract the ZIP and open `magicspot2.exe`. On macOS, open the universal DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium.
 
-See [upstream provenance](UPSTREAM.md), [bootstrap status](docs/magicspot/STATUS.md)
-and [baseline validation](docs/magicspot/BASELINE.md). MagicSpot v3 remains in the
-separate [discontinued repository](https://github.com/FallenG101/MagicSpot).
+## What's new
 
-The development UI now includes a refreshed lyrics sidebar with larger type,
-smooth following and a compact song header. **Settings > Appearance > Theme >
-OLED Blue** selects black main surfaces with blue accents. See
-[UI notes](docs/magicspot/UI_NOTES.md) for the demo command and validation scope.
+- Bold, spacious lyrics with a song header, bright active line, smooth following and soft scroll edges. Scroll manually to read ahead, press Follow to return, or click a timed line to seek.
+- **Settings > Appearance > Theme > OLED Blue** selects black main surfaces and blue accents. Your choice is saved.
+- A separate MagicSpot 2 profile, secure-store identity and updater. Sign in afresh; Spotifast and discontinued MagicSpot v3 settings and credentials are not imported.
 
-## Inherited Spotifast documentation
+![MagicSpot lyrics sidebar in OLED Blue, native Windows demo capture](docs/magicspot/lyrics-oled.png)
 
-The following describes upstream Spotifast. Its downloads and performance claims
-refer to upstream builds, and are not MagicSpot 2.0 release instructions or claims.
+The first release is `2.0.0-preview.1` for Windows x64 and macOS (Apple Silicon and Intel). It omits MilkDrop. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0-preview.1.md) and [validation status](docs/magicspot/STATUS.md).
 
-**Spotify, native and fast.** Spotifast is a Spotify client written in
-Rust with [egui](https://github.com/emilk/egui). It plays music through
-[librespot](https://github.com/librespot-org/librespot), typically uses
-100–250 MB of RAM, starts in well under a second, and has no browser engine.
-It runs on Linux, macOS, and Windows.
+## Build and preview
 
-**Playback needs Spotify Premium.** Free accounts can browse and search, but
-cannot play music through Spotifast.
+Rust 1.98 is pinned. Build the normal application:
 
-https://github.com/user-attachments/assets/a5f669ce-b3b7-4f8e-9933-976a78876c7e
+```sh
+cargo build --locked --release --no-default-features
+```
 
-![Spotifast Home with the playlist library, recommendations, queue, and player visible](docs/screenshot.png)
+The executable is `target/release/magicspot2.exe` on Windows, or `target/release/magicspot2` elsewhere. The internal Rust library remains named `spotifast` to keep upstream integration small.
 
-**[spotifast.rocks](https://spotifast.rocks/)** has downloads and the full guide:
+To preview the UI with sample data:
 
-- [Getting started](https://spotifast.rocks/getting-started/): sign-in, playback on this computer, themes, fonts, proxies
-- [Everyday use](https://spotifast.rocks/using-spotifast/): keyboard shortcuts, command-line control, updates
-- [Settings and files](https://spotifast.rocks/settings-and-files/) and [Privacy](https://spotifast.rocks/privacy/)
-- [How it connects](https://spotifast.rocks/how-it-connects/) and [What Spotify allows](https://spotifast.rocks/what-spotify-allows/)
-- [Will my account get banned?](https://spotifast.rocks/what-is-spotifast/#will-my-spotify-account-get-banned)
+```sh
+cargo run --locked --release --no-default-features --features demo -- --demo --demo-show lyrics,oled
+```
 
-**Want WhatsApp just as fast and native?** [ZapFast](https://zapfast.rocks)
-is Spotifast's sibling. Both are built on
-[fastframe](https://github.com/crmne/fastframe).
+Downloads are packaged with `packaging/magicspot/package-windows.ps1` and `packaging/magicspot/package-macos.sh`. The inherited Spotifast installer, release and package-publishing workflows remain disabled for this fork.
 
-## Install
+## Guides and provenance
 
-- **macOS:** `brew install --cask crmne/tap/spotifast`, or
-  [download the Mac app](https://spotifast.rocks/download/#macos).
-- **Arch Linux:** `yay -S spotifast-bin`
-- **Windows, Flatpak, AppImage, Nix and other Linux:** see the
-  [Download page](https://spotifast.rocks/download/).
-- **From source:** see
-  [Build from source](https://spotifast.rocks/getting-started/#build-from-source).
+The [Spotifast guide](https://spotifast.rocks/getting-started/) explains the inherited Spotify sign-in, local playback, Connect and personal-app flows. Its download links, app paths and performance figures refer to Spotifast. MagicSpot uses the same public Web API client and OAuth loopback behavior; it does not invent a new Spotify Client ID.
 
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull
-request. To look at the interface without a Spotify account, run
-`cargo run --features demo -- --demo`. Translations live in `assets/i18n/`;
-see [Translating Spotifast](docs/_reference/translating.md). Release
-packaging is described in [PACKAGING.md](PACKAGING.md).
+Read [identity and privacy](docs/magicspot/IDENTITY.md), [UI notes](docs/magicspot/UI_NOTES.md), [upstream provenance](UPSTREAM.md), and the [untouched baseline](docs/magicspot/BASELINE.md). MagicSpot v3 remains in its [discontinued repository](https://github.com/FallenG101/MagicSpot).
 
 ## Acknowledgements
 
-Spotifast uses [librespot](https://github.com/librespot-org/librespot),
-[egui](https://github.com/emilk/egui), the [Inter](https://rsms.me/inter/)
-typeface (OFL), and [Lucide](https://lucide.dev) icons (ISC).
+MagicSpot is a fork of Spotifast by Carmine Paolino and contributors. It uses [fastframe](https://github.com/crmne/fastframe), [librespot](https://github.com/librespot-org/librespot), [egui](https://github.com/emilk/egui), [Inter](https://rsms.me/inter/) (OFL), [Noto Emoji](https://github.com/googlefonts/noto-emoji) (OFL), and [Lucide](https://lucide.dev) icons (ISC). Original license and copyright notices are retained and included in the download.
 
-Spotifast is an independent project and is not affiliated with Spotify.
-Spotify is a trademark of Spotify AB.
-
-Licensed under the [MIT License](LICENSE).
+MagicSpot is independent and not affiliated with Spotify. Spotify is a trademark of Spotify AB. Licensed under the [MIT License](LICENSE).

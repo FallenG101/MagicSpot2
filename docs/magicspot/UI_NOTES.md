@@ -36,6 +36,14 @@ with theme, size and state selectors. Before is commit `225a65c`, using the same
 demo data, inner window size and six-second capture delay. OLED Blue is new and
 is compared with the old Dark appearance. Native captures are Windows only.
 
-Validation results will be recorded after the final build and test run. No
+The release/demo Windows test suite passed 971 tests, with one native-store test
+ignored in the main suite. That dummy-grant native-store round trip passed
+separately. Strict clippy passed. Regression coverage includes stable wrapped
+line metrics, manual scroll and Follow, full-window transitions, theme persistence,
+custom-palette switching, text contrast and rendering of pages/dialogs/states.
+The autoscroll test now locates the actual panel instead of clicking the old
+lyrics-header coordinate, which the new song header occupies.
+
+No
 startup, memory, CPU or playback-speed improvement is claimed. No dependencies,
 network services, Spotify grants or profile paths are changed by this UI work.

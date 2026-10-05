@@ -1,4 +1,12 @@
-# Spotifast agent guide
+# MagicSpot 2 agent guide
+
+MagicSpot is maintained as a small lyrics/theme fork of Spotifast. Preserve that
+scope, stay current with upstream, and keep generally useful UI changes separate
+from fork identity and packaging so they can be offered upstream. The maintainer
+hopes to land the UI improvements in Spotifast; posting proposals or creating
+upstream pull requests requires a direct request. `UPSTREAM.md` records provenance
+and the local patch inventory. The inherited guidance below remains applicable
+to implementation and validation; inherited publishing targets stay disabled.
 
 Follow `CONTRIBUTING.md`; it is the canonical product and contribution policy.
 These instructions add implementation constraints for coding agents.

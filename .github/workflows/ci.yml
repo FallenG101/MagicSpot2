@@ -43,8 +43,49 @@ jobs:
       # Build without demo first so the ordinary release cannot contain it.
       - name: Release build (without MilkDrop or demo)
         run: mbx build --locked --release --no-default-features
+      - name: Package MagicSpot Windows download
+        if: runner.os == 'Windows' && github.repository == 'FallenG101/MagicSpot2'
+        shell: pwsh
+        run: ./packaging/magicspot/package-windows.ps1 -Binary target/release/magicspot2.exe -OutputDir dist/ci-windows
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Windows' && github.repository == 'FallenG101/MagicSpot2'
+        with:
+          name: MagicSpot-Windows-x64
+          path: |
+            dist/ci-windows/*.zip
+            dist/ci-windows/checksums.txt
+          if-no-files-found: error
       - name: Release demo build (without MilkDrop)
         run: mbx build --locked --release --no-default-features --features demo
+
+  macos-download:
+    name: macOS universal DMG
+    if: github.repository == 'FallenG101/MagicSpot2'
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+      - uses: jdx/mr-boxington-action@v1
+        with:
+          cache-generation: magicspot-macos-download-v1
+      - name: Build release for Apple Silicon and Intel
+        run: |
+          mbx build --locked --release --no-default-features --target aarch64-apple-darwin
+          mbx build --locked --release --no-default-features --target x86_64-apple-darwin
+      - name: Package and verify DMG
+        run: |
+          mkdir -p dist/macos-universal
+          lipo -create target/aarch64-apple-darwin/release/magicspot2 target/x86_64-apple-darwin/release/magicspot2 -output dist/macos-universal/magicspot2
+          bash packaging/magicspot/package-macos.sh dist/macos-universal/magicspot2 dist/macos-universal
+      - uses: actions/upload-artifact@v7
+        with:
+          name: MagicSpot-macos-universal
+          path: |
+            dist/macos-universal/*.dmg
+            dist/macos-universal/checksums.txt
+          if-no-files-found: error
 
   quality:
     name: quality
@@ -142,18 +183,19 @@ jobs:
         shell: pwsh
         run: |
           mbx build --locked
-          $imports = & dumpbin /dependents target\debug\spotifast.exe | Out-String
+          $imports = & dumpbin /dependents target\debug\magicspot2.exe | Out-String
           $runtime = $imports | Select-String -Pattern 'MSVCP[0-9_]*\.dll|VCRUNTIME[0-9_]*\.dll'
           if ($runtime) { throw "Spotifast imports an MSVC runtime:`n$runtime" }
 
+      # The inherited Spotifast installer is not shipped by MagicSpot.
       - name: Windows installer syntax and renamed inputs
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.repository == 'crmne/spotifast'
         shell: pwsh
         run: |
           $version = (cargo metadata --no-deps --format-version 1 | ConvertFrom-Json).packages[0].version
           $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
           if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
-          & $iscc "/DVersion=$version" /DArch=x86_64 "/DBinary=$PWD\target\debug\spotifast.exe" "/DOutputDir=$env:RUNNER_TEMP\spotifast-installer-check" packaging\windows\spotifast.iss
+          & $iscc "/DVersion=$version" /DArch=x86_64 "/DBinary=$PWD\target\debug\magicspot2.exe" "/DOutputDir=$env:RUNNER_TEMP\spotifast-installer-check" packaging\windows\spotifast.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: macOS bundle identity and helper startup
@@ -162,8 +204,8 @@ jobs:
         run: |
           mbx build --locked
           version=$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(json.load(sys.stdin)["packages"][0]["version"])')
-          app="$RUNNER_TEMP/spotifast-bundle-check/Spotifast.app"
-          bash packaging/macos/bundle.sh target/debug/spotifast "$app" "$version"
+          app="$RUNNER_TEMP/magicspot2-bundle-check/MagicSpot.app"
+          bash packaging/macos/bundle.sh target/debug/magicspot2 "$app" "$version"
           executable=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$app/Contents/Info.plist")
           "$app/Contents/MacOS/$executable" --version
           # A missing job must reach our error handler, not die during launch.

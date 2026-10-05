@@ -110,14 +110,14 @@
               );
             in
             rustPlatform.buildRustPackage rec {
-              pname = "spotifast";
+              pname = "magicspot2";
               version = (pkgs.lib.importTOML ./Cargo.toml).package.version;
               src = self;
 
               # The lock file contains git dependencies. fetchCargoVendor includes
               # them in the fixed-output dependency tree, unlike cargoLock alone.
               cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-                pname = "spotifast";
+                pname = "magicspot2";
                 version = (pkgs.lib.importTOML ./Cargo.toml).package.version;
                 src = self;
                 hash = "sha256-2thLwV0G3+DoKeZF7+xP7v8jgzeTpkamDYey/QBj0E0=";
@@ -172,30 +172,26 @@
               # The GUI dlopens its Wayland, X11 and GL libraries at run time.
               postFixup =
                 pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
-                  wrapProgram $out/bin/spotifast \
+                  wrapProgram $out/bin/magicspot2 \
                     --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath runtimeLibs}
                 ''
                 + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-                  rcodesign sign "$out/Applications/Spotifast.app"
+                  rcodesign sign "$out/Applications/MagicSpot.app"
                 '';
 
               postInstall =
                 pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
-                  install -Dm644 packaging/applications/spotifast.desktop \
-                    $out/share/applications/spotifast.desktop
+                  install -Dm644 packaging/applications/magicspot2.desktop \
+                    $out/share/applications/com.falleng101.magicspot2.desktop
                   install -Dm644 packaging/icons/spotifast.svg \
-                    $out/share/icons/hicolor/scalable/apps/spotifast.svg
-                  install -Dm644 contrib/omarchy/spotifast.json.tpl \
-                    $out/share/spotifast/omarchy/spotifast.json.tpl
-                  install -Dm755 contrib/omarchy/spotifast-theme \
-                    $out/share/spotifast/omarchy/spotifast-theme
+                    $out/share/icons/hicolor/scalable/apps/magicspot2.svg
                 ''
                 + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-                  app="$out/Applications/Spotifast.app/Contents"
+                  app="$out/Applications/MagicSpot.app/Contents"
                   mkdir -p "$app/MacOS" "$app/Resources"
-                  executable=Spotifast
-                  identifier=rocks.spotifast.Spotifast
-                  cp "$out/bin/spotifast" "$app/MacOS/$executable"
+                  executable=MagicSpot
+                  identifier=com.falleng101.magicspot2
+                  cp "$out/bin/magicspot2" "$app/MacOS/$executable"
                   icnsify packaging/macos/icon-1024.png -o "$app/Resources/spotifast.icns"
                   substitute packaging/macos/Info.plist "$app/Info.plist" \
                     --replace-fail __VERSION__ "${version}" \
@@ -206,16 +202,20 @@
 
               meta = {
                 description = "Fast native Spotify client with local playback and Spotify Connect";
-                homepage = "https://spotifast.rocks";
+                homepage = "https://github.com/FallenG101/MagicSpot2";
                 license = pkgs.lib.licenses.mit;
-                mainProgram = "spotifast";
+                mainProgram = "magicspot2";
               };
             };
 
         in
         {
           default = spotifast;
+          magicspot2 = spotifast;
           inherit spotifast;
+          # Expose only the vendor derivation so its hash can be refreshed
+          # after an application-version lockfile change.
+          vendor = spotifast.cargoDeps;
         }
         // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
           spotifast-app = spotifast;

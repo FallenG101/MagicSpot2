@@ -37,11 +37,22 @@ No dependency changes or code from discontinued MagicSpot v3 have been imported.
 | Upstream drift reporting | `.github/workflows/upstream-drift.yml`, `.github/scripts/upstream-drift.py` | Report upstream movement and overlapping changes without merging, publishing or posting comments |
 | Lyrics sidebar | `src/ui/lyrics.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Larger stable text, song header, soft edges and action-based follow/seek behavior |
 | OLED Blue | `src/theme.rs`, `src/settings.rs`, `src/app.rs`, `src/demo.rs`, `src/entrypoint.rs` | Persisted built-in black/blue palette and deterministic demo coverage |
+| App identity and release | `src/identity.rs`, profile/credential/IPC/update and shell modules, Cargo metadata, macOS/Nix metadata, `packaging/magicspot/` | Separate MagicSpot 2 from both previous apps and package normal Windows/macOS downloads |
 
-The untouched application baseline is commit `225a65c`. UI work follows that
-baseline; application identities remain inherited. Do not install development
-builds alongside Spotifast or v3 using
-the inherited packaging. See `docs/magicspot/STATUS.md` for the identity gate.
+The untouched application baseline is commit `225a65c`. The lyrics/OLED patch is
+isolated in `e252ee0`; identity and packaging follow separately. The first release
+uses its own application/profile/secure-store/update identity. The inherited
+Spotifast installer and external publishers remain unused.
+
+## Maintainer direction
+
+The maintainer's October 5 direction is to keep this a small lyrics/theme fork
+and stay current with Spotifast. The intended destination for generally useful
+UI improvements is upstream Spotifast, subject to its maintainer's acceptance.
+Keep UI patches independent of MagicSpot branding, packaging and release files.
+Do not expand into feature parity with discontinued v3 or fork shared runtime
+dependencies without a demonstrated blocker. No upstream proposal or PR has
+been submitted in this session.
 
 ## Sync procedure
 

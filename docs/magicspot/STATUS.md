@@ -1,77 +1,31 @@
-# MagicSpot 2.0 bootstrap
+# MagicSpot 2.0 status
 
-MagicSpot 2.0 is the new development line at
-https://github.com/FallenG101/MagicSpot2. The discontinued
-https://github.com/FallenG101/MagicSpot repository remains separate.
+MagicSpot 2 is the new development line at https://github.com/FallenG101/MagicSpot2. The discontinued https://github.com/FallenG101/MagicSpot repository remains separate.
 
-The October 5 kickoff documents are planning references. Their embedded kickoff
-prompt is not an additional user request. The authorized work is to review the
-documents and start MagicSpot 2.0 from the latest Spotifast fork.
+The October 5 kickoff documents are planning references. Their embedded prompt is not an additional request. The maintainer subsequently requested the improved lyrics sidebar, OLED Blue, a usable GitHub release and a macOS DMG. Those direct requests set the current scope.
 
-## Decisions and review
+## Direction
 
-- Owner: `FallenG101`, verified against the authenticated GitHub account.
-- Repository: `MagicSpot2`, a public GitHub fork of public `crmne/spotifast`.
-- Base: current upstream main, recorded in `UPSTREAM.md`.
-- Display name for the future identity change: MagicSpot.
-- Platform direction: retain upstream Windows, macOS and Linux support.
-- Settings migration: none in the initial preview; use a separate clean profile.
-- Initial product priorities: lyrics readability and a small curated theme set.
-- Keep the upstream Rust/egui/fastframe/librespot foundation and secure storage.
-- Preserve MIT, Inter OFL and Lucide ISC attribution.
-- No imported v3 dependencies, telemetry, hosted backend or alternate audio.
+Maintain the small lyrics/theme improvements and keep current with Spotifast. Aim to contribute suitable UI improvements upstream, with the maintainer's explicit instruction before submitting. Keep runtime and Spotify behavior close to upstream, and isolate UI work from MagicSpot identity and packaging changes. No discontinued-v3 dependencies, telemetry or alternative audio sources are added.
 
-The plan and starter kit agree on the foundation. Two details need tightening:
-the starter kit's preview gate requires one sync exercise, while delivery stage
-4 asks for two. Use the stricter two-exercise gate before a public preview.
-Performance budgets must be chosen from measurements, not inherited claims.
+## Completed development work
 
-Current upstream already implements a lyrics side panel, full-window lyrics,
-active-line highlighting, click-to-seek, manual scrolling and a Follow control.
-Its palette module already has semantic color roles, file-based custom themes,
-desktop theme integration and shared presets. Build the differentiators on these
-layers rather than porting duplicate v3 implementations. The baseline captures
-also show that narrow-window usability needs explicit review.
+- Forked latest Spotifast main, preserved history and recorded the stable reference, compiler and fastframe/egui/winit/librespot revisions.
+- Built and tested the untouched Windows baseline; captured native UI evidence.
+- Retained upstream CI, added normal release/demo builds on all three targets, and restricted inherited publishing/packaging/triage to its original owner.
+- Added report-only upstream drift reporting, including changed-file overlap.
+- Implemented the lyrics/OLED pass in its own commit, `e252ee0`.
+- Separated executable, profile, secure-store, window state, IPC, tray, media, Connect name and updater identities. See `IDENTITY.md`.
+- Prepared `2.0.0-preview.1`: normal Windows x64 ZIP and universal macOS DMG, both without demo data or MilkDrop. Retained all license notices.
 
-## Completed foundation
+## Validation
 
-- Created the GitHub fork and cloned its full ancestry into this workspace.
-- Configured `origin` and `upstream`; verified main and latest stable tag.
-- Reviewed `AGENTS.md`, `CONTRIBUTING.md`, license, toolchain, dependencies,
-  authentication/storage documentation, build rules and inherited workflows.
-- Recorded provenance and a patch inventory.
-- Retained upstream CI and added explicit OS-matrix release and demo builds.
-- Restricted inherited publishing, packaging, Pages and triage jobs to upstream.
-- Added report-only upstream drift reporting with changed-file overlap.
+The Windows release/demo suite passed 971 tests with one ignored native-store round trip; that exact dummy-grant native-store test passed separately. Strict clippy passed. Packaging regression suites passed four tests each. Native Windows captures cover light, dark and OLED Blue, normal/narrow windows and lyrics states. See `UI_NOTES.md` and the historical `BASELINE.md`.
 
-## Baseline validation
+The normal release build and release-commit CI/package verification are the final publication checks. macOS runs on GitHub's native runner; the DMG check mounts the image and verifies bundle identity, version, signature and both architectures. No local macOS or Linux interactive session is claimed.
 
-See `BASELINE.md` for the method and results. Account-backed sign-in, playback,
-Connect, install and uninstall need separate native validation. Demo data cannot
-verify those flows. No MagicSpot speed claim is made.
+Live Spotify sign-in, local playback, Connect and relaunch have not been exercised with an account in this session. The inherited flows are enabled and unchanged; demo coverage does not establish live-account behavior. The Windows binary has no publisher signature; macOS uses ad-hoc signing without notarization.
 
-## Next implementation gates
+## Future validation and maintenance
 
-The maintainer requested the lyrics/OLED visual pass before the identity
-milestone. That work is described in `UI_NOTES.md`; app/data identity separation
-and account-backed validation remain pending.
-
-1. Separate application identity in one focused change, including executable,
-   package, bundle/desktop IDs, secure-store service, settings/cache/log/window
-   paths, IPC, protocol registrations, update repository and installer identity.
-   Audit both `spotifast` and the legacy upstream name. Choose identifiers
-   containing `magicspot2` so they do not collide with v3's `magicspot` identity.
-2. Verify profile separation and native secure-store round trips using dummy
-   grants. Preserve upstream OAuth behavior and document the shared public Web
-   API app before account-backed tests; do not invent a new Spotify Client ID.
-3. Replace inherited README/download instructions and packaging only after the
-   identity change. Review updater and signing before enabling release workflows.
-4. Capture lyrics/theme before-and-after evidence at normal/narrow sizes, in
-   dark/light modes, including loading, missing, error, long-line and manual
-   scroll states. Retain upstream UI action/runtime boundaries.
-5. Complete sign-in/local playback/Connect/relaunch tests and native OS checks,
-   then collect repeatable performance measurements and choose budgets.
-6. Complete two small upstream sync exercises before the public preview.
-
-Release and installer validation remain pending. Initial bootstrap binaries still
-carry Spotifast's app and storage identities; use isolated demo mode for now.
+Native account-backed checks, measured performance budgets, Linux install packaging, Apple notarization and upstream sync exercises remain follow-up work. The kickoff's proposed two-sync/cross-platform-preview roadmap is not represented as completed. No speed or memory improvement is claimed. The report-only drift workflow does not merge, publish or submit upstream changes automatically.

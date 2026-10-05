@@ -2,7 +2,34 @@
 //! for every message a catalog has not translated yet. The interface follows
 //! the operating system's language unless Settings names another one.
 
-pub use fastframe_i18n::{gettext, ngettext, pgettext};
+use std::borrow::Cow;
+
+// Keep upstream message keys and catalogs intact, then apply the fork's
+// product name to translated copy. Ordinary strings retain the borrowed path.
+fn branded(text: Cow<'static, str>) -> Cow<'static, str> {
+    if text.contains("Spotifast") {
+        Cow::Owned(text.replace("Spotifast", crate::identity::DISPLAY_NAME))
+    } else {
+        text
+    }
+}
+
+pub fn gettext(locale: Locale, source: &'static str) -> Cow<'static, str> {
+    branded(fastframe_i18n::gettext(locale, source))
+}
+
+pub fn pgettext(locale: Locale, context: &'static str, source: &'static str) -> Cow<'static, str> {
+    branded(fastframe_i18n::pgettext(locale, context, source))
+}
+
+pub fn ngettext(
+    locale: Locale,
+    singular: &'static str,
+    plural: &'static str,
+    count: u32,
+) -> Cow<'static, str> {
+    branded(fastframe_i18n::ngettext(locale, singular, plural, count))
+}
 
 include!(concat!(env!("OUT_DIR"), "/catalogs.rs"));
 
@@ -457,5 +484,28 @@ mod tests {
         ] {
             assert_eq!(locale.liked_song_count(count), expected);
         }
+    }
+}
+
+#[cfg(test)]
+mod branding_tests {
+    use super::*;
+
+    #[test]
+    fn brand_is_applied_after_translation_without_changing_message_keys() {
+        for locale in [
+            Locale::English,
+            Locale::Spanish,
+            Locale::German,
+            Locale::Turkish,
+        ] {
+            let text = gettext(locale, "Spotifast is up to date");
+            assert!(text.contains("MagicSpot"), "{locale:?}: {text}");
+            assert!(!text.contains("Spotifast"));
+        }
+        assert!(matches!(
+            gettext(Locale::English, "Lyrics"),
+            Cow::Borrowed(_)
+        ));
     }
 }

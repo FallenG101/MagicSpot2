@@ -1,12 +1,12 @@
 [package]
-name = "spotifast"
-default-run = "spotifast"
-version = "0.12.0"
+name = "magicspot2"
+default-run = "magicspot2"
+version = "2.0.0-preview.1"
 edition = "2024"
 rust-version = "1.98"
 license = "MIT"
 description = "A native Spotify client"
-repository = "https://github.com/crmne/spotifast"
+repository = "https://github.com/FallenG101/MagicSpot2"
 keywords = ["spotify", "music", "egui", "librespot", "player"]
 categories = ["multimedia::audio"]
 
@@ -15,7 +15,7 @@ name = "spotifast"
 path = "src/lib.rs"
 
 [[bin]]
-name = "spotifast"
+name = "magicspot2"
 path = "src/spotifast.rs"
 
 [dependencies]

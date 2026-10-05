@@ -17,11 +17,11 @@ pub struct AppDirs {
 
 impl AppDirs {
     pub fn discover() -> Self {
-        Self::for_name("spotifast")
+        Self::for_name(crate::identity::COMMAND)
     }
 
     fn for_name(name: &str) -> Self {
-        let project = ProjectDirs::from("me", "paolino", name);
+        let project = ProjectDirs::from("com", "FallenG101", name);
         match project {
             Some(project) => Self {
                 config: project.config_dir().to_path_buf(),
@@ -81,7 +81,7 @@ impl AppDirs {
 
     /// The log of the current run, replaced at every start.
     pub fn log_file(&self) -> PathBuf {
-        self.state.join("spotifast.log")
+        self.state.join("magicspot2.log")
     }
 
     /// Where a panic is recorded before the process dies of it.
@@ -138,5 +138,29 @@ impl AppDirs {
             std::fs::create_dir_all(dir)?;
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn discovery_never_uses_spotifast_or_v3_directories() {
+        let current = AppDirs::discover();
+        for (qualifier, organization, name) in [
+            ("me", "paolino", "spotifast"),
+            ("com", "FallenG101", "magicspot"),
+        ] {
+            if let Some(old) = ProjectDirs::from(qualifier, organization, name) {
+                for path in [&current.config, &current.state, &current.cache] {
+                    for old_path in [old.config_dir(), old.data_local_dir(), old.cache_dir()] {
+                        assert!(!path.starts_with(old_path), "new profile: {path:?}");
+                        assert!(!old_path.starts_with(path), "old profile: {old_path:?}");
+                    }
+                }
+            }
+        }
+        assert_eq!(current.log_file().file_name().unwrap(), "magicspot2.log");
     }
 }

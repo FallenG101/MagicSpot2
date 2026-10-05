@@ -228,7 +228,7 @@ fn run_control(control: Control) -> i32 {
             }
         }
         Err(error) => {
-            eprintln!("Spotifast is not running or does not support remote control: {error}");
+            eprintln!("MagicSpot is not running or does not support remote control: {error}");
             return 1;
         }
     };
@@ -254,12 +254,15 @@ fn write_reply(out: &mut impl std::io::Write, text: &str) -> i32 {
 /// sandbox's app id, which Flatpak always sets in `FLATPAK_ID`.
 #[cfg(target_os = "linux")]
 fn desktop_entry() -> String {
-    fastframe_now_playing::desktop_entry("spotifast")
+    fastframe_now_playing::desktop_entry(spotifast::identity::APP_ID)
 }
 
 #[cfg(target_os = "linux")]
 const PULSEAUDIO_PROPERTIES: [(&str, &str); 2] = [
-    ("PULSE_PROP_application.name", "Spotifast"),
+    (
+        "PULSE_PROP_application.name",
+        spotifast::identity::DISPLAY_NAME,
+    ),
     ("PULSE_PROP_stream.description", "Spotify playback"),
 ];
 
@@ -401,7 +404,7 @@ pub(crate) fn run() -> eframe::Result<()> {
         match single_instance::acquire(&waker, link.as_deref()) {
             single_instance::Outcome::Only(guard) => Some(guard),
             single_instance::Outcome::Surfaced => {
-                log::info!("Spotifast is already running; asked it to show its window");
+                log::info!("MagicSpot is already running; asked it to show its window");
                 return Ok(());
             }
         }
@@ -430,14 +433,15 @@ pub(crate) fn run() -> eframe::Result<()> {
     // Launched from a desktop, stderr goes nowhere; keep the run's log where
     // a bug report can find it, and a line per panic in the panic log (with
     // any link in its message removed: a URL can carry a token).
-    if let Err(error) = fastframe_log::Logging::new("spotifast", env!("CARGO_PKG_VERSION"))
-        .filter(default_filter)
-        .file(dirs.log_file())
-        .panic_log(dirs.panic_log())
-        .panic_message(fastframe_log::PanicMessage::Redacted(
-            fastframe_log::redact::links,
-        ))
-        .init()
+    if let Err(error) =
+        fastframe_log::Logging::new(spotifast::identity::COMMAND, env!("CARGO_PKG_VERSION"))
+            .filter(default_filter)
+            .file(dirs.log_file())
+            .panic_log(dirs.panic_log())
+            .panic_message(fastframe_log::PanicMessage::Redacted(
+                fastframe_log::redact::links,
+            ))
+            .init()
     {
         eprintln!("not logging: {error}");
     }
@@ -572,7 +576,7 @@ pub(crate) fn run() -> eframe::Result<()> {
             #[cfg(target_os = "linux")]
             let hide_from_taskbar = options.viewport.taskbar == Some(false);
             eframe::run_native(
-                "Spotifast",
+                spotifast::identity::DISPLAY_NAME,
                 options,
                 Box::new(move |cc| {
                     if let Some(gl) = &cc.gl {
@@ -745,12 +749,12 @@ fn native_options(
     #[cfg(target_os = "linux")]
     let persistence_path = persistence_path.or_else(|| {
         // Keep the native profile path even when Flatpak supplies its app ID.
-        eframe::storage_dir("spotifast").map(|dir| dir.join("app.ron"))
+        eframe::storage_dir(spotifast::identity::COMMAND).map(|dir| dir.join("app.ron"))
     });
     #[cfg(target_os = "linux")]
     let app_id = desktop_entry();
     #[cfg(not(target_os = "linux"))]
-    let app_id = "spotifast";
+    let app_id = spotifast::identity::COMMAND;
     let icon = if cfg!(target_os = "macos") {
         // macOS takes the dock icon from the bundle's .icns, which is the
         // 1024px drawing with the platform's rounding. Setting a window
@@ -760,7 +764,7 @@ fn native_options(
         app_icon()
     };
     let viewport = egui::ViewportBuilder::default()
-        .with_title("Spotifast")
+        .with_title(spotifast::identity::DISPLAY_NAME)
         .with_app_id(app_id)
         .with_taskbar(true)
         .with_icon(icon);
@@ -819,7 +823,8 @@ fn native_options(
 
 fn profile_options(mut options: eframe::NativeOptions) -> eframe::NativeOptions {
     if options.persist_window {
-        options.persistence_path = eframe::storage_dir("spotifast").map(|dir| dir.join("app.ron"));
+        options.persistence_path =
+            eframe::storage_dir(spotifast::identity::COMMAND).map(|dir| dir.join("app.ron"));
     }
     options
 }
@@ -863,7 +868,7 @@ mod native_window_tests {
         let main = profile_options(native_options(false, None, None));
         assert_eq!(
             main.persistence_path,
-            eframe::storage_dir("spotifast").map(|dir| dir.join("app.ron"))
+            eframe::storage_dir(spotifast::identity::COMMAND).map(|dir| dir.join("app.ron"))
         );
         let demo_path = std::path::PathBuf::from("temporary/demo.ron");
         let demo = profile_options(demo_native_options(
@@ -895,12 +900,15 @@ mod native_window_tests {
             assert_eq!(mini.viewport.app_id, main.viewport.app_id);
             assert_eq!(
                 main.persistence_path,
-                eframe::storage_dir("spotifast").map(|dir| dir.join("app.ron"))
+                eframe::storage_dir(spotifast::identity::COMMAND).map(|dir| dir.join("app.ron"))
             );
         }
         #[cfg(not(target_os = "linux"))]
         {
-            assert_eq!(main.viewport.app_id.as_deref(), Some("spotifast"));
+            assert_eq!(
+                main.viewport.app_id.as_deref(),
+                Some(spotifast::identity::COMMAND)
+            );
             assert_eq!(mini.viewport.app_id, main.viewport.app_id);
             assert_eq!(main.persistence_path, None);
         }
@@ -1250,7 +1258,9 @@ impl eframe::App for Shell {
                 MenuCommand::Back => Action::Back,
                 MenuCommand::Forward => Action::Forward,
                 MenuCommand::OpenRepo => {
-                    ctx.open_url(egui::OpenUrl::new_tab("https://github.com/crmne/spotifast"));
+                    ctx.open_url(egui::OpenUrl::new_tab(
+                        "https://github.com/FallenG101/MagicSpot2",
+                    ));
                     continue;
                 }
                 // Editing goes through egui, which owns the text field

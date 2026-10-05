@@ -1368,7 +1368,8 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                 // the mini player opens.
                 const RANDOM: usize = usize::MAX;
                 let random = gettext(locale, "Random");
-                let mut options: Vec<(usize, &str)> = vec![(RANDOM, &random), (0, "Spotifast")];
+                let mut options: Vec<(usize, &str)> =
+                    vec![(RANDOM, &random), (0, crate::identity::DISPLAY_NAME)];
                 options.extend(
                     choices
                         .iter()
@@ -1402,7 +1403,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                     let label = options
                         .iter()
                         .find(|(value, _)| *value == showing)
-                        .map_or("Spotifast", |(_, label)| label);
+                        .map_or(crate::identity::DISPLAY_NAME, |(_, label)| label);
                     theme::subtle(
                         ui,
                         &palette,
@@ -1857,7 +1858,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
     let source_code = gettext(locale, "Source code");
     let about_rows = [
         RowText::new(
-            format!("Spotifast {}", env!("CARGO_PKG_VERSION")),
+            format!("MagicSpot {}", env!("CARGO_PKG_VERSION")),
             built_with.clone(),
         ),
         RowText::new(
@@ -1874,7 +1875,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                 ui.vertical(|ui| {
                     theme::text(
                         ui,
-                        format!("Spotifast {}", env!("CARGO_PKG_VERSION")),
+                        format!("MagicSpot {}", env!("CARGO_PKG_VERSION")),
                         theme::semibold(15.0),
                         palette.text,
                     );

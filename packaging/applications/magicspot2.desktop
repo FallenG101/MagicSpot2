@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=MagicSpot
+GenericName=Music Player
+Comment=A native Spotify client
+Exec=magicspot2 %u
+Terminal=false
+Categories=AudioVideo;Audio;Player;Music;
+Keywords=spotify;music;player;streaming;magicspot;
+Icon=magicspot2
+StartupNotify=true
+StartupWMClass=com.falleng101.magicspot2
+MimeType=x-scheme-handler/spotify;
