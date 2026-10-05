@@ -18,6 +18,34 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  build:
+    name: release and demo (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - name: GUI build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libpulse-dev libxkbcommon-dev \
+            libwayland-dev libgl1-mesa-dev
+      - uses: jdx/mr-boxington-action@v1
+        with:
+          cache-generation: magicspot-build-v1
+      # MilkDrop's default/all-feature compilation remains covered by the
+      # inherited quality/test jobs. These are the baseline configurations.
+      # Build without demo first so the ordinary release cannot contain it.
+      - name: Release build (without MilkDrop or demo)
+        run: mbx build --locked --release --no-default-features
+      - name: Release demo build (without MilkDrop)
+        run: mbx build --locked --release --no-default-features --features demo
+
   quality:
     name: quality
     runs-on: ubuntu-latest

@@ -39,6 +39,7 @@ permissions:
 
 jobs:
   packaging:
+    if: github.repository == 'crmne/spotifast'
     permissions:
       contents: write
     uses: crmne/native-packages/.github/workflows/package.yml@999768410cf53cdc68c8679c09cb14de1a6bca7b # v0.8.1
@@ -51,6 +52,7 @@ jobs:
     secrets: inherit
 
   homebrew:
+    if: github.repository == 'crmne/spotifast'
     name: Homebrew install (macOS)
     needs: packaging
     runs-on: macos-latest
@@ -79,6 +81,7 @@ jobs:
   # The AppImage carries no libraries of its own, so the runner supplies
   # ALSA as a desktop would. Runners have no FUSE: it unpacks itself to run.
   appimage:
+    if: github.repository == 'crmne/spotifast'
     name: AppImage (${{ matrix.os }})
     needs: packaging
     runs-on: ${{ matrix.os }}
@@ -115,6 +118,7 @@ jobs:
           "$1" --appimage-extract-and-run --version | grep -Ex 'spotifast [0-9]+\.[0-9]+\.[0-9]+.*'
 
   installation:
+    if: github.repository == 'crmne/spotifast'
     name: Install (${{ matrix.os }}, ${{ matrix.image }})
     needs: packaging
     runs-on: ${{ matrix.os }}

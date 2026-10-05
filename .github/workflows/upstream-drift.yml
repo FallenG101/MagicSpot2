@@ -1,0 +1,22 @@
+name: Upstream drift (report only)
+
+on:
+  schedule:
+    - cron: '23 14 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Fetch upstream for comparison
+        run: git fetch --no-tags https://github.com/crmne/spotifast.git main:refs/remotes/upstream/main
+      - name: Report drift and patch overlap
+        run: python3 .github/scripts/upstream-drift.py >> "$GITHUB_STEP_SUMMARY"
