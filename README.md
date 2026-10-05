@@ -1,4 +1,21 @@
-# Spotifast
+# MagicSpot 2.0
+
+MagicSpot 2.0 is starting from a fresh fork of current
+[Spotifast](https://github.com/crmne/spotifast). The first priorities are polished
+lyrics, cohesive themes, measured performance and manageable upstream updates.
+
+This repository is in its bootstrap stage. Application identities and packaging
+are still inherited from Spotifast. Use isolated demo mode while the new identity
+is established; there is no MagicSpot 2.0 download or preview release yet.
+
+See [upstream provenance](UPSTREAM.md), [bootstrap status](docs/magicspot/STATUS.md)
+and [baseline validation](docs/magicspot/BASELINE.md). MagicSpot v3 remains in the
+separate [discontinued repository](https://github.com/FallenG101/MagicSpot).
+
+## Inherited Spotifast documentation
+
+The following describes upstream Spotifast. Its downloads and performance claims
+refer to upstream builds, and are not MagicSpot 2.0 release instructions or claims.
 
 **Spotify, native and fast.** Spotifast is a Spotify client written in
 Rust with [egui](https://github.com/emilk/egui). It plays music through
