@@ -21,6 +21,8 @@ jobs:
   build:
     name: release and demo (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    env:
+      CMAKE_GENERATOR: Ninja
     timeout-minutes: 60
     strategy:
       fail-fast: false
@@ -67,6 +69,8 @@ jobs:
     name: macOS universal DMG
     if: github.repository == 'FallenG101/MagicSpot2'
     runs-on: macos-latest
+    env:
+      CMAKE_GENERATOR: Ninja
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
