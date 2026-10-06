@@ -120,7 +120,7 @@
                 pname = "magicspot2";
                 version = (pkgs.lib.importTOML ./Cargo.toml).package.version;
                 src = self;
-                hash = "sha256-3YEQzmAnVwMKVAlxBICUrJ4YjxGdriUmaw4pAdBwaRk=";
+                hash = "sha256-BrQ+XQRbcpYbrLgYIrdqjQwdpxHpRWDKSVlemu53xlA=";
               };
               # projectm-sys only searches lib, while CMake may otherwise install to lib64.
               postPatch = ''
