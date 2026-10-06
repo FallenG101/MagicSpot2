@@ -14,17 +14,17 @@ separate from Spotifast 0.12 and discontinued MagicSpot v3.
 | Conventional profile directories | `ProjectDirs::from("com", "FallenG101", "magicspot2")` |
 | Log | `magicspot2.log`, inside the separate state directory |
 | GitHub updates | `FallenG101/MagicSpot2` |
-| Windows download | `magicspot2-vVERSION-x86_64-pc-windows-msvc.zip` |
+| Windows download | `magicspot2-vVERSION-x86_64-pc-windows-msvc.exe` plus a license-notice text sidecar |
 | macOS download | `magicspot2-vVERSION-macos-universal.dmg` |
 
 No previous settings, cache, credential or window-state files are imported.
 The profile-directory regression compares both previous app namespaces without
 writing either. The native credential regression uses disposable dummy grants.
 
-The Windows ZIP needs extraction and a launch of `magicspot2.exe`; it does not
-register URL handlers, install shortcuts, change default apps or create an
-uninstaller. Delete the extracted folder to remove the executable. Preferences
-remain in its separate profile. The inherited Spotifast installer and packaging
+The Windows download is a standalone executable: download and run it directly.
+It does not register URL handlers, install shortcuts, change default apps or
+create an uninstaller. Delete the executable to remove it. Preferences remain
+in its separate profile. The inherited Spotifast installer and packaging
 publishers are not used. Their original files remain for upstream provenance.
 Source macOS bundle metadata and Nix desktop packaging use the new identity.
 The macOS DMG contains a universal MagicSpot.app with its own bundle identity.
@@ -43,7 +43,7 @@ key. No Spotify password is handled by MagicSpot.
 The app uses Spotify for catalogue, account and audio requests. Artwork and audio
 are cached within the configured budget. Lyrics may use LRCLIB, including artist,
 title, album and duration. Automatic update checks use this fork's stable GitHub releases, exclude prereleases,
-and can be disabled in Settings. Preview updates are manual; the Windows ZIP
+and can be disabled in Settings. Preview updates are manual; the Windows EXE
 lacks the portable updater marker. Downloads use the matching asset and SHA-256
 from `checksums.txt`; unsigned downloads are not publisher-authenticated. No
 telemetry or hosted MagicSpot backend is added.

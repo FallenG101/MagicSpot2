@@ -297,7 +297,7 @@ magicspot2 [OPTIONS] [LINK]
 
 A link goes to the running MagicSpot when there is one, which then opens
 the page and brings its window forward; otherwise the app starts on it. The
-installed launcher can route `spotify:` links this way; the Windows preview ZIP does not register one.
+installed launcher can route `spotify:` links this way; the Windows preview executable does not register one.
 
 Attach `magicspot2.log` from the state directory to bug reports. It contains
 the last run's output, including extra lines from `magicspot2 -v`. After a

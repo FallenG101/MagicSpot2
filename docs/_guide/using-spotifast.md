@@ -269,7 +269,7 @@ A verb exits non-zero when MagicSpot is not running.
 
 `magicspot2 <link>` opens a Spotify link, a `spotify:` URI or an
 `open.spotify.com` address, in the running app, or starts the app on it.
-Registered desktop launchers can route links this way; the Windows preview ZIP does not register one. On Linux, MagicSpot is
+Registered desktop launchers can route links this way; the Windows preview executable does not register one. On Linux, MagicSpot is
 also an MPRIS player, so `playerctl --player=magicspot2 play-pause` and media
 keys work too.
 
@@ -280,7 +280,7 @@ random token). Use the command rather than the channel itself.
 
 ## Updates
 
-Preview releases are manual downloads from [MagicSpot GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases). Quit the app and replace the extracted Windows folder or Mac app; your separate profile remains in place. The stable-release checker excludes prereleases, and the Preview 1 ZIP has no portable-update marker. See [Download](/download/) for the actual supported packages and signing status.
+Preview releases are manual downloads from the [direct MagicSpot Preview 1 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1). Quit the app and replace the Windows `.exe` or Mac app; your separate profile remains in place. The stable-release checker excludes prereleases. See [Download](/download/) for supported files and signing status.
 
 ## Library order
 

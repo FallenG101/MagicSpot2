@@ -6,9 +6,9 @@ nav_order: 1
 
 ## Install
 
-Get the Windows x64 ZIP or universal macOS DMG from [GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases) when Preview 1 is available. The [Download guide](/download/) lists file names, signing status and manual updates.
+Get the standalone Windows x64 `.exe` or universal macOS DMG from the [direct Preview 1 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1). The [Download guide](/download/) lists file names, signing status and manual updates.
 
-On Windows, extract the whole ZIP and open `magicspot2.exe`. The ZIP does not install shortcuts, register Spotify URL handlers or create an uninstaller. On macOS, drag MagicSpot from the DMG to Applications before opening it. The Mac preview is ad-hoc signed without notarization and may require first-launch approval in Privacy & Security.
+On Windows, download and open the `.exe`; it runs directly without extraction or installation. It does not install shortcuts, register Spotify URL handlers or create an uninstaller. On macOS, drag MagicSpot from the DMG to Applications before opening it. The Mac preview is ad-hoc signed without notarization and may require first-launch approval in Privacy & Security.
 
 ## Sign in
 
@@ -26,7 +26,7 @@ The interface follows your system language when a bundled translation exists. Un
 
 ## Spotify links and proxy settings
 
-You can pass a link to the command: `magicspot2 https://open.spotify.com/track/...`. A second launch forwards the link to the running app. The Mac bundle declares the inherited Spotify URL scheme; macOS determines which registered app receives it. Windows ZIP users do not get a default-app registration.
+You can pass a link to the command: `magicspot2 https://open.spotify.com/track/...`. A second launch forwards the link to the running app. The Mac bundle declares the inherited Spotify URL scheme; macOS determines which registered app receives it. The Windows executable does not register as the default app for Spotify links.
 
 With MagicSpot's Linux desktop file installed, a compatible desktop can select `com.falleng101.magicspot2.desktop` for `x-scheme-handler/spotify`.
 

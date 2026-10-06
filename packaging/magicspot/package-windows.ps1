@@ -14,19 +14,29 @@ if ($LASTEXITCODE -ne 0 -or $reported -ne "magicspot2 $version") {
 }
 $outputPath = [IO.Path]::GetFullPath($OutputDir)
 $stem = "magicspot2-v$version-x86_64-pc-windows-msvc"
-$folder = Join-Path $outputPath $stem
-if (Test-Path -LiteralPath $folder) { throw 'Use a fresh output directory' }
-New-Item -ItemType Directory -Path $folder -Force | Out-Null
-Copy-Item -LiteralPath $binaryPath -Destination (Join-Path $folder 'magicspot2.exe')
-Copy-Item -LiteralPath (Join-Path $repoPath 'LICENSE') -Destination $folder
-Copy-Item -LiteralPath (Join-Path $repoPath 'README.md') -Destination $folder
-New-Item -ItemType Directory -Path (Join-Path $folder 'licenses') | Out-Null
-foreach ($license in @('assets\fonts\Inter-LICENSE.txt','assets\fonts\NotoEmoji-LICENSE.txt','assets\icons\LICENSE.txt')) {
-    $name = $license.Replace('assets\','').Replace('\','-')
-    Copy-Item -LiteralPath (Join-Path $repoPath $license) -Destination (Join-Path $folder "licenses\$name")
+$exeName = "$stem.exe"
+$licensesName = "magicspot2-v$version-THIRD-PARTY-LICENSES.txt"
+if (Test-Path -LiteralPath $outputPath) { throw 'Use a fresh output directory' }
+New-Item -ItemType Directory -Path $outputPath | Out-Null
+$exeOutput = Join-Path $outputPath $exeName
+Copy-Item -LiteralPath $binaryPath -Destination $exeOutput
+
+$licenses = @(
+    @{ Name = 'MagicSpot (MIT License)'; Path = 'LICENSE' },
+    @{ Name = 'Inter (SIL Open Font License 1.1)'; Path = 'assets\fonts\Inter-LICENSE.txt' },
+    @{ Name = 'Noto Emoji (SIL Open Font License 1.1)'; Path = 'assets\fonts\NotoEmoji-LICENSE.txt' },
+    @{ Name = 'Lucide icons (ISC License)'; Path = 'assets\icons\LICENSE.txt' }
+)
+$sections = foreach ($license in $licenses) {
+    $path = Join-Path $repoPath $license.Path
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Missing license file: $path" }
+    "===== $($license.Name) =====`r`n$([IO.File]::ReadAllText($path, [Text.Encoding]::UTF8).Trim())"
 }
-$archive = Join-Path $outputPath "$stem.zip"
-Compress-Archive -LiteralPath $folder -DestinationPath $archive -CompressionLevel Optimal
-$hash = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
-Set-Content -LiteralPath (Join-Path $outputPath 'checksums.txt') -Value "$hash  $stem.zip" -Encoding ascii
-Write-Output $archive
+$licensesOutput = Join-Path $outputPath $licensesName
+[IO.File]::WriteAllText($licensesOutput, (($sections -join "`r`n`r`n") + "`r`n"), [Text.UTF8Encoding]::new($false))
+
+$checksumLines = @($exeOutput, $licensesOutput) |
+    Sort-Object { [IO.Path]::GetFileName($_) } |
+    ForEach-Object { "$((Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant())  $([IO.Path]::GetFileName($_))" }
+[IO.File]::WriteAllLines((Join-Path $outputPath 'checksums.txt'), [string[]]$checksumLines, [Text.Encoding]::ASCII)
+Write-Output $exeOutput

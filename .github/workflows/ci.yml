@@ -52,7 +52,8 @@ jobs:
         with:
           name: MagicSpot-Windows-x64
           path: |
-            dist/ci-windows/*.zip
+            dist/ci-windows/*.exe
+            dist/ci-windows/*THIRD-PARTY-LICENSES.txt
             dist/ci-windows/checksums.txt
           if-no-files-found: error
       - name: Release demo build (without MilkDrop)

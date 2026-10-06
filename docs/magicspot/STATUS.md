@@ -2,11 +2,17 @@
 
 MagicSpot 2 is the new development line at https://github.com/FallenG101/MagicSpot2. The discontinued https://github.com/FallenG101/MagicSpot repository remains separate.
 
+## Current distribution, October 5, 2026
+
+Preview 1 is public at [the direct release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1). The Windows download is the standalone x64 executable `magicspot2-v2.0.0-preview.1-x86_64-pc-windows-msvc.exe`, with a separate license-notice file and SHA-256 checksums; the universal Mac DMG remains available. There is no Windows ZIP. The repository home page's Releases panel only shows tags and can appear empty because this release is a prerelease; direct the maintainer and users to the release page itself.
+
+The EXE was produced from the Windows release binary in successful CI run 37397093468 for commit `628991e`, retaining the tested application bytes. The packaging step adds the standalone filename, license notices and updated checksums. Local verification confirmed the executable version, x64 PE format, license bundle and checksums alongside the already-verified universal DMG. CI now uploads these standalone Windows deliverables and the release publisher expects them. The packaging and public release were manually updated because the one-time publisher intentionally leaves an already-existing release untouched.
+
 The October 5 kickoff documents are planning references. Their embedded prompt is not an additional request. The maintainer subsequently requested the improved lyrics sidebar, OLED Blue, a usable GitHub release and a macOS DMG. Those direct requests set the current scope.
 
 ## Release check, October 5, 2026
 
-There is no public MagicSpot release at this check. [CI run 37391265335](https://github.com/FallenG101/MagicSpot2/actions/runs/37391265335), on `4e3da02`, completed with eight passing jobs and two failures. Normal release/demo builds passed on all three operating systems; quality, docs, Nix, Windows tests and macOS tests passed. The Windows ZIP was produced. Both Mac architectures compiled, but the DMG was not produced.
+There was no public MagicSpot release at that historical check. [CI run 37391265335](https://github.com/FallenG101/MagicSpot2/actions/runs/37391265335), on `4e3da02`, completed with eight passing jobs and two failures. Normal release/demo builds passed on all three operating systems; quality, docs, Nix, Windows tests and macOS tests passed. The Windows ZIP was produced. Both Mac architectures compiled, but the DMG was not produced.
 
 Linux's unavailable-display regression failed because the renamed command's startup INFO log was excluded by the old default filter. The universal DMG packager passed its binary path after `lipo -verify_arch`, where lipo treated it as another architecture. Commit `83b289f` corrects the log filters and both lipo calls. The existing regression and package verification remain in place; these platform-specific fixes still require the replacement CI run.
 
@@ -38,7 +44,7 @@ Maintain the small lyrics/theme improvements and keep current with Spotifast. Ai
 - Added a saved 18–48 point lyric size with Auto mode, and a cover that grows as
   the sidebar is widened.
 - Separated executable, profile, secure-store, window state, IPC, tray, media, Connect name and updater identities. See `IDENTITY.md`.
-- Prepared `2.0.0-preview.1`: normal Windows x64 ZIP and universal macOS DMG, both without demo data or MilkDrop. Retained all license notices.
+- Prepared `2.0.0-preview.1`: normal Windows x64 executable and universal macOS DMG, both without demo data or MilkDrop. Retained all license notices.
 
 ## Validation
 

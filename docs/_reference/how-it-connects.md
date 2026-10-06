@@ -129,7 +129,7 @@ current-track pickup.
   is also in the application menu.
 
   MagicSpot's checker uses `FallenG101/MagicSpot2` and excludes prereleases.
-  Preview 1 updates are manual downloads. The Windows ZIP does not contain the
+  Preview 1 updates are manual downloads. The Windows EXE does not contain the
   portable-update marker, so automatic replacement is not enabled for that
   package. The inherited Mac updater can validate bundle identity, version and
   signature for a compatible future stable update, but ad-hoc signing is not

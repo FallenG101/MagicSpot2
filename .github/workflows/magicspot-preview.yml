@@ -71,4 +71,4 @@ jobs:
             --target "$RELEASE_SHA" --prerelease \
             --title 'MagicSpot 2.0 Preview 1' \
             --notes-file packaging/release-notes/v2.0.0-preview.1.md \
-            dist/release/*.zip dist/release/*.dmg dist/release/checksums.txt
+            dist/release/*.exe dist/release/*THIRD-PARTY-LICENSES.txt dist/release/*.dmg dist/release/checksums.txt

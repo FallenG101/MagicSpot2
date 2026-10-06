@@ -2,7 +2,7 @@
 
 A native Spotify desktop app based on the latest [Spotifast](https://github.com/crmne/spotifast) foundation, with an Apple Music-inspired lyrics sidebar and OLED Blue.
 
-**[MagicSpot downloads on GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases).** Preview 1 downloads become available after the required CI checks pass. On Windows, extract the ZIP and open `magicspot2.exe`. On macOS, open the universal DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium.
+**[Download MagicSpot 2.0 Preview 1](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1).** On Windows, download and run the standalone x64 `.exe`; there is no ZIP to extract. On macOS, open the universal DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium. GitHub doesn't show prereleases in the repository home page's Releases panel, so use the direct release link above.
 
 ## What's new
 
