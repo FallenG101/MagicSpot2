@@ -1,9 +1,12 @@
 ---
 redirect_from: /using-fastpotify/
 title: Everyday Use
-description: Play music, arrange playlists, find lyrics, and make Spotifast your own.
+description: Play music, arrange playlists, find lyrics, and make MagicSpot your own.
 nav_order: 3
 ---
+
+Screenshots in this retained guide are upstream reference captures unless labeled MagicSpot. Historical `0.x` version numbers refer to Spotifast.
+
 
 ## Middle-click autoscroll
 
@@ -74,7 +77,7 @@ is still loading, it selects the songs loaded so far.
 `Ctrl+C` (`Cmd+C`) copies the selected songs' `open.spotify.com` links, one
 per line, ready to paste into another playlist, a message, or Spotify's own
 apps. `Ctrl+V` (`Cmd+V`) in a playlist you can edit adds every song link on
-the clipboard to its end. Links copied from Spotifast add their rows at
+the clipboard to its end. Links copied from MagicSpot add their rows at
 once; links from elsewhere appear as soon as Spotify names the songs. Songs
 already in the playlist ask before being added twice, and links that are
 not songs, such as albums, are skipped.
@@ -132,7 +135,7 @@ while it plays from a playlist you can edit.
 Since 0.8.0, choose **Refresh** in a playlist's **…** menu to reload
 its details and songs, including changes made in another Spotify client. The
 menu item reads **Refreshing…** and is disabled while loading. Current songs,
-filtering and sorting stay visible. Spotifast finishes saving your edits before
+filtering and sorting stay visible. MagicSpot finishes saving your edits before
 loading changes from Spotify. If loading fails, your songs stay visible and
 you can choose **Retry**.
 
@@ -145,19 +148,19 @@ sidebar is not in compact mode.
 
 ## Search from a launcher
 
-**In development, not included in 0.8.0:** a Spotify search link opens Search
+a Spotify search link opens Search
 and fills the box without starting playback. To try it in a development build,
 set a launcher or keyboard shortcut to run:
 
 ```sh
-spotifast 'https://open.spotify.com/search/here%20comes%20the%20sun'
+magicspot2 'https://open.spotify.com/search/here%20comes%20the%20sun'
 ```
 
 This starts the app if needed or opens its existing window. When signed out,
 the latest search link waits for sign-in. Use `https://open.spotify.com/search`
 without a query to open an empty, focused search box.
 
-On Linux, `playerctl --player=spotifast open` accepts the same search link
+On Linux, `playerctl --player=magicspot2 open` accepts the same search link
 when the app is running. Links to songs, albums, and playlists still start
 playback as before.
 
@@ -234,20 +237,20 @@ for its own text.
 
 ## Controlling it from the command line
 
-The `spotifast` command controls the copy already running, on every
+The `magicspot2` command controls the copy already running, on every
 platform. Each verb prints nothing on success:
 
 ```
-spotifast play-pause          spotifast volume 40
-spotifast play                spotifast volume-up [percent]
-spotifast pause               spotifast volume-down [percent]
-spotifast next                spotifast mute
-spotifast previous            spotifast shuffle [on|off]
-spotifast seek 15             spotifast repeat [off|context|track]
-spotifast seek -- -15         spotifast like
-spotifast seek-to 90          spotifast play-uri spotify:playlist:37i9…
-spotifast show                spotifast transfer <device-id>
-spotifast now-playing [--raw] spotifast devices [--raw]
+magicspot2 play-pause          magicspot2 volume 40
+magicspot2 play                magicspot2 volume-up [percent]
+magicspot2 pause               magicspot2 volume-down [percent]
+magicspot2 next                magicspot2 mute
+magicspot2 previous            magicspot2 shuffle [on|off]
+magicspot2 seek 15             magicspot2 repeat [off|context|track]
+magicspot2 seek -- -15         magicspot2 like
+magicspot2 seek-to 90          magicspot2 play-uri spotify:playlist:37i9…
+magicspot2 show                magicspot2 transfer <device-id>
+magicspot2 now-playing [--raw] magicspot2 devices [--raw]
 ```
 
 `shuffle` and `repeat` toggle when used without an argument. Pass a state to
@@ -262,37 +265,22 @@ loading. New fields are appended to keep older scripts working.
 marked with `*`. `--raw` prints JSON. The command refreshes the device list,
 so the first call after startup may be empty. Run it again if needed.
 
-A verb exits non-zero when Spotifast is not running.
+A verb exits non-zero when MagicSpot is not running.
 
-`spotifast <link>` opens a Spotify link, a `spotify:` URI or an
+`magicspot2 <link>` opens a Spotify link, a `spotify:` URI or an
 `open.spotify.com` address, in the running app, or starts the app on it.
-This is what the desktop runs when a link is clicked. On Linux, Spotifast is
-also an MPRIS player, so `playerctl --player=spotifast play-pause` and media
+Registered desktop launchers can route links this way; the Windows preview ZIP does not register one. On Linux, MagicSpot is
+also an MPRIS player, so `playerctl --player=magicspot2 play-pause` and media
 keys work too.
 
 Launchers such as Raycast or Alfred, and the Stream Deck plugin, can use
-these commands. They reach Spotifast through a private channel only your user
+these commands. They reach MagicSpot through a private channel only your user
 can open (on Windows, a loopback port that answers only requests carrying a
 random token). Use the command rather than the channel itself.
 
 ## Updates
 
-The Windows installer, Mac app, and portable Windows and Linux downloads
-update from inside Spotifast. Click the green update button to download a
-release, then choose when to restart and install it. Settings can enable
-automatic background downloads; restarting always waits for your click.
-Closing the update window keeps a download running. You can also check for a
-new release from Settings, or on macOS from the application menu.
-
-Spotifast checks each download before installing it. An interrupted or damaged
-download leaves the running app alone, and a failed startup restores the
-previous installation. Updates keep your settings and sign-ins. On macOS,
-move Spotifast to Applications before updating it.
-
-Package-managed installations update through their package manager,
-including Homebrew, Flatpak, apt, dnf, pacman, Nix, and Cargo. Other
-installations, the AppImage among them, use the [Download page](/download/).
-Portable archives identify themselves with `spotifast-portable.txt`.
+Preview releases are manual downloads from [MagicSpot GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases). Quit the app and replace the extracted Windows folder or Mac app; your separate profile remains in place. The stable-release checker excludes prereleases, and the Preview 1 ZIP has no portable-update marker. See [Download](/download/) for the actual supported packages and signing status.
 
 ## Library order
 
@@ -305,10 +293,10 @@ dates come last.
 
 **Spotify custom order** follows your playlist order and folders from Spotify.
 Set up playback on this computer to load that order. Your playlists stay
-visible while it loads, and Spotifast remembers the last order for your account.
-Items you pin in Spotifast remain at the top, including items from a closed
+visible while it loads, and MagicSpot remembers the last order for your account.
+Items you pin in MagicSpot remain at the top, including items from a closed
 folder. Sorting or dragging Library items changes their order only in
-Spotifast; it does not rearrange your Spotify library.
+MagicSpot; it does not rearrange your Spotify library.
 
 Drag playlists to choose **Local custom order**. New playlists appear below the
 pinned group. Selecting **Name**, **Recently played** or **Spotify custom order**
@@ -325,7 +313,7 @@ Liked Songs starts pinned at the top. Drag it between pins to choose its
 position, or below the pin block to unpin it and put it in **Local custom
 order**. Other pins can sit above it. Its right-click menu also offers **Unpin**
 and **Pin to top**; pinning adds it after your existing pins. The arrangement
-survives restarting Spotifast and switching sort choices.
+survives restarting MagicSpot and switching sort choices.
 
 When unpinned, Liked Songs follows **Name** or **Recently played** like the other
 rows. In **Spotify custom order**, it appears after the playlists because it
@@ -347,14 +335,14 @@ bullet; each artist name remains a separate link.
 
 ## Windows taskbar controls
 
-Since 0.8.0, hovering Spotifast's taskbar button offers **Previous**,
+Since 0.8.0, hovering MagicSpot's taskbar button offers **Previous**,
 **Play/Pause**, and **Next** beneath its window preview. They control the same
 playing device as the player bar, update immediately, and are disabled when
 there is no song or the device refuses controls. The icons follow the system
 appearance and display scaling.
 
 Since 0.8.0, clicking or double-clicking the Windows tray icon shows
-and raises Spotifast. Use **Show or hide Spotifast** in the tray menu to hide
+and raises MagicSpot. Use **Show or hide MagicSpot** in the tray menu to hide
 it again.
 
 Closing to the tray removes the window and its preview. Reopening the main
@@ -365,7 +353,7 @@ is closed.
 For the Winamp mini player, turn off **Show in taskbar** under
 **Settings > Winamp skins**, or **Show in taskbar** in its options menu.
 The choice survives restarts. The mini player stays visible; the tray icon,
-**Ctrl+M**, the skin logo, and launching Spotifast again remain ways to reach
+**Ctrl+M**, the skin logo, and launching MagicSpot again remain ways to reach
 the app. Returning to the main window always restores its taskbar button.
 Changing the option while the mini player is open replaces that window while
 playback continues. This setting is available on Windows and in Linux X11
@@ -381,7 +369,7 @@ it is not needed to recover a position left on an unplugged display.
 
 ## macOS Dock menu
 
-Right-click or Control-click Spotifast's Dock icon for **Play** (or **Pause**
+Right-click or Control-click MagicSpot's Dock icon for **Play** (or **Pause**
 while music plays), **Next**, and **Previous**, above the standard Dock items.
 They control the same playing device as the player bar and keep working while
 the window is closed to the menu bar.
@@ -394,7 +382,7 @@ others.
 Use your desktop's window rule or shortcut instead. In KDE Plasma, configure
 **Keep Window Above Others** under **Settings > Keyboard > Shortcuts >
 Window Management**. Your saved preference remains available when you use
-Spotifast on Windows, macOS, or X11 again.
+MagicSpot on Windows, macOS, or X11 again.
 
 Since 0.8.0, the top bar reserves room for the device and update
 badges beside Search. In narrow windows those badges show only their icons.
@@ -408,7 +396,7 @@ picker or update window.
 
 ## MacBook notch widget
 
-On macOS machines equipped with a display notch, Spotifast displays an
+On macOS machines equipped with a display notch, MagicSpot displays an
 interactive Now Playing floating island under the notch when the main
 window is minimized, in the background, or closed to the tray.
 
@@ -427,7 +415,7 @@ Settings under **Playback on this computer**.
 ## Recent
 
 The queue panel's second tab combines Spotify's history with tracks played
-through Spotifast, which Spotify does not record.
+through MagicSpot, which Spotify does not record.
 
 Since 0.8.0, choosing any Recent row starts that song on its own,
 and the player bar shows the selection immediately while playback starts.
@@ -444,7 +432,7 @@ The local list is stored in `history.json` and is never uploaded. Settings →
 Storage shows its location and has a **Clear history** button.
 
 On Windows, the main window's minimize, maximize, and close buttons share the
-top bar with Spotifast's controls. Drag an empty part of that bar to move or
+top bar with MagicSpot's controls. Drag an empty part of that bar to move or
 snap the window, and drag a window edge or corner to resize it.
 
 ## Radio
@@ -465,7 +453,7 @@ computer to be set up; the page can then play on any device.
 
 ## Playlist covers
 
-**In development, not included in 0.8.0:** open a playlist you own and choose
+open a playlist you own and choose
 **Edit details → Change cover**. Select a
 JPEG or PNG, check the preview, then choose **Upload cover**. Cancelling the
 picker leaves your previous selection intact. An upload error keeps the
@@ -478,6 +466,8 @@ If Spotify refuses permission, sign in again and approve image uploads. If you
 use a personal Spotify app, reconnect it in Settings as well.
 
 ## Lyrics
+
+The sidebar adds saved fonts, custom size, glow, cover colors and a growing album cover. See [Lyrics & Themes](/lyrics-and-themes/) for these MagicSpot controls.
 
 Choose the microphone button in the player bar, or press **L**, to open lyrics.
 Synced lyrics follow the playing line automatically. Scroll to pause following,

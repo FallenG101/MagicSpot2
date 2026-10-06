@@ -1,6 +1,6 @@
-# Contributing to Spotifast
+# Contributing to MagicSpot
 
-Spotifast is a native Spotify client. Changes should improve the
+MagicSpot is a native Spotify client. Changes should improve the
 desktop app without adding a browser, fallback services, or another backend.
 
 ## Before opening an issue
@@ -16,13 +16,13 @@ project.
 Some boundaries come from Spotify or from upstream libraries:
 
 - Local playback requires Spotify Premium because librespot requires it.
-- Spotify Lossless is not available through librespot. Spotifast will
+- Spotify Lossless is not available through librespot. MagicSpot will
   reconsider it if librespot gains lawful upstream support; proposals that
   depend on bypassing Spotify's DRM are out of scope.
 - Spotify tracks must come from Spotify. Substituting audio from YouTube,
   Piped, `yt-dlp`, or another catalogue is out of scope.
-- Spotifast will not embed a browser engine, add telemetry, or introduce a
-  Spotifast-operated service.
+- MagicSpot will not embed a browser engine, add telemetry, or introduce a
+  MagicSpot-operated service.
 
 [What Spotify Lets a Client Do](docs/_reference/what-spotify-allows.md)
 lists what each of the three surfaces offers and the requests none of them
@@ -36,32 +36,11 @@ A bug can be closed once its fix is on `main` and the relevant checks pass,
 with the commit and release status stated. Reporter confirmation is welcome
 but is not required for closure. Reopen the issue if it persists after updating.
 
-## Automated triage
+## Fork scope and triage
 
-[Copilot Triage](https://github.com/crmne/copilot-triage) assesses new and
-reopened issues and new discussions. It uses the report and latest five
-comments plus previous bot replies, adds up to two labels, and may condense a
-long new issue into one concise recap. Follow-up replies must add help: a
-necessary question, supported answer, applicable policy, released fix, or useful
-issue link. Clear duplicates can be closed after comparison; related reports
-stay open. Maintainers handle uncertain decisions and removing obsolete labels.
+MagicSpot maintains lyrics and small theme improvements on the Spotifast foundation. Keep these UI patches separate from fork identity and packaging. Preserve upstream contracts and contributor credit. The maintainer hopes to offer suitable changes upstream; an upstream PR or public message requires a direct request.
 
-Human follow-ups can trigger reassessment. The agent decides whether a reply
-would help; repeated updates and thanks usually need none. Use `/triage` to
-request reassessment, `/triage mute` to stop automatic replies, or maintainer-only
-`/triage unmute` to resume them. You can also run **Issue assessment** from Actions
-with the report kind and number. Preview is enabled by default; turn it off to
-apply the result. The agent uses scoped read-only tools to investigate; only
-conversation state and the CLI installation are cached. A party-popper reaction
-marks a completed assessment,
-including one that needed no reply; it does not promise acceptance or a fix.
-Bot comments are skipped; configured error-monitoring bots can open reports.
-Model failures stay in the job summary.
-
-The `COPILOT_ISSUE_ASSESSMENT_ENABLED` repository variable controls the workflow.
-Edit `.github/triage.yml` for labels, replies, source files, and response policy.
-The shared action follows tested `v0` releases in `.github/workflows/issue-assessment.yml`; its
-implementation and regression tests live in the Copilot Triage repository.
+Use [MagicSpot Issues](https://github.com/FallenG101/MagicSpot2/issues) for fork reports. Inherited automated assessment and publishing workflows are disabled and guarded to upstream. Their configuration files remain for provenance; `/triage` is not an enabled MagicSpot workflow.
 
 ## Design principles
 
@@ -84,7 +63,7 @@ implementation and regression tests live in the Copilot Triage repository.
 
 ## Pull requests
 
-Keep each pull request to one change. Explain why it belongs in Spotifast,
+Keep each pull request to one change. Explain why it belongs in MagicSpot,
 what changed, and how you tested it. Avoid unrelated formatting, refactors,
 generated prose, and large mechanical rewrites.
 
@@ -140,7 +119,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --locked --all-features --no-deps
 ```
 
 Linux needs the development packages listed under
-[Build from source](https://spotifast.rocks/getting-started/#build-from-source); `nix develop`
+[Build from source](docs/_guide/getting-started.md); `nix develop`
 provides the complete development environment. The command compatibility test
 also needs `dbus-run-session`, to use a private bus instead of the desktop's.
 MilkDrop builds libprojectM
@@ -169,18 +148,14 @@ Translation changes also need `.github/scripts/update-translations.sh --check`,
 using GNU gettext tools with Rust support. Run the script without `--check` when
 translatable source strings change, and review any fuzzy or missing entries in
 the updated PO files. Normal Cargo builds compile the catalogs without gettext
-tools. See [Translating Spotifast](docs/_reference/translating.md) for the pilot
+tools. See [Translating MagicSpot](docs/_reference/translating.md) for the pilot
 scope and contributor workflow.
 
-Documentation deployments take their canonical URL from the domain configured
-in GitHub Pages. When changing domains, configure DNS and GitHub Pages before
-redeploying; the previous hostname keeps working until that switch. Renamed
-guides use `jekyll-redirect-from` to preserve their old URLs.
+Documentation is indexed in [docs/README.md](docs/README.md). CI validates the Jekyll build; no MagicSpot domain or Pages deployment is configured. Preserve upstream-named guide routes and internal catalogue paths where useful for syncs. Label historical evidence and release notes instead of presenting them as current MagicSpot behavior.
 
 When changing `Cargo.lock` or `flake.nix`, also verify `nix build .#default`
 on a Nix host or wait for the Nix CI job. A package-version-only lockfile
-change can change the vendor hash. Releases must wait for all required CI
-jobs on the version commit before the tag is pushed.
+change can change the vendor hash. Publication requires every required CI job to pass on the current main commit. Preview 1 uses the guarded workflow in [PACKAGING.md](PACKAGING.md); future releases need a separate scoped change.
 
 By contributing, you agree that your contribution is licensed under the
 project's MIT License.

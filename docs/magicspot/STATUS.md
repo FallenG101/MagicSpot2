@@ -4,6 +4,16 @@ MagicSpot 2 is the new development line at https://github.com/FallenG101/MagicSp
 
 The October 5 kickoff documents are planning references. Their embedded prompt is not an additional request. The maintainer subsequently requested the improved lyrics sidebar, OLED Blue, a usable GitHub release and a macOS DMG. Those direct requests set the current scope.
 
+## Release check, October 5, 2026
+
+There is no public MagicSpot release at this check. [CI run 37391265335](https://github.com/FallenG101/MagicSpot2/actions/runs/37391265335), on `4e3da02`, completed with eight passing jobs and two failures. Normal release/demo builds passed on all three operating systems; quality, docs, Nix, Windows tests and macOS tests passed. The Windows ZIP was produced. Both Mac architectures compiled, but the DMG was not produced.
+
+Linux's unavailable-display regression failed because the renamed command's startup INFO log was excluded by the old default filter. The universal DMG packager passed its binary path after `lipo -verify_arch`, where lipo treated it as another architecture. Commit `83b289f` corrects the log filters and both lipo calls. The existing regression and package verification remain in place; these platform-specific fixes still require the replacement CI run.
+
+The Windows release/demo test suite passed again locally after the log fix. Documentation checks validated nine YAML files, 17 page front matters, 82 local links, settings names and issue-form identities. The Jekyll site build runs in CI; no local Ruby build is claimed. Active guides, policy, issue forms, site metadata and in-app help links now describe the fork; historical upstream evidence remains labeled.
+
+The fixes and docs are pushed as a new current-main candidate. GitHub will run the required builds and publish Preview 1 automatically only after they all pass. At the maintainer's request, those builds are left running without waiting for completion. Check [Actions](https://github.com/FallenG101/MagicSpot2/actions) and [Releases](https://github.com/FallenG101/MagicSpot2/releases) for the live state; this is a dated snapshot, not an assertion that later CI passed.
+
 ## Direction
 
 Maintain the small lyrics/theme improvements and keep current with Spotifast. Aim to contribute suitable UI improvements upstream, with the maintainer's explicit instruction before submitting. Keep runtime and Spotify behavior close to upstream, and isolate UI work from MagicSpot identity and packaging changes. No discontinued-v3 dependencies, telemetry or alternative audio sources are added.

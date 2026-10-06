@@ -60,7 +60,7 @@ impl<'a> RowText<'a> {
 }
 
 /// The guide to writing a palette file for the themes folder.
-const THEMES_GUIDE_URL: &str = "https://spotifast.rocks/settings-and-files/#custom-themes";
+const THEMES_GUIDE_URL: &str = "https://github.com/FallenG101/MagicSpot2/blob/main/docs/_reference/settings-and-files.md#custom-themes";
 
 fn section_matches(needle: &str, title: &str, rows: &[RowText<'_>]) -> bool {
     let needle = needle.trim().to_lowercase();
@@ -376,7 +376,7 @@ pub fn show(app: &mut App, ui: &mut egui::Ui) {
                     .clicked()
                 {
                     app.actions.push(Action::OpenUrl(
-                        "https://spotifast.rocks/make-it-even-faster/#make-a-spotify-app".into(),
+                        "https://github.com/FallenG101/MagicSpot2/blob/main/docs/_guide/make-it-even-faster.md#make-a-spotify-app".into(),
                     ));
                 }
             });

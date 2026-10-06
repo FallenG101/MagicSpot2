@@ -2,18 +2,18 @@
 
 A native Spotify desktop app based on the latest [Spotifast](https://github.com/crmne/spotifast) foundation, with an Apple Music-inspired lyrics sidebar and OLED Blue.
 
-**[Download MagicSpot for Windows and macOS](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1).** On Windows, extract the ZIP and open `magicspot2.exe`. On macOS, open the universal DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium.
+**[MagicSpot downloads on GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases).** Preview 1 downloads become available after the required CI checks pass. On Windows, extract the ZIP and open `magicspot2.exe`. On macOS, open the universal DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium.
 
 ## What's new
 
 - Bold, spacious lyrics with a larger song card, a subtle glow on the current line, smooth following and soft scroll edges. The sidebar background follows the album artwork. Scroll manually to read ahead, press Follow to return, or click a timed line to seek.
 - **Settings > Appearance** offers Inter, System and Monospace lyrics fonts, an adjustable 18–48 point size with Auto mode, plus switches for the glow and artwork background. These choices are saved. The cover grows as you widen the sidebar.
 - **Settings > Appearance > Theme > OLED Blue** selects black main surfaces and blue accents. Your choice is saved.
-- A separate MagicSpot 2 profile, secure-store identity and updater. Sign in afresh; Spotifast and discontinued MagicSpot v3 settings and credentials are not imported.
+- A separate MagicSpot 2 profile, secure-store identity and release feed. Preview updates use manual downloads; the inherited checker follows stable releases. Sign in afresh; Spotifast and discontinued MagicSpot v3 settings and credentials are not imported.
 
 ![MagicSpot lyrics sidebar in OLED Blue, native Windows demo capture](docs/magicspot/lyrics-oled.png)
 
-The first release is `2.0.0-preview.1` for Windows x64 and macOS (Apple Silicon and Intel). It omits MilkDrop. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0-preview.1.md) and [validation status](docs/magicspot/STATUS.md).
+The first release candidate is `2.0.0-preview.1` for Windows x64 and macOS (Apple Silicon and Intel). It omits MilkDrop. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0-preview.1.md) and [validation status](docs/magicspot/STATUS.md).
 
 ## Build and preview
 
@@ -35,9 +35,9 @@ Downloads are packaged with `packaging/magicspot/package-windows.ps1` and `packa
 
 ## Guides and provenance
 
-The [Spotifast guide](https://spotifast.rocks/getting-started/) explains the inherited Spotify sign-in, local playback, Connect and personal-app flows. Its download links, app paths and performance figures refer to Spotifast. MagicSpot uses the same public Web API client and OAuth loopback behavior; it does not invent a new Spotify Client ID.
+Start with the [documentation index](docs/README.md), [installation guide](docs/_guide/getting-started.md), [lyrics controls](docs/_guide/lyrics-and-themes.md) and [downloads/manual updates](docs/_guide/download.md). Read [identity and privacy](docs/magicspot/IDENTITY.md), [UI evidence](docs/magicspot/UI_NOTES.md), [upstream provenance](UPSTREAM.md) and [maintenance](docs/magicspot/MAINTENANCE.md).
 
-Read [identity and privacy](docs/magicspot/IDENTITY.md), [UI notes](docs/magicspot/UI_NOTES.md), [upstream provenance](UPSTREAM.md), and the [untouched baseline](docs/magicspot/BASELINE.md). MagicSpot v3 remains in its [discontinued repository](https://github.com/FallenG101/MagicSpot).
+The foundation is Spotifast main `7048219`, five commits newer than stable `v0.12.0`, including that release. The [untouched baseline](docs/magicspot/BASELINE.md) and retained `v0.*` release notes are historical Spotifast records. MagicSpot v3 remains in its [discontinued repository](https://github.com/FallenG101/MagicSpot).
 
 ## Acknowledgements
 

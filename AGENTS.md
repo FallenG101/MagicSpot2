@@ -13,7 +13,7 @@ These instructions add implementation constraints for coding agents.
 
 ## Product boundaries
 
-- Keep Spotifast a small native Spotify client. Do not add a browser engine,
+- Keep MagicSpot a small native Spotify client. Do not add a browser engine,
   telemetry, a hosted backend, or alternate sources for Spotify audio.
 - Playback capabilities come from librespot. Do not advertise or implement a
   capability merely because its name appears in a protobuf or enum. In
@@ -177,42 +177,10 @@ mise or mbx.
 
 ## Releases
 
-A release is not the tag alone. Do these in order:
+Follow [PACKAGING.md](PACKAGING.md). MagicSpot Preview 1 uses its own Windows ZIP and universal DMG packagers and a publication workflow restricted to `2.0.0-preview.1`. Every required CI job must pass on the current main commit before that workflow publishes. Do not manually tag around a failed gate or claim pending files are available.
 
-1. Change the `Cargo.toml` version, add the matching release to the Flatpak
-   metainfo, and update the lockfile with a build.
-   Refresh the `flake.nix` vendor hash when the lockfile changes, even when
-   only the package version changed. Verify `nix build .#default` locally or
-   in CI. Wait for every required CI job on the release commit before tagging.
-   Commit and push this before the tag so the binaries report the right
-   version. Include written notes in `packaging/release-notes/vVERSION.md`
-   so the release publishes the real description immediately.
-2. Push the `v*` tag, which triggers the release workflow. Wait for every
-   required artifact and `checksums.txt`, then verify the published written
-   notes, screenshot and download links. Never publish generated placeholder notes.
-3. A prerelease stops here. Keep the stable version current on the website,
-   Homebrew, and AUR. The prerelease remains available from GitHub's releases
-   page.
-4. For a stable release, only after the GitHub release exists, update
-   `docs/_config.yml` `spotifast_version` and
-   `docs/_data/versions.yml`. The selector carries only the latest stable
-   version: replace its version entry, make it `current`, and point it at
-   `/download/`. Do not retain older version entries; they remain available
-   through the Changelog link. Never make the download page point at files
-   that do not exist yet.
-5. Update the Homebrew cask in the maintainer's tap and the AUR package from
-   the release's `checksums.txt`. The packaging workflow handles configured
-   destinations when `PUBLISH_HOMEBREW` and `PUBLISH_AUR` are enabled. Otherwise
-   use the in-repository packaging CLI to prepare, review and publish them;
-   see `PACKAGING.md`. Native package validation remains required.
+Future releases need explicit scope and matching version/lockfile, vendor hash, relevant metainfo, written release notes, package/publication configuration and docs. Refresh the Nix vendor hash even for a package-version-only lockfile change. Verify Nix in CI or on a Nix host.
 
-Before writing release notes, read the previous two stable releases and match
-their style. Start with a short plain-language summary, use `New` and `Fixed`
-sections as applicable, lead each item with a bold user-facing result, credit
-contributors and reporters with the relevant issue or pull request numbers,
-include a `Thanks` section, and end with the full changelog link. Do not leave
-the generated notes in place or introduce a different section scheme for
-ordinary improvements.
+Keep inherited Spotifast release, website deployment, Homebrew, AUR and triage publishers disabled. Their files are upstream reference material, not MagicSpot publication instructions. No MagicSpot public documentation domain is configured. Use GitHub Releases for actual availability and preserve original copyright/license notices.
 
-Skipping an applicable step ships a release that lies somewhere; the dropdown
-was forgotten once already.
+Release notes lead with the concrete user-facing changes, explain supported downloads and signing status, distinguish automated/visual checks from live-account validation, credit upstream and contributors, and link the full changelog. Do not publish generated placeholder notes.

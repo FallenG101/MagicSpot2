@@ -1,158 +1,52 @@
-# Packaging
+# MagicSpot packaging and releases
 
-[`native-packages.yaml`](native-packages.yaml) is the packaging configuration:
-it pins the shared CLI and nFPM versions and declares Linux amd64/arm64 inputs,
-DEB/RPM/AppImage contents, dependencies, recipe templates and downstream repositories.
-Application assets and native recipes stay in `packaging/`.
+Preview 1 (`2.0.0-preview.1`) packages the normal app with real Spotify sign-in and playback enabled, without demo mode or MilkDrop. It produces two assets and a combined `checksums.txt`:
 
-Public AUR, Homebrew, DEB/RPM and release download names use Spotifast, and
-Linux packages install `spotifast` as the only executable.
+| Target | Asset | Signing |
+| --- | --- | --- |
+| Windows x64 | `magicspot2-v2.0.0-preview.1-x86_64-pc-windows-msvc.zip` | Unsigned |
+| macOS Apple Silicon + Intel | `magicspot2-v2.0.0-preview.1-macos-universal.dmg` | Ad-hoc signed, not notarized |
 
-Linux builds provide `spotifast.desktop` and `spotifast.svg`, matching the
-native window and MPRIS desktop-entry ID. Flatpak installs those assets under
-its full application ID and sets the window class to match.
-`python3 packaging/test-launchers.py` exercises the actual AUR and Flatpak
-installation commands with a release payload, using Ruby to read YAML.
+Linux and Nix remain source/CI targets. There is no MagicSpot Windows installer, Windows ARM asset, Linux install package, Flatpak release, Homebrew cask or AUR publication for this preview. Inherited Spotifast packaging tools and historical release notes remain for provenance, with their publishers disabled and guarded to the upstream repository.
 
-Linux packages also install the optional Omarchy template and hook under
-`share/spotifast/omarchy` in their installation prefix. The normal application
-launch registers missing per-user files and prepares the current palette on an
-Omarchy desktop, without changing existing files or the selected theme. Setup
-runs in the background; package-manager scripts do not write into user homes.
-DEB/RPM packages take these small assets from the checked-out configuration,
-so package validation can still use the pinned older binary fixture. AUR and
-portable Linux release archives carry the assets with their source/binary
-payloads. Source and binary AUR recipes also accept older releases that predate
-the integration; the git recipe requires the current files. Nix installs the
-Linux desktop assets beside its binaries and packages the signed macOS
-`Spotifast.app` bundle in the same derivation. Flatpak does not install host
-desktop hooks.
+## Build and package
 
-```sh
-gem install native-packages --version 0.8.1
-native-packages validate
-native-packages doctor --target linux-amd64 --target linux-arm64
-native-packages build --release v1.2.3 --target linux-amd64 --target linux-arm64
+Use the pinned Rust toolchain and locked dependencies. On Windows:
+
+```powershell
+cargo build --locked --release --no-default-features
+./packaging/magicspot/package-windows.ps1 -Binary target/release/magicspot2.exe -OutputDir dist/windows
 ```
 
-Replace `v1.2.3` with an existing stable application release. Local use also
-requires nFPM 2.47.0, `bsdtar`, `readelf` and, for the AppImage,
-`mksquashfs` (squashfs-tools); AUR generation needs `makepkg`
-or Docker. CI installs its tooling. To package local release archives, put
-the selected target inputs and recipe assets under `dist/`, then run
-`native-packages build --version 1.2.3 --target linux-amd64 --target linux-arm64`.
-Outputs go to `dist/packages/1.2.3`; use `--output` for a fresh destination when rebuilding.
+The packager checks `--version`, creates a fresh distribution folder, includes README and the app/font/icon licenses, writes the ZIP, and hashes it. The ZIP contains a folder with `magicspot2.exe`; it does not register URL handlers or shortcuts and does not include the portable updater marker. Updates are manual for this preview.
 
-Before tagging, commit written notes at `packaging/release-notes/vVERSION.md`.
-CI requires notes for the current Cargo version, and the release workflow
-publishes that file immediately instead of a generated PR-only summary.
-Verify the notes and their download links after the artifacts are published.
-
-Stable tags run the existing native build jobs first. After binaries and
-`checksums.txt` are published, the shared workflow verifies their hashes,
-builds the configured packages, and attaches them to the GitHub release.
-Configured recipes are attached as an archive. Package checksums are separate
-from the original binary checksums. PR validation never publishes.
-
-The Linux release runners are pinned to Ubuntu 24.04 (glibc 2.39). The native
-packages target Ubuntu 24.04 / Debian 13 and newer, and Fedora 41 and newer.
-Runtime-loaded GUI libraries must be declared explicitly in the YAML; ELF
-inspection only discovers linked dependencies. The ALSA library mapping also
-uses the Debian/Ubuntu `libasound2t64` name for this baseline.
-
-Packaging CI builds both architectures using a pinned published release
-(`v0.11.2`) for pushes and PRs, or the requested version for manual and release
-runs. It then installs and removes each package in clean Ubuntu 24.04, Debian
-13, Fedora 41 and current Fedora containers on native amd64 and arm64 runners.
-Each case verifies that a settings fixture survives installation and removal,
-runs `spotifast --version`, loads the GUI libraries with `dlopen`, and
-verifies the desktop entry and icon. They cover installation and library
-resolution, not a running desktop or Spotify playback. On release runs these
-checks follow artifact attachment; a failure marks the workflow as failed.
-The generated Homebrew cask is also installed, launched with `--version`,
-signature-checked, and uninstalled on a native macOS runner. Wait for this
-check before publishing the staged cask to the tap.
-
-To repeat a check locally on the matching architecture, with Docker and a C
-compiler available:
+On macOS:
 
 ```sh
-bash packaging/test-install.sh ubuntu:24.04 dist/packages/1.2.3
-bash packaging/test-install.sh fedora:latest dist/packages/1.2.3
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
+cargo build --locked --release --no-default-features --target aarch64-apple-darwin
+cargo build --locked --release --no-default-features --target x86_64-apple-darwin
+mkdir -p dist/macos-universal
+lipo -create target/aarch64-apple-darwin/release/magicspot2 target/x86_64-apple-darwin/release/magicspot2 -output dist/macos-universal/magicspot2
+bash packaging/magicspot/package-macos.sh dist/macos-universal/magicspot2 dist/macos-universal
 ```
 
-Review or publish an existing build with the same installed CLI:
+The packager builds `MagicSpot.app` with bundle ID `com.falleng101.magicspot2`, preserves license notices, ad-hoc signs it and creates a compressed DMG. It verifies and mounts the image read-only, checks the app's version, both architectures and signature, then unmounts it. These checks do not establish Apple notarization or an interactive Mac sign-in test.
 
-```sh
-native-packages publish --from dist/packages/1.2.3 --to github --target linux-amd64 --target linux-arm64
-native-packages repositories
-native-packages status --offline
-```
+Output locations must be fresh; do not overwrite a distribution under review. SHA-256 checksums establish consistency with the uploaded files, not independent publisher authentication.
 
-For applications with configured AUR or Homebrew destinations, stage the
-recipes with `native-packages stage TARGET dist/packages/1.2.3/recipes`,
-inspect `native-packages diff TARGET`, run native package validation, and
-publish with `native-packages publish TARGET`. These destinations use ignored
-managed Git clones, recorded in this application's YAML configuration.
-AUR automation needs `PUBLISH_AUR=true`, `AUR_SSH_KEY` and `AUR_KNOWN_HOSTS`;
-Homebrew automation needs `PUBLISH_HOMEBREW=true` and
-`HOMEBREW_TAP_GITHUB_TOKEN`. Enable only configured destinations.
+## Preview 1 publication gate
 
-The macOS target, Windows and Flatpak build steps remain responsible
-for their native artifacts. Additional nFPM formats require suitable platform
-inputs and dependencies; adding a format does not port the application.
-See the [shared CLI documentation](https://github.com/crmne/native-packages/tree/v0.8.1)
-for commands and supported formats.
+1. CI builds ordinary release and demo configurations on Linux, macOS and Windows, runs quality/tests/docs/Nix checks, and uploads `MagicSpot-Windows-x64` and `MagicSpot-macos-universal` artifacts.
+2. `.github/workflows/magicspot-preview.yml` runs after CI completes. It accepts only successful push-to-main CI from this repository with Cargo version exactly `2.0.0-preview.1`.
+3. It checks that the CI source commit still equals current remote main and that an existing tag, if any, names that same commit. An existing release is left alone.
+4. `packaging/magicspot/prepare-preview.py` verifies both expected assets against their one-entry checksum files, validates the ZIP and executable path, and creates the combined publication directory.
+5. The workflow checks main again, then creates the prerelease `v2.0.0-preview.1` at the tested commit with the written [release notes](packaging/release-notes/v2.0.0-preview.1.md), ZIP, DMG and checksums.
 
-The manual **Flatpak from release** workflow can rebuild a missing Flatpak from
-an existing tag. It verifies the published Linux archive against `checksums.txt`
-and uses that tag's version and description with the current Flatpak app ID,
-`rocks.spotifast.Spotifast`, without compiling or replacing binaries.
-It uploads a workflow artifact only. After checking the bundle, attach it to the
-existing release and add its hash to `checksums.txt`, preserving every existing
-asset and checksum. Release tags stay immutable.
+A new push cancels older running CI; only the successful current-main run can publish. A failed job blocks publication even if both packages built. Check [Actions](https://github.com/FallenG101/MagicSpot2/actions) and [Releases](https://github.com/FallenG101/MagicSpot2/releases) for live status. Do not describe an unpublished tag or pending artifact as an available download.
 
-Check AUR source-directory compatibility against a downloaded source archive
-with `bash packaging/test-arch-source.sh SOURCE_ARCHIVE VERSION`. It runs the
-recipe's prepare/build/check directory handling with Cargo calls stubbed out;
-it does not replace compilation or native package installation checks.
+## Future releases
 
-To upgrade the tool, change `tool.version` in `native-packages.yaml`, the matching
-immutable workflow reference, and any release-job gem installation pin together.
-Applications need no packaging Gemfile, lockfile or Ruby wrapper.
+The automatic publisher is restricted to the requested first preview. Future versions need an explicitly scoped release change: version/lockfile, Nix vendor hash, relevant metainfo, written notes, package names, publication workflow and documentation. Run the required checks on that commit before publishing. Do not enable the inherited external publishers or update Spotifast's website, tap or AUR as part of a MagicSpot release.
 
-## Automatic macOS notarization
-
-The macOS release job builds the app first, then selects
-`macos-universal` from `native-packages.yaml` and uses `packaging/macos/dmg.rb`
-to package it. Native Mac builds pass `--defer-recipes`, so they do not require
-Linux inputs, AUR tooling or the not-yet-published DMG for Homebrew. The Linux
-packaging job selects `linux-amd64,linux-arm64` from the same configuration
-after the release assets exist and generates downstream recipes then.
-The shared gem signs its owned input copy, notarizes the DMG, staples and validates
-Apple's ticket, and only then records final checksums. Configure these repository
-secrets, which the job exposes as environment variables:
-
-- `APPLE_CERTIFICATE_P12`: base64 PKCS#12 Developer ID Application certificate and private key.
-- `APPLE_CERTIFICATE_PASSWORD`: the export password.
-- `APPLE_SIGNING_IDENTITY`: exact `Developer ID Application: Name (TEAMID)` identity.
-- `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_PASSWORD`: Apple email, Team ID and app-specific password.
-
-A complete set enables notarization automatically. An incomplete set fails;
-no values retain local builds without Developer ID signing. Application inputs
-and the user's normal keychains remain unchanged. See the shared
-[Apple setup and phase contract](https://github.com/crmne/native-packages/blob/v0.8.1/docs/apple-notarization.md).
-
-After preparing `dist/macos-input` on a Mac, test packaging without publishing:
-
-```sh
-native-packages build \
-  --version 1.2.3 --target macos-universal --defer-recipes --output dist/macos-packages-test
-```
-
-Secret configuration applies to future builds. Existing published DMGs retain
-their original signatures; this setup does not replace release assets.
-
-`packaging/release-names.py DIST TAG` checks the release's `spotifast-`
-downloads and writes their checksums. Run `python3 packaging/test-release-names.py`
-when changing this step. Published historical downloads are never rewritten.
+Preview updates use manual downloads. The app's inherited stable-release checker points to this fork and excludes prereleases. Document any later updater or signing changes based on the actual package configuration.

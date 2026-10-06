@@ -1,3 +1,5 @@
+> Historical Spotifast review evidence, retained for upstream provenance. These captures and conclusions are not a MagicSpot platform-validation claim.
+
 # Finite scrolling comparison
 
 Native Linux demo captures at 1200×800 and 1000×700, in both themes.

@@ -28,8 +28,7 @@ remain in its separate profile. The inherited Spotifast installer and packaging
 publishers are not used. Their original files remain for upstream provenance.
 Source macOS bundle metadata and Nix desktop packaging use the new identity.
 The macOS DMG contains a universal MagicSpot.app with its own bundle identity.
-It is ad-hoc signed, with a verified signature and both architectures, but has
-no Apple notarization. The DMG is mounted and its app/version checked in CI.
+The packager ad-hoc signs the bundle and checks its signature and both architectures. There is no Apple notarization. CI must complete DMG mounting and app/version checks before publication.
 Nix and Linux remain source/CI targets without install downloads in this release.
 
 ## Spotify and privacy
@@ -43,8 +42,9 @@ key. No Spotify password is handled by MagicSpot.
 
 The app uses Spotify for catalogue, account and audio requests. Artwork and audio
 are cached within the configured budget. Lyrics may use LRCLIB, including artist,
-title, album and duration. Automatic update checks use this fork's GitHub releases
-and can be disabled in Settings. Downloads use the matching asset and SHA-256
+title, album and duration. Automatic update checks use this fork's stable GitHub releases, exclude prereleases,
+and can be disabled in Settings. Preview updates are manual; the Windows ZIP
+lacks the portable updater marker. Downloads use the matching asset and SHA-256
 from `checksums.txt`; unsigned downloads are not publisher-authenticated. No
 telemetry or hosted MagicSpot backend is added.
 
@@ -60,3 +60,14 @@ on GitHub's macOS runner. No performance improvement is claimed.
 The kickoff documents remain a roadmap. Their proposed cross-platform packaging,
 performance and sync-exercise milestones are recorded as future work, rather
 than represented as completed checks for this first preview.
+
+
+## Profile paths
+
+| Platform | Configuration | State and logs | Cache |
+| --- | --- | --- | --- |
+| Windows | `%APPDATA%\FallenG101\magicspot2\config` | `%LOCALAPPDATA%\FallenG101\magicspot2\data` | `%LOCALAPPDATA%\FallenG101\magicspot2\cache` |
+| macOS | `~/Library/Application Support/com.FallenG101.magicspot2` | Same as configuration | `~/Library/Caches/com.FallenG101.magicspot2` |
+| Linux | `${XDG_CONFIG_HOME:-~/.config}/magicspot2` | `${XDG_STATE_HOME:-~/.local/state}/magicspot2` | `${XDG_CACHE_HOME:-~/.cache}/magicspot2` |
+
+The macOS profile's `FallenG101` capitalization comes from ProjectDirs and differs from the lowercase bundle/secure-store ID. Linux media controls use `playerctl --player=magicspot2`. The desktop file is `com.falleng101.magicspot2.desktop`.

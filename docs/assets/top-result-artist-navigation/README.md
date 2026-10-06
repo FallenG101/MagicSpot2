@@ -1,3 +1,5 @@
+> Historical Spotifast review evidence, retained for upstream provenance. These captures and conclusions are not a MagicSpot platform-validation claim.
+
 # Top-result artist navigation review
 
 Native Linux demo captures compare `main` at `69c2a72` with the

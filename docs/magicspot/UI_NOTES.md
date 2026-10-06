@@ -64,3 +64,6 @@ lyrics-header coordinate, which the new song header occupies.
 
 No startup, memory, CPU or playback-speed improvement is claimed. No dependencies,
 network services, Spotify grants or profile paths are changed by this UI work.
+
+
+User controls are documented in [Lyrics & Themes](../_guide/lyrics-and-themes.md). The documentation index and maintenance guide distinguish inherited review captures from MagicSpot evidence.

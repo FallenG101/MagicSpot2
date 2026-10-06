@@ -5,18 +5,18 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please include the log from Spotifast's last run:
+        Please include the log from MagicSpot's last run:
 
-        - Linux: `~/.local/state/spotifast/spotifast.log`
-        - macOS: `~/Library/Application\ Support/me.paolino.spotifast/spotifast.log`
-        - Windows: `%LOCALAPPDATA%\paolino\spotifast\data\spotifast.log`
+        - Linux: `~/.local/state/magicspot2/magicspot2.log`
+        - macOS: `~/Library/Application Support/com.FallenG101.magicspot2/magicspot2.log`
+        - Windows: `%LOCALAPPDATA%\FallenG101\magicspot2\data\magicspot2.log`
 
-        If the app crashed or vanished, include `panic.log` from the same folder.
+        If the app crashed or vanished, include `panic.log` from the same folder. Review logs for private details; never attach credentials or token files.
   - type: input
     id: version
     attributes:
-      label: Spotifast version and how you installed it
-      placeholder: "0.5.0-rc1 from the AUR / the DMG / the Windows installer / Homebrew / the Flatpak bundle"
+      label: MagicSpot version and how you installed it
+      placeholder: "2.0.0-preview.1 from the Windows x64 ZIP / universal macOS DMG / source build"
     validations:
       required: true
   - type: dropdown
@@ -56,7 +56,7 @@ body:
   - type: textarea
     id: log
     attributes:
-      label: spotifast.log
+      label: magicspot2.log
       description: Reproduce the problem, quit the app, then paste the whole file here (and panic.log, if there is one). Paths are above.
       render: text
     validations:

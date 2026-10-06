@@ -1,3 +1,5 @@
+> Historical Spotifast review evidence, retained for upstream provenance. These captures and conclusions are not a MagicSpot platform-validation claim.
+
 # MacBook notch widget visual review
 
 Native macOS captures on Apple Silicon M2 with hardware camera notch (macOS Sequoia) comparing `main` baseline with the `feature/mac-notch-widget` candidate branch.

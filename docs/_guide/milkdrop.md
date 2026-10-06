@@ -1,19 +1,18 @@
 ---
 title: MilkDrop
 description: Run the MilkDrop visualiser, install presets, and use its controls.
-nav_order: 5
+nav_order: 6
 ---
 
 MilkDrop shows colourful animations that react to your music. Open it from
 the top-bar visualiser button, Ctrl+Shift+K, Settings, or the mini player's
 **V** menu. It runs in its own window.
 
-<video autoplay loop muted playsinline preload="metadata" poster="/assets/images/milkdrop-poster.jpg" aria-label="MilkDrop running in Spotifast" style="width: 100%; height: auto;">
+<video autoplay loop muted playsinline preload="metadata" poster="/assets/images/milkdrop-poster.jpg" aria-label="MilkDrop running in MagicSpot" style="width: 100%; height: auto;">
   <source src="/assets/images/milkdrop.mp4" type="video/mp4">
 </video>
 
-MilkDrop is included on Linux and macOS, and in the Windows download for
-Intel or AMD PCs. It is not included in the Windows on ARM download.
+MilkDrop is omitted from MagicSpot Preview 1 downloads. This guide applies only to source builds with the optional MilkDrop feature enabled. The video above is inherited Spotifast reference footage.
 
 ## The window
 
@@ -27,10 +26,10 @@ It reacts only to music playing on this computer.
 
 ## Presets
 
-Each visual design is called a **preset**. They change every ten seconds by
+Each visual design is called a **preset**. They change every thirty seconds by
 default; choose a different interval in Settings.
 
-On first use, Spotifast automatically downloads the 550 MilkDrop 2 presets
+On first use, MagicSpot automatically downloads the 550 MilkDrop 2 presets
 and the 9,800-preset Cream of the Crop pack. You can download either pack
 again from Settings. A built-in animation appears while the download starts.
 

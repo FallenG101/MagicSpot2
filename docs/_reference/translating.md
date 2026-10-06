@@ -1,17 +1,20 @@
 ---
-title: Translating Spotifast
-description: Help translate Spotifast and preview the work so far.
+title: Translating MagicSpot
+description: Help translate MagicSpot and preview the work so far.
 nav_order: 6
 ---
 
-Spotifast follows your computer's language when it has a translation for it,
+Catalogue coverage below describes the inherited Spotifast strings. New MagicSpot lyric font, size, glow and artwork controls remain English until localized. Template/catalogue filenames keep their upstream names; the runtime adapts product branding.
+
+
+MagicSpot follows your computer's language when it has a translation for it,
 and uses English otherwise. **Settings → Appearance → Language** picks another
 language, listed under its own name, and applies it at once; **System** follows
 the computer again. This arrived in 0.10.0. Corrections from
 fluent speakers are welcome.
 
 Translations are stored in `.po` files, a common format supported by editors
-such as Poedit and Weblate. They are included with Spotifast, so the app does
+such as Poedit and Weblate. They are included with MagicSpot, so the app does
 not contact an online translation service.
 
 ## Languages and coverage
@@ -19,7 +22,7 @@ not contact an online translation service.
 | Language | Tag | Coverage |
 | --- | --- | --- |
 | English | `en` | Source language |
-| Spanish | `es` | Complete |
+| Spanish | `es` | Complete for inherited catalogue |
 | German | `de-DE` | Partial |
 | Dutch | `nl` | Partial |
 | Portuguese (Brazil) | `pt-BR` | Partial |
@@ -32,9 +35,9 @@ not contact an online translation service.
 | Japanese | `ja` | Partial |
 | Chinese (Simplified) | `zh-Hans` | Partial |
 | Chinese (Traditional) | `zh-Hant` | Partial |
-| Turkish | `tr` | Complete |
+| Turkish | `tr` | Complete for inherited catalogue |
 
-The interface is marked for translation throughout: navigation, Home, Search,
+The inherited interface is marked for translation throughout: navigation, Home, Search,
 Library and collection pages, menus, the player bar, Queue and Lyrics, dialogs,
 keyboard shortcuts, sign-in, Settings and notifications, including tooltips
 and screen-reader names. The partial catalogues translate the earlier pilot:
@@ -129,8 +132,7 @@ A maintainer must also register the locale in the app, including how system
 language tags map to it, and preview it before it becomes available. Adding a
 PO alone does not add a language to the Settings list.
 
-Use the [translation problem form](https://github.com/crmne/spotifast/issues/new?template=translation.yml)
+Use the [translation problem form](https://github.com/FallenG101/MagicSpot2/issues/new?template=translation.yml)
 for incorrect wording, missing translations or text that does not fit. Each
 report gets its own issue. Include the language, version, affected control, and
-the text you see; a suggested correction is welcome. The catalog headers link
-to this form too.
+the text you see; a suggested correction is welcome. Inherited catalogue headers may still point to Spotifast; use the MagicSpot form for fork reports.

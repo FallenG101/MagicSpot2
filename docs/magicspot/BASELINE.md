@@ -1,3 +1,5 @@
+> Historical untouched Spotifast baseline at `225a65c`. Commands and app identity below reproduce that baseline, not the current MagicSpot build. Current builds use `magicspot2`; see [STATUS.md](STATUS.md).
+
 # Untouched upstream baseline
 
 Base: `7048219716fb8bbf2f1af0934f545801f52cb29b`.

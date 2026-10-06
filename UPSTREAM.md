@@ -11,7 +11,7 @@
 - License: MIT. Preserve `LICENSE` and upstream copyright notices.
 
 Current main was selected because the requested starting point is the latest
-Spotifast. The stable release remains a comparison reference. Git ancestry and
+Spotifast. This base includes stable v0.12.0 plus five subsequent commits. The stable release remains a comparison reference. Git ancestry and
 tags are preserved. `origin` is MagicSpot2; `upstream` is Spotifast.
 
 ## Foundation
@@ -42,7 +42,7 @@ No dependency changes or code from discontinued MagicSpot v3 have been imported.
 | Preview 1 publication | `.github/workflows/magicspot-preview.yml`, `packaging/magicspot/prepare-preview.py` | Publish only the requested first preview after successful current-main CI and verification of both downloads |
 
 The untouched application baseline is commit `225a65c`. The lyrics/OLED patch is
-isolated in `e252ee0`; identity and packaging follow separately. The first release
+isolated in `e252ee0`; fonts/glow/artwork follow in `ef38ed2`, size/growing cover in `748b804`, and identity/packaging in `f140497`. Publication gates are in `4e3da02`. The first release
 uses its own application/profile/secure-store/update identity. The inherited
 Spotifast installer and external publishers remain unused.
 
@@ -66,3 +66,5 @@ effort, conflicts and regressions in `docs/magicspot/STATUS.md`.
 
 The drift workflow is report-only. A report is not permission to merge, tag,
 publish, migrate a profile or send public messages.
+
+See [MAINTENANCE.md](docs/magicspot/MAINTENANCE.md) for the bounded sync procedure and documentation/release boundaries. Active fork docs are indexed in [docs/README.md](docs/README.md); retained v0.x notes and old review captures are historical upstream records.

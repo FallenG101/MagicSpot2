@@ -1,64 +1,34 @@
 ---
 title: Privacy
-description: What Spotifast stores on your computer, what it sends and to whom, and what it never collects.
+description: MagicSpot storage, network requests and optional services.
 nav_order: 4
 ---
 
-Spotifast is a desktop app that runs entirely on your computer. It has no
-account of its own, no server, no telemetry, no analytics, and no advertising.
-Its author receives nothing about you or how you use it.
+MagicSpot runs on your computer with no MagicSpot account, hosted backend, app telemetry or analytics. It retains the upstream Spotify connections and adds local lyrics appearance settings.
 
-This page covers the Spotifast app, version 0.8.0 and later. Earlier versions
-kept sign-ins in files instead of the system credential store; update to a
-current release.
+## Local storage
 
-## What stays on your computer
+Spotify grants and optional proxy passwords use Credential Manager on Windows, Keychain on macOS or Secret Service on Linux, under `com.falleng101.magicspot2`. You authorize on Spotify's browser page; MagicSpot does not handle your Spotify password. A locked or unavailable store is reported, with no plaintext fallback for new grants.
 
-- **Spotify sign-ins.** The grants Spotify issues when you sign in, and the
-  reusable playback credential, are kept in the system credential store:
-  Credential Manager on Windows, Keychain on macOS, and Secret Service on
-  Linux. Your Spotify password never passes through Spotifast; you sign in
-  on Spotify's own pages. A proxy password, if you set one, uses the same
-  store.
-- **Settings and history.** Settings, window positions, recent plays, the
-  last session, skins, themes and MilkDrop presets live in the config
-  directory.
-- **Caches.** Downloaded audio, artwork, lyrics and library metadata live in
-  the cache directory and can be deleted at any time.
-- **Log.** `spotifast.log` records errors and diagnostics. It stays on your
-  computer and never contains credentials; share it only if you choose to
-  attach it to a bug report.
+Settings, skins and themes live in the configuration folder. Session data, window state, recent plays and logs live in the state folder. Audio, artwork, lyrics and library metadata live in the cache folder. See [Settings & Files](/settings-and-files/) for exact paths. The new profile does not import Spotifast or discontinued MagicSpot v3 files.
 
-[Settings & Files](/settings-and-files/) lists every location and what is safe
-to delete. **Sign out** in Settings removes the stored credentials.
+The app keeps `magicspot2.log` and, after a panic, `panic.log` locally. Credentials must not be logged. Logs may contain track or system details; review them before attaching them to an issue. **Sign out** removes saved Spotify grants; failed deletion leaves revocation markers to prevent restoring them.
 
-## What is sent, and to whom
+## Network requests
 
-Spotifast connects only to the services below.
+| Service | Purpose |
+| --- | --- |
+| Spotify | Browser authorization, catalogue, account, library, playlist, audio and Connect requests. |
+| LRCLIB | Lyrics fallback when Spotify has none; sends artist, title, album and duration, without an account identifier. |
+| GitHub | Checks this fork's stable releases, and downloads an update if requested. Automatic checks can be disabled in Settings. Preview downloads are manual. |
+| Local network | mDNS receiver discovery and communication with selected Spotify Connect receivers. |
 
-- **Spotify.** Sign-in, your library, search, playlists, playback and Spotify
-  Connect all go to Spotify, under your account. Spotify's own
-  [privacy policy](https://www.spotify.com/legal/privacy-policy/) applies to
-  that data.
-- **LRCLIB.** When the lyrics panel is open and Spotify has no lyrics for the
-  song, Spotifast sends its artist, title, album and length to
-  [lrclib.net](https://lrclib.net). Nothing identifying you is included.
-- **GitHub.** Once a day, Spotifast asks GitHub for the latest release. You
-  can turn automatic checks off in Settings. Downloading an update, and the
-  first opening of MilkDrop, also fetch files from GitHub. No Spotify data is
-  sent.
-- **Your local network.** Spotifast looks for Spotify Connect speakers over
-  mDNS and talks to the ones you choose.
+Optional MilkDrop source builds download preset packs from GitHub when used. Preview 1 omits MilkDrop. Links such as Spotify developer setup or the Winamp Skin Museum open in your browser. Each service has its own privacy terms; see [Spotify's policy](https://www.spotify.com/legal/privacy-policy/).
 
-Links you open from the app, such as the Winamp Skin Museum or this website,
-open in your browser.
+Artwork-derived lyrics backgrounds reuse the existing cover loader, blur and cache. Font, size, glow and theme settings require no new service.
 
-## This website
+## Documentation site
 
-spotifast.rocks counts page visits with [Plausible](https://plausible.io/data-policy),
-which uses no cookies and collects no personal data. The app itself contains
-no analytics.
+The fork removes the inherited Spotifast domain and analytics script. No MagicSpot hosted documentation site is configured. Reading the Markdown on GitHub uses GitHub's service; a local Jekyll preview includes no project analytics.
 
-## Questions
-
-Ask on [GitHub](https://github.com/crmne/spotifast/issues).
+Questions and bug reports belong on [MagicSpot GitHub Issues](https://github.com/FallenG101/MagicSpot2/issues).
