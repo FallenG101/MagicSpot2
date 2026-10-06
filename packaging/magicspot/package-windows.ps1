@@ -25,7 +25,8 @@ $licenses = @(
     @{ Name = 'MagicSpot (MIT License)'; Path = 'LICENSE' },
     @{ Name = 'Inter (SIL Open Font License 1.1)'; Path = 'assets\fonts\Inter-LICENSE.txt' },
     @{ Name = 'Noto Emoji (SIL Open Font License 1.1)'; Path = 'assets\fonts\NotoEmoji-LICENSE.txt' },
-    @{ Name = 'Lucide icons (ISC License)'; Path = 'assets\icons\LICENSE.txt' }
+    @{ Name = 'Lucide icons (ISC License)'; Path = 'assets\icons\LICENSE.txt' },
+    @{ Name = 'projectM (GNU Lesser General Public License 2.1)'; Path = 'assets\licenses\projectM-LICENSE.txt' }
 )
 $sections = foreach ($license in $licenses) {
     $path = Join-Path $repoPath $license.Path

@@ -6,13 +6,15 @@ The maintainer requested a regular `v2.0.0` release with a standalone Windows x6
 
 MagicSpot is a focused lyrics and theme fork of Spotifast main `7048219`, five commits beyond upstream stable `v0.12.0`. It adds the Apple Music inspired lyrics sidebar, saved font and size options, a subtle active-line glow, artwork-derived background, a larger cover in a wider sidebar, and OLED Blue. The app uses a separate MagicSpot profile and retains upstream Spotify sign-in, playback and Connect flows. Local playback requires Spotify Premium.
 
-The Windows download is a versioned standalone `.exe` with separate license notices and checksums. The Mac download is a universal Apple Silicon and Intel `.dmg`. Both are normal builds without demo data or MilkDrop. Windows is unsigned; macOS is ad-hoc signed without notarization. Linux remains a source and CI target.
+The Windows download is a versioned standalone `.exe` with separate license notices and checksums. The Mac download is a universal Apple Silicon and Intel `.dmg`. Both are normal builds with upstream's default MilkDrop feature and without demo data. Windows is unsigned; macOS is ad-hoc signed without notarization. Linux remains a source and CI target.
 
 ## Release verification
 
 The earlier application code passed Windows and Mac package validation on successful CI run [37397093468](https://github.com/FallenG101/MagicSpot2/actions/runs/37397093468). Its Windows executable passed version, x64 PE, license and checksum checks; the DMG passed mount, architecture, version and signature checks on GitHub's Mac runner. Those binaries carry an earlier version and cannot be renamed into `2.0.0` assets. The regular release requires new Windows and Mac builds from its own current-main commit, along with quality, test, documentation and Nix gates. The publication workflow verifies both package checksum files and only then creates `v2.0.0` as GitHub's Latest release.
 
 Live Spotify account sign-in, playback and Connect have not been exercised in this development session. The inherited flows remain enabled, but demo and automated coverage do not establish an account-backed session. No startup or memory improvement is claimed.
+
+The [upstream parity audit](../../UPSTREAM.md#functional-parity-audit) compares this fork with Spotifast's current main commit. The playback engine and Spotify backend have no source changes. The release now builds with upstream's default MilkDrop feature; CI must still pass the resulting Windows and universal Mac packages before publication.
 
 ## Maintenance
 

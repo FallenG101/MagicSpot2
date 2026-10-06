@@ -12,7 +12,7 @@ the top-bar visualiser button, Ctrl+Shift+K, Settings, or the mini player's
   <source src="/assets/images/milkdrop.mp4" type="video/mp4">
 </video>
 
-MilkDrop is omitted from MagicSpot 2.0 downloads. This guide applies only to source builds with the optional MilkDrop feature enabled. The video above is inherited Spotifast reference footage.
+MilkDrop is included in MagicSpot 2.0 downloads, as it is in Spotifast's default build. The video above is inherited Spotifast reference footage.
 
 ## The window
 

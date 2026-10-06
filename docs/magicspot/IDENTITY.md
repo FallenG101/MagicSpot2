@@ -50,8 +50,8 @@ telemetry or hosted MagicSpot backend is added.
 
 ## Release scope
 
-The Windows x64 and universal macOS executables are release builds without the demo feature or
-MilkDrop. It supports normal sign-in and playback; local playback requires
+The Windows x64 and universal macOS executables are release builds with upstream's
+default MilkDrop feature and without demo data. They support normal sign-in and playback; local playback requires
 Spotify Premium. The inherited engine is not changed by this release. A live
 account sign-in/playback/Connect session and install packages on other operating
 systems have not been validated locally. macOS packaging is built and verified

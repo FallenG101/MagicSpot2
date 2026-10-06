@@ -1,6 +1,6 @@
 # MagicSpot packaging and releases
 
-MagicSpot `2.0.0` packages the normal app with Spotify sign-in and playback enabled, without demo mode or MilkDrop. It produces a direct Windows executable with a license sidecar, a universal Mac DMG, and a combined `checksums.txt`:
+MagicSpot `2.0.0` packages the normal app with Spotify sign-in, playback and upstream's default MilkDrop feature enabled, without demo mode. It produces a direct Windows executable with a license sidecar, a universal Mac DMG, and a combined `checksums.txt`:
 
 | Target | Asset | Signing |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ Linux and Nix remain source/CI targets. There is no MagicSpot Windows installer,
 Use the pinned Rust toolchain and locked dependencies. On Windows:
 
 ```powershell
-cargo build --locked --release --no-default-features
+cargo build --locked --release
 ./packaging/magicspot/package-windows.ps1 -Binary target/release/magicspot2.exe -OutputDir dist/windows
 ```
 
@@ -24,8 +24,8 @@ On macOS:
 
 ```sh
 rustup target add aarch64-apple-darwin x86_64-apple-darwin
-cargo build --locked --release --no-default-features --target aarch64-apple-darwin
-cargo build --locked --release --no-default-features --target x86_64-apple-darwin
+cargo build --locked --release --target aarch64-apple-darwin
+cargo build --locked --release --target x86_64-apple-darwin
 mkdir -p dist/macos-universal
 lipo -create target/aarch64-apple-darwin/release/magicspot2 target/x86_64-apple-darwin/release/magicspot2 -output dist/macos-universal/magicspot2
 bash packaging/magicspot/package-macos.sh dist/macos-universal/magicspot2 dist/macos-universal

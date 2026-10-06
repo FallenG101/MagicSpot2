@@ -10,7 +10,7 @@ MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com
 - [Everyday use](_guide/using-spotifast.md)
 - [Lyrics and OLED Blue](_guide/lyrics-and-themes.md)
 - [Winamp mini player](_guide/winamp.md)
-- [Optional source-build MilkDrop](_guide/milkdrop.md)
+- [MilkDrop visualizer](_guide/milkdrop.md)
 - [Personal Spotify app](_guide/make-it-even-faster.md)
 
 ## Reference

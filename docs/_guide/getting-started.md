@@ -39,7 +39,7 @@ Use a checkout of this fork and the pinned **Rust 1.98.0** toolchain:
 ```sh
 git clone https://github.com/FallenG101/MagicSpot2.git
 cd MagicSpot2
-cargo build --locked --release --no-default-features
+cargo build --locked --release
 ```
 
 Run `target/release/magicspot2.exe` on Windows or `target/release/magicspot2` elsewhere. Windows needs Rust's MSVC toolchain and Visual Studio C++ build tools; macOS needs Xcode command-line tools. On Ubuntu, the ordinary build needs:
@@ -50,4 +50,4 @@ sudo apt install libasound2-dev libpulse-dev libxkbcommon-dev libwayland-dev lib
 
 On other Linux distributions, install the equivalent ALSA, PulseAudio, XKB, Wayland and OpenGL development libraries. `nix develop` supplies the full source-build environment on a Nix host. If characters are missing, install appropriate Noto text/CJK and color-emoji fonts.
 
-Default-feature builds include optional MilkDrop and also need CMake, a C++ compiler and libclang. On Windows this additionally needs vcpkg's `glew:x64-windows-static`. [Contributing](https://github.com/FallenG101/MagicSpot2/blob/main/CONTRIBUTING.md) gives the full checks. Release downloads are built with `--no-default-features`.
+The default build includes MilkDrop and needs CMake, a C++ compiler and libclang. On Windows this additionally needs vcpkg's `glew:x64-windows-static`. [Contributing](https://github.com/FallenG101/MagicSpot2/blob/main/CONTRIBUTING.md) gives the full checks. The release downloads use these default features.

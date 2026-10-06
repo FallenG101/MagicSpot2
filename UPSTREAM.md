@@ -27,6 +27,19 @@ tags are preserved. `origin` is MagicSpot2; `upstream` is Spotifast.
 
 No dependency changes or code from discontinued MagicSpot v3 have been imported.
 
+## Functional parity audit
+
+On October 5, 2026, `git ls-remote upstream refs/heads/main` still returned
+`7048219716fb8bbf2f1af0934f545801f52cb29b`, so the recorded base is the
+current upstream main commit. The source diff adds the requested lyrics and
+OLED theme behavior, plus MagicSpot naming, separate profile/credentials,
+desktop integration names and update repository. The playback engine and
+Spotify backend (`src/player.rs` and `src/backend.rs`) are unchanged. In
+`src/auth.rs`, only sign-in page wording changes; in `src/http.rs`, only the
+application name in the User-Agent changes. The release build uses upstream's
+default feature set, including MilkDrop. Live account-backed playback and
+Connect still need direct validation; this code audit does not replace it.
+
 ## MagicSpot patch inventory
 
 | Patch | Files | Purpose |

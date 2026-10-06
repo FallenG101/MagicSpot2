@@ -14,6 +14,7 @@ bash packaging/macos/bundle.sh "$binary" "$input/MagicSpot.app" "$version"
 cp README.md LICENSE "$input/"
 cp assets/fonts/Inter-LICENSE.txt assets/fonts/NotoEmoji-LICENSE.txt "$input/licenses/"
 cp assets/icons/LICENSE.txt "$input/licenses/Lucide-LICENSE.txt"
+cp assets/licenses/projectM-LICENSE.txt "$input/licenses/"
 ln -s /Applications "$input/Applications"
 test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$input/MagicSpot.app/Contents/Info.plist")" = 'com.falleng101.magicspot2'
 test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$input/MagicSpot.app/Contents/Info.plist")" = "$version"

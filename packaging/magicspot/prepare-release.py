@@ -39,7 +39,12 @@ def prepare(root: Path) -> None:
             ):
                 raise ValueError("Windows download is not an x86-64 PE executable")
             licenses = paths[1].read_text(encoding="utf-8")
-            for expected_license in ("MIT License", "SIL OPEN FONT LICENSE", "ISC License"):
+            for expected_license in (
+                "MIT License",
+                "SIL OPEN FONT LICENSE",
+                "ISC License",
+                "GNU LESSER GENERAL PUBLIC LICENSE",
+            ):
                 if expected_license not in licenses:
                     raise ValueError(f"Windows license bundle is missing {expected_license}")
         pairs = [

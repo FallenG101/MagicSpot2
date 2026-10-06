@@ -12,7 +12,7 @@ The [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releas
 | macOS Apple Silicon and Intel | `magicspot2-v2.0.0-macos-universal.dmg` | Open the DMG and drag **MagicSpot** to **Applications**. Eject the DMG, then open the installed app. |
 | Linux | Source build | See [Getting Started](/getting-started/#build-from-source). No Linux download is published for 2.0.0. |
 
-These are normal applications with Spotify sign-in, playback and Connect enabled. Local playback requires Spotify Premium. The downloads omit demo mode and MilkDrop. Windows on ARM, a Windows installer, AppImage, Flatpak, AUR and Homebrew packages are not offered for this release.
+These are normal applications with Spotify sign-in, playback, Connect and MilkDrop enabled. Local playback requires Spotify Premium. The downloads omit demo mode. Windows on ARM, a Windows installer, AppImage, Flatpak, AUR and Homebrew packages are not offered for this release.
 
 Windows has no publisher signature. macOS uses ad-hoc signing, without Apple notarization; first launch may require approval in **System Settings > Privacy & Security**. Download only from the project's release page. `checksums.txt` provides SHA-256 integrity checks; it is not a separate publisher signature.
 
@@ -29,7 +29,7 @@ From a MagicSpot checkout, `nix build .#magicspot2` builds the app; `.#default` 
 You can install from source with:
 
 ```sh
-cargo install --git https://github.com/FallenG101/MagicSpot2 --locked --no-default-features
+cargo install --git https://github.com/FallenG101/MagicSpot2 --locked
 ```
 
 Source installs follow their own update/build path. See [Packaging](https://github.com/FallenG101/MagicSpot2/blob/main/PACKAGING.md) for how downloads are produced.

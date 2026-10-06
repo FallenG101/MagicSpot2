@@ -13,14 +13,14 @@ A native Spotify desktop app based on the latest [Spotifast](https://github.com/
 
 ![MagicSpot lyrics sidebar in OLED Blue, native Windows demo capture](docs/magicspot/lyrics-oled.png)
 
-Version `2.0.0` targets Windows x64 and macOS (Apple Silicon and Intel). It omits MilkDrop. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0.md) and [validation status](docs/magicspot/STATUS.md).
+Version `2.0.0` targets Windows x64 and macOS (Apple Silicon and Intel), including upstream's MilkDrop visualizer. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0.md) and [validation status](docs/magicspot/STATUS.md).
 
 ## Build and preview
 
 Rust 1.98 is pinned. Build the normal application:
 
 ```sh
-cargo build --locked --release --no-default-features
+cargo build --locked --release
 ```
 
 The executable is `target/release/magicspot2.exe` on Windows, or `target/release/magicspot2` elsewhere. The internal Rust library remains named `spotifast` to keep upstream integration small.
@@ -41,6 +41,6 @@ The foundation is Spotifast main `7048219`, five commits newer than stable `v0.1
 
 ## Acknowledgements
 
-MagicSpot is a fork of Spotifast by Carmine Paolino and contributors. It uses [fastframe](https://github.com/crmne/fastframe), [librespot](https://github.com/librespot-org/librespot), [egui](https://github.com/emilk/egui), [Inter](https://rsms.me/inter/) (OFL), [Noto Emoji](https://github.com/googlefonts/noto-emoji) (OFL), and [Lucide](https://lucide.dev) icons (ISC). Original license and copyright notices are retained and included in the download.
+MagicSpot is a fork of Spotifast by Carmine Paolino and contributors. It uses [fastframe](https://github.com/crmne/fastframe), [librespot](https://github.com/librespot-org/librespot), [egui](https://github.com/emilk/egui), [projectM](https://github.com/projectM-visualizer/projectm) (LGPL 2.1), [Inter](https://rsms.me/inter/) (OFL), [Noto Emoji](https://github.com/googlefonts/noto-emoji) (OFL), and [Lucide](https://lucide.dev) icons (ISC). Original license and copyright notices are retained and included in the download.
 
 MagicSpot is independent and not affiliated with Spotify. Spotify is a trademark of Spotify AB. Licensed under the [MIT License](LICENSE).

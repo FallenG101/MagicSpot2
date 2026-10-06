@@ -12,7 +12,7 @@ The October 5 foundation is upstream main commit `7048219`, five commits newer t
 
 The sidebar uses spacious bold lyrics, smooth following, a subtle active-line glow and blurred cover colors. Choose Inter, System or Monospace, use Auto size or 18–48 points, and widen the sidebar to grow the cover. **OLED Blue** adds black main surfaces and blue accents. See [Lyrics & Themes](/lyrics-and-themes/).
 
-Spotify sign-in, local playback, library, search, playlists, queue, Connect, the Winamp mini player and full-screen lyrics retain the upstream foundation. MilkDrop remains an optional source-build feature and is omitted from the 2.0.0 downloads.
+Spotify sign-in, local playback, library, search, playlists, queue, Connect, the Winamp mini player, full-screen lyrics and MilkDrop retain the upstream foundation. MilkDrop is included in the 2.0.0 downloads.
 
 ## Requirements and limits
 

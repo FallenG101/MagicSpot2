@@ -23,7 +23,7 @@ The app keeps `magicspot2.log` and, after a panic, `panic.log` locally. Credenti
 | GitHub | Checks this fork's release feed, and downloads an update if requested. Automatic checks can be disabled in Settings. Replacing the standalone Windows executable is manual. |
 | Local network | mDNS receiver discovery and communication with selected Spotify Connect receivers. |
 
-Optional MilkDrop source builds download preset packs from GitHub when used. Version 2.0.0 omits MilkDrop. Links such as Spotify developer setup or the Winamp Skin Museum open in your browser. Each service has its own privacy terms; see [Spotify's policy](https://www.spotify.com/legal/privacy-policy/).
+MilkDrop downloads preset packs from GitHub when used. Links such as Spotify developer setup or the Winamp Skin Museum open in your browser. Each service has its own privacy terms; see [Spotify's policy](https://www.spotify.com/legal/privacy-policy/).
 
 Artwork-derived lyrics backgrounds reuse the existing cover loader, blur and cache. Font, size, glow and theme settings require no new service.
 

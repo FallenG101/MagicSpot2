@@ -10,6 +10,8 @@ uses the same package types and is checked in the place users actually see it.
 - Keep the Windows app license notices in a separate text asset beside the
   executable. Include SHA-256 checksums for both.
 - Keep macOS as a universal Apple Silicon and Intel `.dmg`.
+- Build the normal app with Spotifast's default features, including MilkDrop.
+  Demo data is excluded. Include projectM's LGPL notice with both packages.
 - Do not add an installer, shortcuts, URL handler, app registration or automatic
   updater unless the maintainer requests that distribution behavior.
 - The release version is **2.0.0**, with no preview suffix in the tag, app

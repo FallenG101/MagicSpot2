@@ -34,15 +34,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libasound2-dev libpulse-dev libxkbcommon-dev \
-            libwayland-dev libgl1-mesa-dev
+            libwayland-dev libgl1-mesa-dev cmake libclang-dev
+      - name: GLEW for libprojectM
+        if: runner.os == 'Windows'
+        run: vcpkg install glew:x64-windows-static
+      - name: MSVC environment for libprojectM
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
       - uses: jdx/mr-boxington-action@v1
         with:
           cache-generation: magicspot-build-v1
-      # MilkDrop's default/all-feature compilation remains covered by the
-      # inherited quality/test jobs. These are the baseline configurations.
-      # Build without demo first so the ordinary release cannot contain it.
-      - name: Release build (without MilkDrop or demo)
-        run: mbx build --locked --release --no-default-features
+      # Build with the same default features as upstream, without demo data.
+      - name: Release build (normal app)
+        run: mbx build --locked --release
       - name: Package MagicSpot Windows download
         if: runner.os == 'Windows' && github.repository == 'FallenG101/MagicSpot2'
         shell: pwsh
@@ -73,8 +77,8 @@ jobs:
           cache-generation: magicspot-macos-download-v1
       - name: Build release for Apple Silicon and Intel
         run: |
-          mbx build --locked --release --no-default-features --target aarch64-apple-darwin
-          mbx build --locked --release --no-default-features --target x86_64-apple-darwin
+          mbx build --locked --release --target aarch64-apple-darwin
+          mbx build --locked --release --target x86_64-apple-darwin
       - name: Package and verify DMG
         run: |
           mkdir -p dist/macos-universal
