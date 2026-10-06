@@ -44,7 +44,12 @@ jobs:
           current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
           if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
           if gh release view "v$version" >/dev/null 2>&1; then exit 0; fi
-          existing=$(gh api "repos/$GH_REPO/git/ref/tags/v$version" --jq .object.sha 2>/dev/null || true)
+          existing=''
+          # gh prints a JSON error body on stdout for 404; do not mistake it
+          # for an existing tag SHA.
+          if gh api "repos/$GH_REPO/git/ref/tags/v$version" >/dev/null 2>&1; then
+            existing=$(gh api "repos/$GH_REPO/git/ref/tags/v$version" --jq .object.sha)
+          fi
           if [ -n "$existing" ] && [ "$existing" != "$RELEASE_SHA" ]; then
             echo '::error::The release tag already identifies a different commit.'
             exit 1

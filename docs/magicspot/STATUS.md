@@ -1,21 +1,19 @@
 # MagicSpot 2.0 status
 
-The maintainer requested a regular `v2.0.0` release with a standalone Windows x64 EXE and a universal Mac DMG. The application, release notes, packaging and publication workflow now target `2.0.0` without a preview suffix. The [release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) is the source of truth for availability; do not describe the downloads as public until GitHub publishes the verified assets.
+The regular [MagicSpot 2.0 release](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) is public and marked **Latest** on the repository home page. It offers a standalone Windows x64 EXE, a universal Apple Silicon and Intel DMG, third-party license notices and SHA-256 checksums. There is no ZIP or preview release. Windows is unsigned; the Mac app is ad-hoc signed without notarization. Linux remains a source and CI target.
 
 ## Source and scope
 
-MagicSpot is a focused lyrics and theme fork of Spotifast main `7048219`, five commits beyond upstream stable `v0.12.0`. It adds the Apple Music inspired lyrics sidebar, saved font and size options, a subtle active-line glow, artwork-derived background, a larger cover in a wider sidebar, and OLED Blue. The app uses a separate MagicSpot profile and retains upstream Spotify sign-in, playback and Connect flows. Local playback requires Spotify Premium.
+MagicSpot starts from Spotifast main `7048219`, which was still upstream's main commit at the [functional parity audit](../../UPSTREAM.md#functional-parity-audit). The changes are the lyrics sidebar, saved font/size and glow controls, artwork-derived background and growing cover, OLED Blue, and the fork's separate identity and packaging. The playback engine and Spotify backend source are unchanged. Both downloads include upstream's default MilkDrop feature and exclude demo data.
 
-The Windows download is a versioned standalone `.exe` with separate license notices and checksums. The Mac download is a universal Apple Silicon and Intel `.dmg`. Both are normal builds with upstream's default MilkDrop feature and without demo data. Windows is unsigned; macOS is ad-hoc signed without notarization. Linux remains a source and CI target.
+## Validation
 
-## Release verification
+[CI run 37405687141](https://github.com/FallenG101/MagicSpot2/actions/runs/37405687141) passed all ten jobs on release commit `84de29c97ddf366c29813608674bfad3f4758bd4`: normal and demo builds, platform tests, quality, docs, Nix and Mac DMG packaging. The Windows EXE reports `magicspot2 2.0.0`; its x64 PE header, license sidecar and package SHA-256 values were checked. The Mac workflow verified both architectures, version, mounted DMG and app signature. GitHub's public API reports `draft: false`, `prerelease: false` and `v2.0.0` as Latest; the repository's visible Releases panel shows MagicSpot 2.0, and anonymous requests to the release page and both downloads returned HTTP 200.
 
-The earlier application code passed Windows and Mac package validation on successful CI run [37397093468](https://github.com/FallenG101/MagicSpot2/actions/runs/37397093468). Its Windows executable passed version, x64 PE, license and checksum checks; the DMG passed mount, architecture, version and signature checks on GitHub's Mac runner. Those binaries carry an earlier version and cannot be renamed into `2.0.0` assets. The regular release requires new Windows and Mac builds from its own current-main commit, along with quality, test, documentation and Nix gates. The publication workflow verifies both package checksum files and only then creates `v2.0.0` as GitHub's Latest release.
+The automatic publisher initially rejected a nonexistent `v2.0.0` tag because its 404 handling read GitHub's JSON error body as a tag SHA. After all CI jobs passed, the same CI artifacts were independently verified and published at that tested commit. The tag check and checksum-order comparison were fixed in the publication code afterward. The superseded preview release and tag were removed only after the regular release was verified.
 
-Live Spotify account sign-in, playback and Connect have not been exercised in this development session. The inherited flows remain enabled, but demo and automated coverage do not establish an account-backed session. No startup or memory improvement is claimed.
-
-The [upstream parity audit](../../UPSTREAM.md#functional-parity-audit) compares this fork with Spotifast's current main commit. The playback engine and Spotify backend have no source changes. The release now builds with upstream's default MilkDrop feature; CI must still pass the resulting Windows and universal Mac packages before publication.
+Live Spotify account sign-in, playback and Connect have **not** been exercised in this development session. Their inherited flows remain enabled; automated tests and source comparison do not replace an account-backed test. No startup or memory improvement is claimed.
 
 ## Maintenance
 
-The [release decisions](RELEASE_DECISIONS.md) require a full `2.0.0` version in the app, tag, title and asset names, a visible Latest release on the repository home page, and anonymous checks of all public downloads. [PACKAGING.md](../../PACKAGING.md) describes the release gate. The report-only upstream drift workflow does not merge, publish or submit upstream changes automatically.
+The [release decisions](RELEASE_DECISIONS.md) record the required package types and public checks. [PACKAGING.md](../../PACKAGING.md) gives the build and publication procedure. The [upstream sync guide](MAINTENANCE.md) keeps future lyric and theme changes separate from fork identity. The drift workflow reports upstream changes without merging or publishing them.

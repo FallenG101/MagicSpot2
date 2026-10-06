@@ -45,6 +45,8 @@ Output locations must be fresh; do not overwrite a distribution under review. SH
 
 A new push cancels older running CI; only the successful current-main run can publish. A failed job blocks publication even if both packages built. Check [Actions](https://github.com/FallenG101/MagicSpot2/actions), the repository home page Releases panel and the [2.0.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) for live status. Do not describe an unpublished tag or pending artifact as an available download.
 
+The first `v2.0.0` publisher run failed after all [ten CI jobs](https://github.com/FallenG101/MagicSpot2/actions/runs/37405687141) passed: the tag check treated GitHub's 404 JSON response as an existing tag, and local package validation found a checksum-order mismatch in the verifier. Both checks are corrected in the repository. The verified EXE, license sidecar, DMG and combined checksums were published manually from that successful CI run at its tested commit. The obsolete preview release and tag were then removed. [STATUS.md](docs/magicspot/STATUS.md) records the public verification.
+
 ## Future releases
 
 The automatic publisher is restricted to the requested `2.0.0` release. Future versions need an explicitly scoped release change: version/lockfile, Nix vendor hash, relevant metainfo, written notes, package names, publication workflow and documentation. Run the required checks on that commit before publishing. Do not enable the inherited external publishers or update Spotifast's website, tap or AUR as part of a MagicSpot release.

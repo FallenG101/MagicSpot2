@@ -39,7 +39,9 @@ Before calling a release published:
 5. Open the repository home page without authentication. Its Releases panel
    must show MagicSpot 2.0 with a link to the release. Open that direct release URL
    as well and use it in user-facing download instructions.
-6. If replacing assets on an already-published version, upload and verify the
+6. Once the regular release is verified, remove any superseded preview release
+   and tag so the project has one clear public download.
+7. If replacing assets on an already-published version, upload and verify the
    replacement set before removing obsolete assets. Update the release notes,
    checksum file, automation and repository documentation in the same change.
 
@@ -47,10 +49,4 @@ Ask the maintainer only when a future request leaves a material choice open,
 such as standalone executable versus installer, supported Windows architecture,
 signing, or whether another version should have a different GitHub release type.
 
-## Version 2.0.0
-
-`v2.0.0` follows these choices: standalone Windows x64 EXE, a separate
-license-notice text file, SHA-256 checksums, and the universal Mac DMG. It is a
-public regular release marked Latest once the verified assets are published. Use
-<https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0> as the
-download link after publication.
+The first release is [MagicSpot 2.0](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0), publicly marked Latest with the verified assets above.

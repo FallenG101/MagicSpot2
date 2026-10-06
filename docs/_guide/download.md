@@ -4,7 +4,7 @@ description: MagicSpot Windows executable, universal macOS DMG and source builds
 nav_order: 2
 ---
 
-The [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) lists the verified downloads once GitHub publishes the release. It will appear under Releases on the repository home page.
+The [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) lists the verified downloads. GitHub also shows it as **Latest** under Releases on the repository home page.
 
 | Platform | 2.0.0 asset | Installation |
 | --- | --- | --- |

@@ -6,7 +6,7 @@ nav_order: 1
 
 ## Install
 
-Get the standalone Windows x64 `.exe` or universal macOS DMG from the [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) when GitHub publishes the verified files. The [Download guide](/download/) lists file names, signing status and manual updates.
+Get the standalone Windows x64 `.exe` or universal macOS DMG from the [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0). The [Download guide](/download/) lists file names, signing status and manual updates.
 
 On Windows, download and open the `.exe`; it runs directly without extraction or installation. It does not install shortcuts, register Spotify URL handlers or create an uninstaller. On macOS, drag MagicSpot from the DMG to Applications before opening it. The Mac app is ad-hoc signed without notarization and may require first-launch approval in Privacy & Security.
 

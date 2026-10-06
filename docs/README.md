@@ -1,6 +1,6 @@
 # MagicSpot documentation
 
-MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com/crmne/spotifast). Version `2.0.0` is the first regular release. The [2.0.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) will list its verified downloads once publication completes.
+MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com/crmne/spotifast). Version `2.0.0` is the first regular release. Get the verified Windows EXE and Mac DMG from the [2.0.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0).
 
 ## User guides
 

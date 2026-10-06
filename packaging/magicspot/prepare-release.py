@@ -26,7 +26,7 @@ def prepare(root: Path) -> None:
                 raise ValueError(f"Missing regular download: {name}")
             paths.append(path)
         entries = (folder / "checksums.txt").read_text(encoding="ascii").splitlines()
-        expected = [entry.split() for entry in entries if entry.strip()]
+        expected = sorted(tuple(entry.split()) for entry in entries if entry.strip())
         if directory == "windows":
             executable = paths[0].read_bytes()
             if len(executable) < 0x40 or executable[:2] != b"MZ":
@@ -52,7 +52,7 @@ def prepare(root: Path) -> None:
             for path in paths
         ]
         checksums = sorted((digest, name) for digest, name, _ in pairs)
-        if expected != [list(entry) for entry in checksums]:
+        if expected != checksums:
             raise ValueError(f"Checksum mismatch or unexpected inputs: {directory}")
         verified.extend(pairs)
     output = root / "release"

@@ -39,6 +39,7 @@ Spotify backend (`src/player.rs` and `src/backend.rs`) are unchanged. In
 application name in the User-Agent changes. The release build uses upstream's
 default feature set, including MilkDrop. Live account-backed playback and
 Connect still need direct validation; this code audit does not replace it.
+The regular 2.0.0 packages and platform checks passed on [CI run 37405687141](https://github.com/FallenG101/MagicSpot2/actions/runs/37405687141).
 
 ## MagicSpot patch inventory
 
