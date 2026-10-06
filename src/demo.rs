@@ -4900,7 +4900,7 @@ mod tests {
             crate::ui::settings::show,
         );
         assert!(app.actions.iter().any(|action| matches!(action,
-            Action::OpenUrl(url) if url == "https://spotifast.rocks/settings-and-files/#custom-themes")));
+            Action::OpenUrl(url) if url == "https://github.com/FallenG101/MagicSpot2/blob/main/docs/_reference/settings-and-files.md#custom-themes")));
         app.backend.shutdown();
     }
 

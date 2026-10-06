@@ -14,6 +14,14 @@ The Windows release/demo test suite passed again locally after the log fix. Docu
 
 The fixes and docs are pushed as a new current-main candidate. GitHub will run the required builds and publish Preview 1 automatically only after they all pass. At the maintainer's request, those builds are left running without waiting for completion. Check [Actions](https://github.com/FallenG101/MagicSpot2/actions) and [Releases](https://github.com/FallenG101/MagicSpot2/releases) for the live state; this is a dated snapshot, not an assertion that later CI passed.
 
+## Follow-up release check
+
+[CI run 37395432601](https://github.com/FallenG101/MagicSpot2/actions/runs/37395432601), on `7f5d8c2`, passed quality, the updated Jekyll documentation build, all three release/demo build jobs and the universal DMG package verification. Default-feature tests on all three platforms stopped at the same theme-help-link assertion: the app now opens the MagicSpot guide, but the test still expected Spotifast's URL. The correction keeps the existing headless click test and changes its expected destination to the new guide. Nix was still running at this snapshot.
+
+The actual Windows ZIP from this run was downloaded and verified locally: its SHA-256 matches the uploaded checksum, the archive integrity check passes, and it contains the expected executable and license. The executable reports `magicspot2 2.0.0-preview.1`. The uploaded DMG was also downloaded, and the publication preparation script accepted both actual artifacts and generated the combined checksums. Mac mounting, version, architecture and signature checks passed on the native CI runner. These checks do not substitute for live-account playback validation or the remaining release gates.
+
+After correcting the expected help URL, its targeted headless click test passed locally. The full Windows release/demo headless library suite then passed 955 tests with one ignored native-store test. Formatting and diff checks passed. The correction is pushed as the next CI candidate; publication still requires successful current-main CI.
+
 ## Direction
 
 Maintain the small lyrics/theme improvements and keep current with Spotifast. Aim to contribute suitable UI improvements upstream, with the maintainer's explicit instruction before submitting. Keep runtime and Spotify behavior close to upstream, and isolate UI work from MagicSpot identity and packaging changes. No discontinued-v3 dependencies, telemetry or alternative audio sources are added.
