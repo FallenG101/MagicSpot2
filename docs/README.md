@@ -1,6 +1,6 @@
 # MagicSpot documentation
 
-MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com/crmne/spotifast). The first preview is `2.0.0-preview.1`. Get the [public Preview 1 downloads](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1) from its direct release page; GitHub's repository home page omits prereleases from the Releases panel.
+MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com/crmne/spotifast). Version `2.0.0` is the first regular release. The [2.0.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) will list its verified downloads once publication completes.
 
 ## User guides
 
@@ -29,7 +29,7 @@ MagicSpot 2 is a focused lyrics and theme fork of [Spotifast](https://github.com
 - [Upstream provenance and patch inventory](../UPSTREAM.md)
 - [Maintenance and sync procedure](magicspot/MAINTENANCE.md)
 - [Identity](magicspot/IDENTITY.md), [validation status](magicspot/STATUS.md), [UI evidence](magicspot/UI_NOTES.md) and [historical baseline](magicspot/BASELINE.md)
-- [Preview 1 notes](../packaging/release-notes/v2.0.0-preview.1.md) and [release procedure](../PACKAGING.md)
+- [2.0.0 release notes](../packaging/release-notes/v2.0.0.md) and [release procedure](../PACKAGING.md)
 - [Release decisions and distribution contract](magicspot/RELEASE_DECISIONS.md)
 
 The Jekyll site source is maintained here. With Ruby and Bundler installed, run `bundle install` and `bundle exec jekyll build` from `docs/`; `bundle exec jekyll serve` previews it locally. There is no configured MagicSpot domain or enabled Pages deployment. CI builds the site for validation. GitHub renders this index and the Markdown guides directly; site-root links inside guides refer to the Jekyll routes.

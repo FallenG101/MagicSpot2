@@ -29,6 +29,6 @@ features:
     link: /what-is-spotifast/
 ---
 
-Preview 1 targets Windows x64 with a standalone `.exe` and a universal macOS DMG. Download from the [direct public release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1). Local playback requires Spotify Premium. Windows is unsigned; macOS is ad-hoc signed without notarization. Linux remains a source/CI target. See [installation and preview details](/download/).
+MagicSpot 2.0 targets Windows x64 with a standalone `.exe` and a universal macOS DMG. The verified files will appear on the [2.0.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0). Local playback requires Spotify Premium. Windows is unsigned; macOS is ad-hoc signed without notarization. Linux remains a source/CI target. See [installation and release details](/download/).
 
 MagicSpot is based on [Spotifast](https://github.com/crmne/spotifast) by Carmine Paolino and contributors. Original MIT and asset license notices remain. It is independent and not affiliated with Spotify. No MagicSpot performance improvement or live-account validation is claimed by the demo image.

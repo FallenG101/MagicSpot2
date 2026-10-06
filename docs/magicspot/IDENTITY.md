@@ -1,7 +1,7 @@
 # MagicSpot 2 identity and first release
 
 The maintainer requested a usable GitHub release on October 5, 2026, including
-normal Spotify sign-in and playback. Version `2.0.0-preview.1` is the new line,
+normal Spotify sign-in and playback. Version `2.0.0` is the new line,
 separate from Spotifast 0.12 and discontinued MagicSpot v3.
 
 | Surface | Identity |
@@ -42,8 +42,8 @@ key. No Spotify password is handled by MagicSpot.
 
 The app uses Spotify for catalogue, account and audio requests. Artwork and audio
 are cached within the configured budget. Lyrics may use LRCLIB, including artist,
-title, album and duration. Automatic update checks use this fork's stable GitHub releases, exclude prereleases,
-and can be disabled in Settings. Preview updates are manual; the Windows EXE
+title, album and duration. Automatic update checks use this fork's GitHub release feed
+and can be disabled in Settings. Replacing the Windows EXE is manual; it
 lacks the portable updater marker. Downloads use the matching asset and SHA-256
 from `checksums.txt`; unsigned downloads are not publisher-authenticated. No
 telemetry or hosted MagicSpot backend is added.
@@ -59,7 +59,7 @@ on GitHub's macOS runner. No performance improvement is claimed.
 
 The kickoff documents remain a roadmap. Their proposed cross-platform packaging,
 performance and sync-exercise milestones are recorded as future work, rather
-than represented as completed checks for this first preview.
+than represented as completed checks for this first release.
 
 
 ## Profile paths

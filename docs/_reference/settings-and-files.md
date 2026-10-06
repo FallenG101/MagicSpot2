@@ -4,7 +4,7 @@ description: Configuration, credential and cache locations, and what is safe to 
 nav_order: 0
 ---
 
-This reference describes MagicSpot 2. Historical `0.x` milestones below refer to its Spotifast foundation. Legacy migration logic applies within a profile; MagicSpot does not import previous Spotifast or MagicSpot v3 grants. Flatpak references describe retained source integration, not an available MagicSpot preview package.
+This reference describes MagicSpot 2. Historical `0.x` milestones below refer to its Spotifast foundation. Legacy migration logic applies within a profile; MagicSpot does not import previous Spotifast or MagicSpot v3 grants. Flatpak references describe retained source integration, not an available MagicSpot package.
 
 
 ## Where things live
@@ -275,7 +275,7 @@ main fields are:
 | `milkdrop_size` | `640, 480` | The MilkDrop window's size in points |
 | `keep_playing_in_background` | `true` | Close to tray |
 | `mac_notch_widget` | `false` | Show interactive Now Playing widget when hovering over the MacBook notch (macOS only) |
-| `check_for_updates` | `true` | Check this fork for stable releases once a day; excludes prereleases |
+| `check_for_updates` | `true` | Check this fork's GitHub release feed once a day |
 | `web_client_id` | none | Optional personal Spotify app id used alongside shared coverage |
 | `personal_app_nudge_at` | none | Legacy daily-reminder timestamp, retained for older releases |
 | `personal_app_intro_seen` | `false` | Whether the Premium personal-app introduction was dismissed or followed (available since 0.8.0) |
@@ -297,7 +297,7 @@ magicspot2 [OPTIONS] [LINK]
 
 A link goes to the running MagicSpot when there is one, which then opens
 the page and brings its window forward; otherwise the app starts on it. The
-installed launcher can route `spotify:` links this way; the Windows preview executable does not register one.
+installed launcher can route `spotify:` links this way; the Windows standalone executable does not register one.
 
 Attach `magicspot2.log` from the state directory to bug reports. It contains
 the last run's output, including extra lines from `magicspot2 -v`. After a
@@ -309,7 +309,7 @@ Builds made with `cargo build --features demo` accept `--demo`, which loads
 sample data for screenshots and interface work. Demo mode never writes
 settings.
 
-Preview downloads omit the demo feature. For the new lyrics fixtures, use `--demo-show lyrics,oled`; `lyrics-wide` widens the sidebar, `lyrics-large` sets 40 points, and `appearance` opens the relevant settings.
+Release downloads omit the demo feature. For the new lyrics fixtures, use `--demo-show lyrics,oled`; `lyrics-wide` widens the sidebar, `lyrics-large` sets 40 points, and `appearance` opens the relevant settings.
 
 `--demo-page` opens a page, such as `home`, `playlist:pl1`, or `artist:art0`,
 and `--demo-show` adds surfaces on top of it: a comma separated list of

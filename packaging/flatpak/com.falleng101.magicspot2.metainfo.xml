@@ -11,8 +11,8 @@
   <url type="bugtracker">https://github.com/FallenG101/MagicSpot2/issues</url>
   <content_rating type="oars-1.1" />
   <releases>
-    <release version="2.0.0-preview.1" date="2026-10-05" type="development">
-      <url>https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1</url>
+    <release version="2.0.0" date="2026-10-05" type="stable">
+      <url>https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0</url>
     </release>
   </releases>
 </component>

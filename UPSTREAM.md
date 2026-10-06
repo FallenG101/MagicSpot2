@@ -39,7 +39,7 @@ No dependency changes or code from discontinued MagicSpot v3 have been imported.
 | Lyrics appearance options | `src/ui/lyrics.rs`, `src/ui/settings.rs`, `src/settings.rs`, `src/theme.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Persisted font choices, subtle active-line glow, larger cover card and cached artwork background |
 | OLED Blue | `src/theme.rs`, `src/settings.rs`, `src/app.rs`, `src/demo.rs`, `src/entrypoint.rs` | Persisted built-in black/blue palette and deterministic demo coverage |
 | App identity and release | `src/identity.rs`, profile/credential/IPC/update and shell modules, Cargo metadata, macOS/Nix metadata, `packaging/magicspot/` | Separate MagicSpot 2 from both previous apps and package normal Windows/macOS downloads |
-| Preview 1 publication | `.github/workflows/magicspot-preview.yml`, `packaging/magicspot/prepare-preview.py` | Publish only the requested first preview after successful current-main CI and verification of both downloads |
+| MagicSpot 2.0 publication | `.github/workflows/magicspot-release.yml`, `packaging/magicspot/prepare-release.py` | Publish version 2.0.0 after successful current-main CI and verification of both downloads |
 
 The untouched application baseline is commit `225a65c`. The lyrics/OLED patch is
 isolated in `e252ee0`; fonts/glow/artwork follow in `ef38ed2`, size/growing cover in `748b804`, and identity/packaging in `f140497`. Publication gates are in `4e3da02`. The first release

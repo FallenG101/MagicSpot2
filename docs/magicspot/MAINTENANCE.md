@@ -21,4 +21,4 @@ Internal library and catalogue names such as `spotifast`, `spotifast:liked-songs
 
 Use [docs/README.md](../README.md) as the documentation index. Update active guides, references, root policies, issue forms and site metadata together when app behavior or supported downloads change. Preserve and label historical baseline, upstream review evidence and `v0.*` notes rather than rewriting their history.
 
-Only GitHub Releases establishes download availability. Preview 1's publisher is restricted to that version and requires successful current-main CI; see [PACKAGING.md](../../PACKAGING.md). New pushes replace the CI candidate. Future releases require their own scoped publication change. Stable version selectors and package-manager claims must follow files and channels that actually exist.
+Only GitHub Releases establishes download availability. The 2.0.0 publisher is restricted to that version and requires successful current-main CI; see [PACKAGING.md](../../PACKAGING.md). New pushes replace the CI candidate. Future releases require their own scoped publication change. Version selectors and package-manager claims must follow files and channels that actually exist.

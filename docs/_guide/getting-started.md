@@ -6,9 +6,9 @@ nav_order: 1
 
 ## Install
 
-Get the standalone Windows x64 `.exe` or universal macOS DMG from the [direct Preview 1 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1). The [Download guide](/download/) lists file names, signing status and manual updates.
+Get the standalone Windows x64 `.exe` or universal macOS DMG from the [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) when GitHub publishes the verified files. The [Download guide](/download/) lists file names, signing status and manual updates.
 
-On Windows, download and open the `.exe`; it runs directly without extraction or installation. It does not install shortcuts, register Spotify URL handlers or create an uninstaller. On macOS, drag MagicSpot from the DMG to Applications before opening it. The Mac preview is ad-hoc signed without notarization and may require first-launch approval in Privacy & Security.
+On Windows, download and open the `.exe`; it runs directly without extraction or installation. It does not install shortcuts, register Spotify URL handlers or create an uninstaller. On macOS, drag MagicSpot from the DMG to Applications before opening it. The Mac app is ad-hoc signed without notarization and may require first-launch approval in Privacy & Security.
 
 ## Sign in
 
@@ -50,4 +50,4 @@ sudo apt install libasound2-dev libpulse-dev libxkbcommon-dev libwayland-dev lib
 
 On other Linux distributions, install the equivalent ALSA, PulseAudio, XKB, Wayland and OpenGL development libraries. `nix develop` supplies the full source-build environment on a Nix host. If characters are missing, install appropriate Noto text/CJK and color-emoji fonts.
 
-Default-feature builds include optional MilkDrop and also need CMake, a C++ compiler and libclang. On Windows this additionally needs vcpkg's `glew:x64-windows-static`. [Contributing](https://github.com/FallenG101/MagicSpot2/blob/main/CONTRIBUTING.md) gives the full checks. Preview downloads are built with `--no-default-features`.
+Default-feature builds include optional MilkDrop and also need CMake, a C++ compiler and libclang. On Windows this additionally needs vcpkg's `glew:x64-windows-static`. [Contributing](https://github.com/FallenG101/MagicSpot2/blob/main/CONTRIBUTING.md) gives the full checks. Release downloads are built with `--no-default-features`.

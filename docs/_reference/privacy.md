@@ -20,10 +20,10 @@ The app keeps `magicspot2.log` and, after a panic, `panic.log` locally. Credenti
 | --- | --- |
 | Spotify | Browser authorization, catalogue, account, library, playlist, audio and Connect requests. |
 | LRCLIB | Lyrics fallback when Spotify has none; sends artist, title, album and duration, without an account identifier. |
-| GitHub | Checks this fork's stable releases, and downloads an update if requested. Automatic checks can be disabled in Settings. Preview downloads are manual. |
+| GitHub | Checks this fork's release feed, and downloads an update if requested. Automatic checks can be disabled in Settings. Replacing the standalone Windows executable is manual. |
 | Local network | mDNS receiver discovery and communication with selected Spotify Connect receivers. |
 
-Optional MilkDrop source builds download preset packs from GitHub when used. Preview 1 omits MilkDrop. Links such as Spotify developer setup or the Winamp Skin Museum open in your browser. Each service has its own privacy terms; see [Spotify's policy](https://www.spotify.com/legal/privacy-policy/).
+Optional MilkDrop source builds download preset packs from GitHub when used. Version 2.0.0 omits MilkDrop. Links such as Spotify developer setup or the Winamp Skin Museum open in your browser. Each service has its own privacy terms; see [Spotify's policy](https://www.spotify.com/legal/privacy-policy/).
 
 Artwork-derived lyrics backgrounds reuse the existing cover loader, blur and cache. Font, size, glow and theme settings require no new service.
 

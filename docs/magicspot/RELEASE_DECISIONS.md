@@ -12,9 +12,10 @@ uses the same package types and is checked in the place users actually see it.
 - Keep macOS as a universal Apple Silicon and Intel `.dmg`.
 - Do not add an installer, shortcuts, URL handler, app registration or automatic
   updater unless the maintainer requests that distribution behavior.
-- Preview releases are intentionally prereleases. GitHub can omit them from the
-  repository home page's Releases sidebar even when the release page is public.
-  Check the tag's direct release URL and its asset list; use that direct URL in
+- The release version is **2.0.0**, with no preview suffix in the tag, app
+  version, title or download filenames. Publish it as a regular GitHub release
+  marked **Latest** so it appears in the repository home page's Releases panel.
+  Check both that panel and the direct release URL; use the direct URL in
   README and download guidance.
 - Keep the release notes, workflow artifact globs, checksum manifest, package
   scripts, documentation and actual GitHub assets in agreement. Never claim a
@@ -30,24 +31,24 @@ Before calling a release published:
    version and target. Check `--version`, the PE architecture, sidecar license
    notices and the SHA-256 entries. Confirm no `.zip` is attached.
 3. Confirm the Mac universal DMG and its existing platform checks.
-4. Confirm the public release API or release page identifies the right tag and
-   visibility, and lists the EXE, license sidecar, DMG and checksums. Confirm
-   each direct asset link returns successfully without authentication.
-5. Open the direct release URL and use it in user-facing download instructions.
-   A repository sidebar showing tags instead of releases is not a failed or
-   missing prerelease.
+4. Confirm the public release API identifies the right tag with `draft: false`,
+   `prerelease: false` and Latest status, and lists the EXE, license sidecar,
+   DMG and checksums. Confirm each direct asset link works without authentication.
+5. Open the repository home page without authentication. Its Releases panel
+   must show MagicSpot 2.0 with a link to the release. Open that direct release URL
+   as well and use it in user-facing download instructions.
 6. If replacing assets on an already-published version, upload and verify the
    replacement set before removing obsolete assets. Update the release notes,
    checksum file, automation and repository documentation in the same change.
 
 Ask the maintainer only when a future request leaves a material choice open,
 such as standalone executable versus installer, supported Windows architecture,
-signing, or whether a stable release rather than a prerelease is intended.
+signing, or whether another version should have a different GitHub release type.
 
-## Preview 1
+## Version 2.0.0
 
-`v2.0.0-preview.1` follows these choices: standalone Windows x64 EXE, a separate
+`v2.0.0` follows these choices: standalone Windows x64 EXE, a separate
 license-notice text file, SHA-256 checksums, and the universal Mac DMG. It is a
-public prerelease, so use
-<https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0-preview.1> as the
-download link.
+public regular release marked Latest once the verified assets are published. Use
+<https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0> as the
+download link after publication.

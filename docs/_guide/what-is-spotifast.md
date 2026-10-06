@@ -12,12 +12,12 @@ The October 5 foundation is upstream main commit `7048219`, five commits newer t
 
 The sidebar uses spacious bold lyrics, smooth following, a subtle active-line glow and blurred cover colors. Choose Inter, System or Monospace, use Auto size or 18–48 points, and widen the sidebar to grow the cover. **OLED Blue** adds black main surfaces and blue accents. See [Lyrics & Themes](/lyrics-and-themes/).
 
-Spotify sign-in, local playback, library, search, playlists, queue, Connect, the Winamp mini player and full-screen lyrics retain the upstream foundation. MilkDrop remains an optional source-build feature and is omitted from Preview 1 downloads.
+Spotify sign-in, local playback, library, search, playlists, queue, Connect, the Winamp mini player and full-screen lyrics retain the upstream foundation. MilkDrop remains an optional source-build feature and is omitted from the 2.0.0 downloads.
 
 ## Requirements and limits
 
 Local playback requires Spotify Premium. Spotify and librespot determine which account and playback features are available; see [What Spotify Allows](/what-spotify-allows/). MagicSpot is independent and not affiliated with Spotify.
 
-Preview 1 targets Windows x64 and a universal Mac app. Linux remains a source/CI target. Windows is unsigned and macOS is ad-hoc signed without notarization. Live account-backed validation is still a follow-up; no MagicSpot startup-time or memory improvement is claimed.
+Version 2.0.0 targets Windows x64 and a universal Mac app. Linux remains a source/CI target. Windows is unsigned and macOS is ad-hoc signed without notarization. Live account-backed validation is still a follow-up; no MagicSpot startup-time or memory improvement is claimed.
 
 The project aims to maintain a small upstream-compatible patch set and eventually offer suitable UI improvements to Spotifast. Release availability, provenance and validation are recorded in the [project documentation](https://github.com/FallenG101/MagicSpot2/blob/main/docs/README.md).

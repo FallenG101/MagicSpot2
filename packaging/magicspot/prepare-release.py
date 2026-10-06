@@ -1,4 +1,4 @@
-"""Verify CI's two Preview 1 downloads before the authorized publication."""
+"""Verify CI's MagicSpot 2.0 downloads before publication."""
 
 import hashlib
 from pathlib import Path
@@ -8,11 +8,11 @@ import sys
 
 
 def prepare(root: Path) -> None:
-    stem = "magicspot2-v2.0.0-preview.1"
+    stem = "magicspot2-v2.0.0"
     assets = {
         "windows": [
             f"{stem}-x86_64-pc-windows-msvc.exe",
-            f"magicspot2-v2.0.0-preview.1-THIRD-PARTY-LICENSES.txt",
+            f"magicspot2-v2.0.0-THIRD-PARTY-LICENSES.txt",
         ],
         "macos": [f"{stem}-macos-universal.dmg"],
     }
