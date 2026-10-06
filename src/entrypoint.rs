@@ -414,11 +414,11 @@ pub(crate) fn run() -> eframe::Result<()> {
         None
     };
     let default_filter = if cli.verbose {
-        "info,librespot=info,spotifast=debug"
+        "info,librespot=info,spotifast=debug,magicspot2=debug"
     } else {
         // Which system face draws each script the interface font lacks,
         // one line per script at startup, for reports of odd-looking text.
-        "warn,spotifast=info,fastframe_fonts=info"
+        "warn,spotifast=info,magicspot2=info,fastframe_fonts=info"
     };
     let dirs = paths::AppDirs::discover();
     #[cfg(feature = "demo")]

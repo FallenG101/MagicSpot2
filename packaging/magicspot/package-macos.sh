@@ -8,7 +8,7 @@ name="magicspot2-v${version}-macos-universal.dmg"
 input="$output/macos-input"
 test ! -e "$input"
 mkdir -p "$input/licenses"
-lipo -verify_arch arm64 x86_64 "$binary"
+lipo "$binary" -verify_arch arm64 x86_64
 test "$("$binary" --version)" = "magicspot2 $version"
 bash packaging/macos/bundle.sh "$binary" "$input/MagicSpot.app" "$version"
 cp README.md LICENSE "$input/"
@@ -24,7 +24,7 @@ mount=$(mktemp -d)
 trap 'hdiutil detach "$mount" >/dev/null 2>&1 || true; rmdir "$mount" 2>/dev/null || true' EXIT
 hdiutil attach "$output/$name" -readonly -nobrowse -mountpoint "$mount"
 test "$("$mount/MagicSpot.app/Contents/MacOS/MagicSpot" --version)" = "magicspot2 $version"
-lipo -verify_arch arm64 x86_64 "$mount/MagicSpot.app/Contents/MacOS/MagicSpot"
+lipo "$mount/MagicSpot.app/Contents/MacOS/MagicSpot" -verify_arch arm64 x86_64
 codesign --verify --strict "$mount/MagicSpot.app"
 hdiutil detach "$mount"
 rmdir "$mount"
