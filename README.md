@@ -16,6 +16,8 @@ A native Spotify desktop app based on the latest [Spotifast](https://github.com/
 
 Version `2.0.0` targets Windows x64 and macOS (Apple Silicon and Intel), including upstream's MilkDrop visualizer. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0.md) and [validation status](docs/magicspot/STATUS.md).
 
+[Scrolling and personal-app quota](docs/_guide/make-it-even-faster.md) explains library ordering and API delays.
+
 ## Build and preview
 
 Rust 1.98 is pinned. Build the normal application:

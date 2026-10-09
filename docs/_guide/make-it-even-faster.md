@@ -6,6 +6,17 @@ nav_order: 7
 
 This is the inherited Spotify personal-app flow. It changes API quota usage, not measured MagicSpot startup or memory performance. Setup screenshots are upstream reference images.
 
+## Scrolling and large libraries
+
+The sidebar is drawn alongside every page, so its sorting work can affect
+scrolling elsewhere in the window. Library ordering now looks up each row's
+position once per sort instead of repeatedly searching the full saved order.
+This reduces the work each frame needs for large libraries while preserving
+your chosen sort, pins, and folders.
+
+The main window draws as needed and uses the platform's frame pacing. The
+MilkDrop frame-rate setting applies to its separate visualizer window.
+
 ## API rate limits
 
 Spotify limits how often apps can ask for information. MagicSpot normally
