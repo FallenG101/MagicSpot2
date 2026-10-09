@@ -22,7 +22,7 @@ Sign-in, local playback and Connect are enabled in the normal release. Automated
 
 Open **Settings > Appearance > Theme** and choose **OLED** for black surfaces and white/gray accents. The published 2.0.0 downloads retain the earlier OLED Blue name and blue palette. Open lyrics with the microphone button or **L**. Widen the sidebar to enlarge its cover. Appearance also offers lyric fonts, a saved 18–48 point size, a slight current-line glow and a cover-derived background. See [Lyrics & Themes](/lyrics-and-themes/).
 
-The interface follows your system language when a bundled translation exists. Untranslated strings, including the new MagicSpot lyrics controls, appear in English. [Translation coverage](/translating/) records the inherited catalogues.
+The interface follows your system language when a bundled translation exists, including the inherited Ukrainian catalogue. Untranslated strings, including the new MagicSpot lyrics controls, appear in English. [Translation coverage](/translating/) records the inherited catalogues.
 
 ## Spotify links and proxy settings
 

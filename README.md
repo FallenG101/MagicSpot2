@@ -36,6 +36,8 @@ cargo run --locked --release --no-default-features --features demo -- --demo --d
 
 Downloads are packaged with `packaging/magicspot/package-windows.ps1` and `packaging/magicspot/package-macos.sh`. The inherited Spotifast installer, release and package-publishing workflows remain disabled for this fork.
 
+The inherited interface includes Spanish, Turkish and Ukrainian catalogues. New MagicSpot lyrics controls currently remain English.
+
 ## Guides and provenance
 
 Start with the [documentation index](docs/README.md), [installation guide](docs/_guide/getting-started.md), [lyrics controls](docs/_guide/lyrics-and-themes.md) and [downloads/manual updates](docs/_guide/download.md). Read [identity and privacy](docs/magicspot/IDENTITY.md), [UI evidence](docs/magicspot/UI_NOTES.md), [upstream provenance](UPSTREAM.md) and [maintenance](docs/magicspot/MAINTENANCE.md).
