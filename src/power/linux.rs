@@ -146,7 +146,7 @@ fn inhibit(manager: &Proxy<'_>) -> Option<zbus::zvariant::OwnedFd> {
             "Inhibit",
             &(
                 "sleep",
-                "Spotifast",
+                crate::identity::DISPLAY_NAME,
                 "Saves the session before sleeping",
                 "delay",
             ),

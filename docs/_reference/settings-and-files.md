@@ -235,7 +235,7 @@ main fields are:
 | `custom_theme_cache` | absent | Last accepted custom palette; preserves appearance if its file is missing or invalid |
 | `system_theme_cache` | absent | Last accepted Omarchy palette for Follow system; retained across restarts |
 | `lyrics_font` | `inter` | Sidebar font: `inter`, `system`, or `monospace` |
-| `lyrics_font_size` | `null` | Auto sidebar size, or 18â€“48 points |
+| `lyrics_font_size` | `null` | Auto sidebar size, or 18–48 points |
 | `lyrics_glow` | `true` | Subtle glow on the synced current sidebar line |
 | `lyrics_art_background` | `true` | Blurred cover background in the sidebar |
 | `lyrics_width` | `360` | Preferred sidebar width in points, capped to the available window |
@@ -289,7 +289,7 @@ main fields are:
 ```
 magicspot2 [OPTIONS] [LINK]
 
-  LINK                  A Spotify link to open: spotify:track:â€¦, or an
+  LINK                  A Spotify link to open: spotify:track:…, or an
                         open.spotify.com address
   --device-name <NAME>  Spotify Connect name for this session
   -v, --verbose         More logs from librespot and the API client
@@ -389,9 +389,9 @@ the folder records which it has already put there.
 
 To make your own, add JSON files to the `themes` folder.
 Run `magicspot2 reload-themes` if the app is already open, then select it
-under **Settings â†’ Appearance â†’ Theme**, where it is listed by its filename
+under **Settings → Appearance → Theme**, where it is listed by its filename
 without `.json`.
-The default is **Follow system**. It uses your desktopâ€™s light/dark appearance,
+The default is **Follow system**. It uses your desktop’s light/dark appearance,
 or the current Omarchy palette on an Omarchy desktop. On Linux,
 the light/dark appearance comes from the desktop portal's `color-scheme`
 setting (GNOME, KDE and Flatpak), and since 0.10.0, the app follows
