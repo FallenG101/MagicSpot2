@@ -76,7 +76,27 @@ passed the targeted localization suite. Three temporary-repository drift tests
 pass, including a cherry-picked base that is not an ancestor of MagicSpot HEAD.
 
 Windows full-feature prerequisites were resolved with a local vcpkg GLEW build,
-MSVC/Ninja and libclang. Final full-feature checks, native visual review,
-Linux/macOS/Windows ARM CI, Nix and documentation results will be recorded here
-when complete. No live Spotify account sign-in, playback or Connect validation
+MSVC/Ninja and libclang. On the 2.0.1 source, all-feature tests passed with
+1,011 library tests (two ignored), thirteen binary tests and every other target.
+Default-feature tests passed with 986 library tests (two ignored), twelve binary
+tests and every other target. Clippy passed for both configurations; all-feature
+doctests and warning-free Rustdoc passed. Formatting, four release-name tests,
+four Flatpak metadata tests, five package-verifier tests, five exact-commit CI
+gate tests and three drift tests also passed.
+
+The first candidate CI run, [38083199342](https://github.com/FallenG101/MagicSpot2/actions/runs/38083199342),
+derived the final MagicSpot 2.0.1 vendor hash:
+`sha256-wCKC9aLQqXYCxuzhO+MtqSW98cGZwqdq9a1qz7T/HzE=`.
+This came from MagicSpot's version and lockfile, not Spotifast's hash. The same
+run exposed a short-SHA checkout error in the new visual job and Ubuntu's old
+gettext lacking Rust extraction. Both prerequisites were corrected. Gettext
+now comes from the locked Nix input. The second run regenerated the catalogues;
+semantic review confirmed all 649 messages and every translation unchanged.
+Only references, headers and wrapping changed. The localization test passed
+after applying the reviewed hunks. Neither failed run could publish.
+
+[Native Windows evidence](upstream-review/windows/index.html) has sixteen
+matching light/dark, narrow/normal playlist and radio captures, all inspected.
+Linux/macOS/Windows ARM CI, native Linux evidence and final Nix verification
+remain pending. No live Spotify account sign-in, playback or Connect validation
 has been performed; automated and deterministic demo checks do not establish it.

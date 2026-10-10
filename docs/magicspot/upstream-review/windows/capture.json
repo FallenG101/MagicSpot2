@@ -1,0 +1,17 @@
+{
+  "host": "Windows",
+  "before": "8491cf3",
+  "after": "500db5fb7697543f47e1972d786c72a517b007b2",
+  "settle_ms": 5000,
+  "cases": [
+    {
+      "key": "playlist",
+      "label": "#722/#744/#745: playlist contributors and shuffle"
+    },
+    {
+      "key": "radio",
+      "label": "#659: song radio"
+    }
+  ],
+  "source_tree": "8a884daaa6d2fcb2708a4a28b3b81aab3c63294a"
+}
