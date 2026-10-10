@@ -103,7 +103,7 @@ October 10. Default-off layout, both window-button placements, lyrics/queue
 space, the setting, playlist/radio and Blend contributors fit in both themes
 at both sizes. The [combined comparison](upstream-review/index.html) links each
 case and platform. The matching application source tree is recorded in
-`upstream-review/linux/REVIEW.json` and is checked by publication.
+`upstream-review/linux/REVIEW.json`.
 
 [CI 38083468357](https://github.com/FallenG101/MagicSpot2/actions/runs/38083468357)
 passed all ten platform/build/docs/Nix jobs on `5c4928f`, including native ARM
@@ -119,7 +119,19 @@ at the time of this record. The downloaded Windows EXE and universal DMG also
 pass the combined package verifier. They are candidate artifacts, not published
 downloads.
 
-The final evidence commit must pass all twelve jobs again on current main
-before publication. No live Spotify account sign-in, playback or Connect
+After this review, the maintainer explicitly chose “Yes, make 2.0.1
+Windows/macOS only” on October 10. Linux release/demo builds, platform tests,
+Nix packages and Linux screenshot jobs were removed from the final candidate
+CI and publication requirements, including the Linux-only inspection guard.
+The six-test guard suite became five tests because that Linux-specific
+requirement no longer applies; exact-main, job-set, missing/skipped/failed-job
+and wrong-SHA checks remain enforced. Shared quality/docs jobs remain on Ubuntu;
+Windows x64/ARM and macOS tests and both supported download builds remain
+required. Linux source and packaging are retained as best effort. The completed
+Linux visual review and successful Nix build above are preserved, not claimed
+as final-candidate gates.
+
+The final candidate must pass all eight jobs on current main before publication.
+No live Spotify account sign-in, playback or Connect
 validation has been performed; automated and deterministic demo checks do not
 establish it.

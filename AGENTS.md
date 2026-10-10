@@ -30,7 +30,8 @@ These instructions add implementation constraints for coding agents.
   the player engine in `src/player.rs`, never as blocking work on the UI
   thread.
 - Keep platform integrations behind target-specific modules or `cfg` blocks.
-  A fix for one platform must keep the other two targets compiling.
+  A fix for one supported platform must keep the other compiling. Preserve
+  inherited Linux compatibility where practical, without maintained builds.
 - Settings and state files must remain readable, backward compatible, and
   atomically written. Never log credentials or authorization responses.
 - Prefer existing dependencies. Explain any new crate in `Cargo.toml` next to
@@ -179,7 +180,16 @@ mise or mbx.
 
 Follow [PACKAGING.md](PACKAGING.md). MagicSpot 2.0 uses its own standalone Windows EXE and universal DMG packagers and a publication workflow restricted to the authorized `2.0.1`. Every required CI job must pass on the current main commit before that workflow publishes. Do not manually tag around a failed gate or claim pending files are available.
 
-Future releases need explicit scope and matching version/lockfile, vendor hash, relevant metainfo, written release notes, package/publication configuration and docs. Refresh the Nix vendor hash even for a package-version-only lockfile change. Verify Nix in CI or on a Nix host.
+MagicSpot supports Windows and macOS. The maintainer explicitly removed Linux
+release/demo builds, Linux platform tests, Nix packages and Linux screenshot
+jobs from the 2.0.1 release gates on October 10, 2026. Shared quality and docs
+checks still run on Ubuntu. Keep inherited Linux source and packaging as best
+effort; do not claim maintained Linux builds or require them for publication.
+
+Future releases need explicit scope and matching version/lockfile, relevant
+metainfo, written release notes, package/publication configuration and docs.
+If separately updating inherited Nix packaging, recalculate its vendor hash
+even for a package-version-only lockfile change and verify it on a Nix host.
 
 Keep inherited Spotifast release, website deployment, Homebrew, AUR and triage publishers disabled. Their files are upstream reference material, not MagicSpot publication instructions. No MagicSpot public documentation domain is configured. Use GitHub Releases for actual availability and preserve original copyright/license notices.
 

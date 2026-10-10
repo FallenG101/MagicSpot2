@@ -28,6 +28,9 @@ is Spotifast. See the [October sync record](docs/magicspot/upstream-sync-2026-10
 - winit: `ed7caa9023f10b397f5b6ec8284a840cbd8a6f65`.
 - librespot: `23fc42cff37848e51f0d8eaefad1a93941b71e59`.
 - Supported upstream platforms: Windows, macOS, Linux.
+- Maintained MagicSpot products: Windows and macOS. The maintainer removed
+  Linux platform/Nix/screenshot CI gates for 2.0.1 on October 10, 2026;
+  inherited Linux source and packaging are best effort.
 - Local validation host: Windows; other platforms require CI/native hardware.
 
 No dependency changes or code from discontinued MagicSpot v3 have been imported.

@@ -51,9 +51,10 @@ Use [MagicSpot Issues](https://github.com/FallenG101/MagicSpot2/issues) for fork
 3. **Honest integrations.** Use Spotify's Web API and librespot for what they
    support. Do not scrape, impersonate capabilities, bypass technical
    protections, or silently replace one service with another.
-4. **Cross-platform by default.** Linux, macOS, and Windows are supported
-   products. Platform-specific code must be isolated and the other targets
-   must keep compiling.
+4. **Windows and macOS.** These are MagicSpot's supported products.
+   Platform-specific code must be isolated and both targets must keep
+   compiling. Inherited Linux source and packaging remain best effort,
+   without maintained builds or a release support commitment.
 5. **Small dependency surface.** Reuse the standard library and existing
    crates where practical. A new dependency needs a concrete benefit worth
    its build time, binary size, maintenance, and security cost.
@@ -126,8 +127,10 @@ MilkDrop builds libprojectM
 from source, so every platform also needs CMake, a C++ compiler, and
 libclang (on Windows, vcpkg with `glew:x64-windows-static` installed and
 `VCPKG_INSTALLATION_ROOT` pointing at it); `--no-default-features` leaves
-MilkDrop out and needs none of that. CI repeats the test suite on Linux,
-macOS, and Windows. Passing CI is required, but does not replace review
+MilkDrop out and needs none of that. CI repeats the test suite on macOS,
+Windows x64 and Windows ARM. Shared quality and documentation checks run on
+Ubuntu; Linux release/demo builds, platform tests, Nix packages and native
+screenshots are not release gates. Passing CI is required, but does not replace review
 for correctness, product fit, maintainability, or security.
 
 Credential-storage changes also need a native store round trip. With the
@@ -153,9 +156,12 @@ scope and contributor workflow.
 
 Documentation is indexed in [docs/README.md](docs/README.md). CI validates the Jekyll build; no MagicSpot domain or Pages deployment is configured. Preserve upstream-named guide routes and internal catalogue paths where useful for syncs. Label historical evidence and release notes instead of presenting them as current MagicSpot behavior.
 
-When changing `Cargo.lock` or `flake.nix`, also verify `nix build .#default`
-on a Nix host or wait for the Nix CI job. A package-version-only lockfile
-change can change the vendor hash. Publication requires every required CI job to pass on the current main commit. Version 2.0.1 uses the guarded workflow in [PACKAGING.md](PACKAGING.md); future releases need a separate scoped change.
+Inherited Nix packaging is best effort. A change to its lockfile or package
+version can change the vendor hash; anyone updating that packaging should
+recalculate and verify it on a Nix host. It is not a MagicSpot release gate.
+Publication requires all eight required CI jobs to pass on current main.
+Version 2.0.1 uses the guarded workflow in [PACKAGING.md](PACKAGING.md);
+future releases need a separate scoped change.
 
 By contributing, you agree that your contribution is licensed under the
 project's MIT License.

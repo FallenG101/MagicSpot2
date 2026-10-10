@@ -41,10 +41,6 @@ jobs:
           version=$(python3 -c 'import tomllib; print(tomllib.load(open("Cargo.toml", "rb"))["package"]["version"])')
           # This authorization covers 2.0.1, not future versions.
           if [ "$version" != '2.0.1' ]; then exit 0; fi
-          if [ ! -s docs/magicspot/upstream-review/linux/REVIEW.json ]; then
-            echo 'Linux visual inspection has not been recorded; publication is held.'
-            exit 0
-          fi
           current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
           if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
           if gh release view "v$version" >/dev/null 2>&1; then exit 0; fi

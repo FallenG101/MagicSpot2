@@ -7,7 +7,7 @@ The authorized MagicSpot `2.0.1` candidate packages the normal app with Spotify 
 | Windows x64 | `magicspot2-v2.0.1-x86_64-pc-windows-msvc.exe` plus `magicspot2-v2.0.1-THIRD-PARTY-LICENSES.txt` | Unsigned |
 | macOS Apple Silicon + Intel | `magicspot2-v2.0.1-macos-universal.dmg` | Ad-hoc signed, not notarized |
 
-Linux and Nix remain source/CI targets. There is no MagicSpot Windows installer, Windows ARM asset, Linux install package, Flatpak release, Homebrew cask or AUR publication for this release. Inherited Spotifast packaging tools and historical release notes remain for provenance, with their publishers disabled and guarded to the upstream repository.
+MagicSpot supports Windows and macOS. Linux source and Nix packaging are inherited, best effort and outside maintained CI/release support. There is no MagicSpot Windows installer, Windows ARM asset, Linux install package, Flatpak release, Homebrew cask or AUR publication for this release. Windows ARM remains a test target. Inherited Spotifast packaging tools and historical release notes remain for provenance, with their publishers disabled and guarded to the upstream repository.
 
 ## Build and package
 
@@ -37,9 +37,9 @@ Output locations must be fresh; do not overwrite a distribution under review. SH
 
 ## 2.0.1 publication gate
 
-1. CI builds ordinary release and demo configurations on Linux, macOS and Windows, runs quality/tests/docs/Nix checks, and uploads `MagicSpot-Windows-x64` and `MagicSpot-macos-universal` artifacts.
-2. `.github/workflows/magicspot-release.yml` runs after CI completes. It verifies that all twelve named required jobs completed successfully on the exact SHA, including Windows ARM tests and Linux visual review. It accepts only successful push-to-main CI from this repository with Cargo version exactly `2.0.1`.
-3. It checks that the CI source commit still equals current remote main and that an existing tag, if any, names that same commit. An existing release is left alone. Publication is held until the committed Linux visual review records inspection of the current application source tree, separately from the maintainer's #648 scope approval.
+1. CI builds ordinary release and demo configurations on macOS and Windows, runs macOS/Windows x64/Windows ARM tests plus shared quality/docs checks, and uploads `MagicSpot-Windows-x64` and `MagicSpot-macos-universal` artifacts. Shared checks run on Ubuntu; Linux platform builds/tests, Nix packages and Linux screenshots were removed from release gates by the maintainer on October 10, 2026.
+2. `.github/workflows/magicspot-release.yml` runs after CI completes. It verifies that all eight named required jobs completed successfully on the exact SHA, including Windows ARM tests. It accepts only successful push-to-main CI from this repository with Cargo version exactly `2.0.1`.
+3. It checks that the CI source commit still equals current remote main and that an existing tag, if any, names that same commit. An existing release is left alone. The completed #648 scope approval and inspected Linux evidence remain in the review ledger; Linux inspection is no longer a publication gate for this Windows/macOS-only release.
 4. `packaging/magicspot/prepare-release.py` verifies the Windows EXE, its license sidecar and the Mac DMG against their CI checksums; it validates the Windows PE architecture and required license notices, then creates the combined publication directory.
 5. The workflow checks main again, then creates the regular GitHub release `v2.0.1`, marked Latest, at the tested commit with the written [release notes](packaging/release-notes/v2.0.1.md), Windows EXE and license sidecar, DMG and checksums.
 
@@ -49,6 +49,6 @@ The first `v2.0.0` publisher run failed after all [ten CI jobs](https://github.c
 
 ## Future releases
 
-The automatic publisher is restricted to the requested `2.0.1` release. Future versions need an explicitly scoped release change: version/lockfile, Nix vendor hash, relevant metainfo, written notes, package names, publication workflow and documentation. Run the required checks on that commit before publishing. Do not enable the inherited external publishers or update Spotifast's website, tap or AUR as part of a MagicSpot release.
+The automatic publisher is restricted to the requested `2.0.1` release. Future versions need an explicitly scoped release change: version/lockfile, relevant metainfo, written notes, package names, publication workflow and documentation. Nix packaging is best effort; independently updating it still requires its own recalculated vendor hash and Nix-host verification. Run the required checks on the release commit before publishing. Do not enable the inherited external publishers or update Spotifast's website, tap or AUR as part of a MagicSpot release.
 
 Updates use manual downloads. The app's inherited release checker points to this fork; the standalone Windows executable has no automatic replacement setup. Document any later updater or signing changes based on the actual package configuration and [maintainer distribution decisions](docs/magicspot/RELEASE_DECISIONS.md).

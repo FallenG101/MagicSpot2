@@ -24,7 +24,9 @@ lyrics view, left/right controls, settings and Blend contributors. Default-off
 layout is retained. Enabled buttons leave clear space above navigation, lyrics
 and queue. The setting and playlist labels fit; no adjustment is required.
 [Review metadata](linux/REVIEW.json) binds this inspection to the application
-source tree. This is native rendering under Xvfb, not an interactive test of a
+source tree. After inspection the maintainer removed Linux builds and review
+from publication gates; this evidence remains a historical record. This is
+native rendering under Xvfb, not an interactive test of a
 physical Linux desktop. Static
 captures check layout; regression tests cover loading transport buttons,
 shuffle hover, contributor lookup, song-radio naming and held slider presses.

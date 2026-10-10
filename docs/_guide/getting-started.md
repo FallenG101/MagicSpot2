@@ -28,12 +28,16 @@ The interface follows your system language when a bundled translation exists, in
 
 You can pass a link to the command: `magicspot2 https://open.spotify.com/track/...`. A second launch forwards the link to the running app. The Mac bundle declares the inherited Spotify URL scheme; macOS determines which registered app receives it. The Windows executable does not register as the default app for Spotify links.
 
-With MagicSpot's Linux desktop file installed, a compatible desktop can select `com.falleng101.magicspot2.desktop` for `x-scheme-handler/spotify`.
+Inherited Linux desktop-file support is best effort and outside MagicSpot's
+Windows/macOS support scope. A compatible desktop can select
+`com.falleng101.magicspot2.desktop` for `x-scheme-handler/spotify`.
 
 Proxy settings are available on sign-in and in **Settings > Proxy**. Browsing supports the configured proxy; local playback supports HTTP proxies without authentication. The browser used for consent has its own network settings. See [network behavior](/how-it-connects/#proxy).
 
 ## Build from source
 
+MagicSpot maintains Windows and macOS builds. Linux/Nix source recipes are
+retained as best effort without maintained builds or release support.
 Use a checkout of this fork and the pinned **Rust 1.98.0** toolchain:
 
 ```sh

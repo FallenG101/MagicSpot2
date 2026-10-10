@@ -9,8 +9,12 @@ reviewing matching Linux light/dark and narrow/normal captures. Those 56 Linux
 captures and sixteen Windows captures have now been inspected; the
 [comparison index](upstream-review/index.html) and [scope ledger](TRIAGE.md)
 record the evidence and approval separately from automated gates. Publication
-requires the recalculated MagicSpot Nix vendor hash, all twelve exact-main CI
-jobs, verified Windows x64 EXE and universal DMG, and written release notes.
+requires all eight exact-main CI jobs, verified Windows x64 EXE and universal
+DMG, and written release notes. On October 10 the maintainer explicitly made
+2.0.1 Windows/macOS only and removed Linux platform builds/tests, Nix packages
+and screenshot jobs from release gates. The completed Linux review and
+successful Nix build with MagicSpot's recalculated vendor hash remain recorded
+as historical validation; inherited Linux source and packaging are best effort.
 See the [October sync record](upstream-sync-2026-10.md) for provenance and validation.
 Live Spotify validation remains separate and has not been performed.
 

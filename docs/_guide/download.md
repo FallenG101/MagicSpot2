@@ -10,7 +10,7 @@ The [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releas
 | --- | --- | --- |
 | Windows x64 (Intel/AMD) | `magicspot2-v2.0.0-x86_64-pc-windows-msvc.exe` | Download and open the executable directly. It runs without extracting an archive or installing an app. |
 | macOS Apple Silicon and Intel | `magicspot2-v2.0.0-macos-universal.dmg` | Open the DMG and drag **MagicSpot** to **Applications**. Eject the DMG, then open the installed app. |
-| Linux | Source build | See [Getting Started](/getting-started/#build-from-source). No Linux download is published for 2.0.0. |
+| Linux | Unsupported, best-effort source | No maintained Linux build or download. Inherited build instructions remain in [Getting Started](/getting-started/#build-from-source). |
 
 These are normal applications with Spotify sign-in, playback, Connect and MilkDrop enabled. Local playback requires Spotify Premium. The downloads omit demo mode. Windows on ARM, a Windows installer, AppImage, Flatpak, AUR and Homebrew packages are not offered for this release.
 
@@ -24,7 +24,7 @@ The inherited automatic checker points at `FallenG101/MagicSpot2`, but the stand
 
 ## Nix and Cargo
 
-From a MagicSpot checkout, `nix build .#magicspot2` builds the app; `.#default` and the inherited `.#spotifast` alias select the same package. `nix develop` supplies the development environment. The CI Nix check targets x86_64 Linux. There is no configured public MagicSpot binary cache; other architectures are not validated merely because the flake declares them.
+Inherited Nix packaging is best effort and no longer checked by MagicSpot's release CI. From a checkout, `nix build .#magicspot2`, `.#default` and the inherited `.#spotifast` alias select the same package. `nix develop` supplies a development environment. There is no configured public MagicSpot binary cache or maintained Linux download; declared architectures do not establish validation.
 
 You can install from source with:
 

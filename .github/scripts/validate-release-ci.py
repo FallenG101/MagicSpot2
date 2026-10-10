@@ -2,32 +2,18 @@
 
 import json
 from pathlib import Path
-import subprocess
 import sys
 
 REQUIRED = {
-    "release and demo (ubuntu-latest)",
     "release and demo (macos-latest)",
     "release and demo (windows-latest)",
     "macOS universal DMG",
     "quality",
-    "test (ubuntu-latest)",
     "test (macos-latest)",
     "test (windows-latest)",
     "test (windows-11-arm)",
-    "Nix package",
     "docs",
-    "Linux visual review",
 }
-
-
-def validate_visual_review(review, source_tree):
-    if (
-        review.get("version") != "2.0.1"
-        or review.get("linux_visual_review") != "passed"
-        or review.get("source_tree") != source_tree
-    ):
-        raise ValueError("Publication requires inspected Linux evidence for the current application source")
 
 
 def validate(run, pages, sha, repository):
@@ -63,7 +49,4 @@ if __name__ == "__main__":
         sha,
         repository,
     )
-    review = Path("docs/magicspot/upstream-review/linux/REVIEW.json")
-    source_tree = subprocess.check_output(["git", "rev-parse", "HEAD:src"], text=True).strip()
-    validate_visual_review(json.loads(review.read_text(encoding="utf8")), source_tree)
     print("Every required CI job passed on the release SHA.")
