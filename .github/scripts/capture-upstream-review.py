@@ -14,6 +14,7 @@ CASES = [
     ("appearance", "#648: Appearance setting", "settings", "appearance", False, ":close"),
     ("playlist", "#722/#744/#745: playlist contributors and shuffle", "playlist:pl1", "", False, ":close"),
     ("radio", "#659: song radio", "radio:spotify:track:trk0", "", False, ":close"),
+    ("blend", "#745: Blend contributor column and byline", "playlist:pl1", "review-blend", False, ":close"),
 ]
 
 
@@ -26,7 +27,8 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     host = "Windows" if sys.platform == "win32" else "Linux"
-    cases = CASES if host == "Linux" else CASES[4:]
+    # The preserved Windows binaries predate the extra Blend fixture.
+    cases = CASES if host == "Linux" else CASES[4:6]
     args.output.mkdir(parents=True, exist_ok=False)
     scratch = Path(".cache/upstream-visual-profiles").resolve()
     env = os.environ.copy()
@@ -58,6 +60,7 @@ def main():
                     print(f"Captured {key}", flush=True)
     metadata = dict(host=host, before=args.before_sha, after=args.after_sha, settle_ms=5000,
                     cases=[dict(key=c[0], label=c[1]) for c in cases])
+    metadata["source_tree"] = subprocess.check_output(["git", "rev-parse", "HEAD:src"], text=True).strip()
     (args.output / "capture.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf8")
     template = Path(__file__).with_name("upstream-review.html").read_text(encoding="utf8")
     (args.output / "index.html").write_text(template.replace("/*CAPTURE_METADATA*/", json.dumps(metadata)), encoding="utf8")

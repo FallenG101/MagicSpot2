@@ -29,6 +29,14 @@ class GateTest(unittest.TestCase):
     def test_all_required_jobs_on_exact_sha(self):
         self.check()
 
+    def test_publication_needs_reviewed_linux_evidence_for_current_source(self):
+        review = dict(version="2.0.1", linux_visual_review="passed", source_tree=self.sha)
+        gate.validate_visual_review(review, self.sha)
+        for key, value in (("version", "2.0.0"), ("linux_visual_review", "pending"),
+                           ("source_tree", "b" * 40)):
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                gate.validate_visual_review(review | {key: value}, self.sha)
+
     def test_missing_or_skipped_job_blocks_even_successful_run(self):
         with self.assertRaisesRegex(ValueError, "Missing required"):
             self.check(self.jobs[:-1])

@@ -296,19 +296,24 @@ jobs:
         with:
           ref: 8491cf3bd52c2a6c965ef5de00579ee1ed1a3b06
           path: .cache/visual-before
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .cache/visual-after
       - uses: dtolnay/rust-toolchain@stable
       - name: Native GUI and capture dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libpulse-dev libxkbcommon-dev \
+          sudo apt-get install -y libasound2-dev libpulse-dev libxkbcommon-dev libxkbcommon-x11-dev \
             libwayland-dev libgl1-mesa-dev xvfb dbus-x11 gsettings-desktop-schemas adwaita-icon-theme
       - uses: jdx/mr-boxington-action@v1
         with:
           cache-generation: magicspot-visual-v1
       - name: Build matching demo binaries
         run: |
+          python3 .github/scripts/install-review-fixtures.py .cache/visual-before .cache/visual-after
           CARGO_TARGET_DIR="$GITHUB_WORKSPACE/target/visual-before" mbx build --manifest-path .cache/visual-before/Cargo.toml --locked --no-default-features --features demo
-          CARGO_TARGET_DIR=target/visual-after mbx build --locked --no-default-features --features demo
+          CARGO_TARGET_DIR="$GITHUB_WORKSPACE/target/visual-after" mbx build --manifest-path .cache/visual-after/Cargo.toml --locked --no-default-features --features demo
       - name: Capture native Linux comparisons
         run: |
           xvfb-run -a -s '-screen 0 1600x1000x24' dbus-run-session -- python3 .github/scripts/capture-upstream-review.py \

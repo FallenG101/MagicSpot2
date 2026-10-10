@@ -39,7 +39,7 @@ Output locations must be fresh; do not overwrite a distribution under review. SH
 
 1. CI builds ordinary release and demo configurations on Linux, macOS and Windows, runs quality/tests/docs/Nix checks, and uploads `MagicSpot-Windows-x64` and `MagicSpot-macos-universal` artifacts.
 2. `.github/workflows/magicspot-release.yml` runs after CI completes. It verifies that all twelve named required jobs completed successfully on the exact SHA, including Windows ARM tests and Linux visual review. It accepts only successful push-to-main CI from this repository with Cargo version exactly `2.0.1`.
-3. It checks that the CI source commit still equals current remote main and that an existing tag, if any, names that same commit. An existing release is left alone.
+3. It checks that the CI source commit still equals current remote main and that an existing tag, if any, names that same commit. An existing release is left alone. Publication is held until the committed Linux visual review records inspection of the current application source tree, separately from the maintainer's #648 scope approval.
 4. `packaging/magicspot/prepare-release.py` verifies the Windows EXE, its license sidecar and the Mac DMG against their CI checksums; it validates the Windows PE architecture and required license notices, then creates the combined publication directory.
 5. The workflow checks main again, then creates the regular GitHub release `v2.0.1`, marked Latest, at the tested commit with the written [release notes](packaging/release-notes/v2.0.1.md), Windows EXE and license sidecar, DMG and checksums.
 
