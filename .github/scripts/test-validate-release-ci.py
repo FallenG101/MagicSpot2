@@ -3,8 +3,10 @@
 import copy
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
 
+sys.dont_write_bytecode = True
 spec = importlib.util.spec_from_file_location("gate", Path(__file__).with_name("validate-release-ci.py"))
 gate = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gate)

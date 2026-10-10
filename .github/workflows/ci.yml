@@ -121,14 +121,14 @@ jobs:
           cache-generation: quality-v1
       - name: Formatting
         run: cargo fmt --all --check
-      - name: Translation extraction tools
-        run: sudo apt-get install -y gettext
+      # Ubuntu 24.04's gettext predates Rust extraction. Use our locked input.
+      - uses: cachix/install-nix-action@v31
       - name: Translation source and catalogue consistency
         id: translations
-        run: bash .github/scripts/update-translations.sh --check
+        run: nix shell .#translations --command bash .github/scripts/update-translations.sh --check
       - name: Export refreshed catalogues for review after extraction failure
         if: failure() && steps.translations.outcome == 'failure'
-        run: bash .github/scripts/update-translations.sh
+        run: nix shell .#translations --command bash .github/scripts/update-translations.sh
       - uses: actions/upload-artifact@v7
         if: failure() && steps.translations.outcome == 'failure'
         with:
@@ -294,7 +294,7 @@ jobs:
       - uses: actions/checkout@v7
       - uses: actions/checkout@v7
         with:
-          ref: 8491cf3
+          ref: 8491cf3bd52c2a6c965ef5de00579ee1ed1a3b06
           path: .cache/visual-before
       - uses: dtolnay/rust-toolchain@stable
       - name: Native GUI and capture dependencies

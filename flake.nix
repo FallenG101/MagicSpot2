@@ -120,7 +120,7 @@
                 pname = "magicspot2";
                 version = (pkgs.lib.importTOML ./Cargo.toml).package.version;
                 src = self;
-                hash = "sha256-BrQ+XQRbcpYbrLgYIrdqjQwdpxHpRWDKSVlemu53xlA=";
+                hash = "sha256-wCKC9aLQqXYCxuzhO+MtqSW98cGZwqdq9a1qz7T/HzE=";
               };
               # projectm-sys only searches lib, while CMake may otherwise install to lib64.
               postPatch = ''
@@ -216,6 +216,8 @@
           # Expose only the vendor derivation so its hash can be refreshed
           # after an application-version lockfile change.
           vendor = spotifast.cargoDeps;
+          # GNU gettext with Rust extraction support, from the locked Nix input.
+          translations = pkgs.gettext;
         }
         // pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
           spotifast-app = spotifast;
