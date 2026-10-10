@@ -177,7 +177,7 @@ mise or mbx.
 
 ## Releases
 
-Follow [PACKAGING.md](PACKAGING.md). MagicSpot 2.0 uses its own standalone Windows EXE and universal DMG packagers and a publication workflow restricted to `2.0.0`. Every required CI job must pass on the current main commit before that workflow publishes. Do not manually tag around a failed gate or claim pending files are available.
+Follow [PACKAGING.md](PACKAGING.md). MagicSpot 2.0 uses its own standalone Windows EXE and universal DMG packagers and a publication workflow restricted to the authorized `2.0.1`. Every required CI job must pass on the current main commit before that workflow publishes. Do not manually tag around a failed gate or claim pending files are available.
 
 Future releases need explicit scope and matching version/lockfile, vendor hash, relevant metainfo, written release notes, package/publication configuration and docs. Refresh the Nix vendor hash even for a package-version-only lockfile change. Verify Nix in CI or on a Nix host.
 

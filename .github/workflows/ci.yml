@@ -121,6 +121,19 @@ jobs:
           cache-generation: quality-v1
       - name: Formatting
         run: cargo fmt --all --check
+      - name: Translation extraction tools
+        run: sudo apt-get install -y gettext
+      - name: Translation source and catalogue consistency
+        id: translations
+        run: bash .github/scripts/update-translations.sh --check
+      - name: Export refreshed catalogues for review after extraction failure
+        if: failure() && steps.translations.outcome == 'failure'
+        run: bash .github/scripts/update-translations.sh
+      - uses: actions/upload-artifact@v7
+        if: failure() && steps.translations.outcome == 'failure'
+        with:
+          name: Refreshed-catalogues-for-review
+          path: assets/i18n/
       - name: Flatpak release metadata regression tests
         run: python3 packaging/flatpak/test-metainfo.py
       - name: Linux launcher packaging regressions
@@ -129,6 +142,8 @@ jobs:
         run: |
           python3 packaging/test-release-names.py
           python3 packaging/magicspot/test-prepare-release.py
+          python3 .github/scripts/test-upstream-drift.py
+          python3 .github/scripts/test-validate-release-ci.py
       - name: Clippy (default features)
         run: mbx clippy --locked --all-targets -- -D warnings
       - name: Clippy (all features)
@@ -259,7 +274,7 @@ jobs:
       # Only a successful main push publishes. PRs and manual branch builds
       # can read the public cache, but never receive its upload credential.
       - name: Publish the Nix package closure
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.CACHIX_CACHE != ''
+        if: github.repository == 'crmne/spotifast' && github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.CACHIX_CACHE != ''
         shell: bash
         env:
           CACHIX_CACHE: ${{ vars.CACHIX_CACHE }}
@@ -270,6 +285,40 @@ jobs:
             exit 1
           fi
           nix path-info --recursive ./result | cachix push "$CACHIX_CACHE"
+
+  visual:
+    name: Linux visual review
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          ref: 8491cf3
+          path: .cache/visual-before
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Native GUI and capture dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libpulse-dev libxkbcommon-dev \
+            libwayland-dev libgl1-mesa-dev xvfb dbus-x11 gsettings-desktop-schemas adwaita-icon-theme
+      - uses: jdx/mr-boxington-action@v1
+        with:
+          cache-generation: magicspot-visual-v1
+      - name: Build matching demo binaries
+        run: |
+          CARGO_TARGET_DIR="$GITHUB_WORKSPACE/target/visual-before" mbx build --manifest-path .cache/visual-before/Cargo.toml --locked --no-default-features --features demo
+          CARGO_TARGET_DIR=target/visual-after mbx build --locked --no-default-features --features demo
+      - name: Capture native Linux comparisons
+        run: |
+          xvfb-run -a -s '-screen 0 1600x1000x24' dbus-run-session -- python3 .github/scripts/capture-upstream-review.py \
+            --before target/visual-before/debug/magicspot2 --after target/visual-after/debug/magicspot2 \
+            --after-sha "$GITHUB_SHA" --output dist/linux-upstream-review
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Linux-upstream-interface-review
+          path: dist/linux-upstream-review/
+          if-no-files-found: error
 
   docs:
     name: docs

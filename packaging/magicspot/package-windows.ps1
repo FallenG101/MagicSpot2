@@ -12,6 +12,14 @@ $reported = (& $binaryPath --version | Out-String).Trim()
 if ($LASTEXITCODE -ne 0 -or $reported -ne "magicspot2 $version") {
     throw "Wrong binary/version: $reported"
 }
+$headers = & dumpbin /headers $binaryPath | Out-String
+if ($LASTEXITCODE -ne 0 -or $headers -notmatch '8664 machine \(x64\)') {
+    throw 'The Windows download must be an x64 PE executable'
+}
+$imports = & dumpbin /dependents $binaryPath | Out-String
+if ($LASTEXITCODE -ne 0 -or $imports -match 'MSVCP[0-9_]*\.dll|VCRUNTIME[0-9_]*\.dll') {
+    throw "The Windows download requires an external MSVC runtime: $imports"
+}
 $outputPath = [IO.Path]::GetFullPath($OutputDir)
 $stem = "magicspot2-v$version-x86_64-pc-windows-msvc"
 $exeName = "$stem.exe"

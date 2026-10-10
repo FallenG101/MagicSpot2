@@ -17,14 +17,14 @@ spec.loader.exec_module(prepare_release)
 
 
 class PrepareReleaseTest(unittest.TestCase):
-    def test_filename_ordered_package_checksums_verify(self):
+    def package(self, mutate=None):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             windows = root / "windows"
             macos = root / "macos"
             windows.mkdir()
             macos.mkdir()
-            stem = "magicspot2-v2.0.0"
+            stem = "magicspot2-v2.0.1"
             pe = bytearray(128)
             pe[:2] = b"MZ"
             struct.pack_into("<I", pe, 0x3C, 0x40)
@@ -52,6 +52,8 @@ class PrepareReleaseTest(unittest.TestCase):
                     encoding="ascii",
                 )
 
+            if mutate:
+                mutate(root, stem)
             prepare_release.prepare(root)
             names = sorted(path.name for path in (root / "release").iterdir())
             self.assertEqual(
@@ -63,6 +65,33 @@ class PrepareReleaseTest(unittest.TestCase):
                     f"{stem}-x86_64-pc-windows-msvc.exe",
                 ],
             )
+
+    def test_filename_ordered_package_checksums_verify(self):
+        self.package()
+
+    def test_wrong_windows_architecture_blocks_publication(self):
+        def arm64(root, stem):
+            path = root / "windows" / f"{stem}-x86_64-pc-windows-msvc.exe"
+            data = bytearray(path.read_bytes())
+            data[0x44:0x46] = b"\x64\xaa"
+            path.write_bytes(data)
+        with self.assertRaisesRegex(ValueError, "x86-64 PE"):
+            self.package(arm64)
+
+    def test_tampered_dmg_blocks_publication(self):
+        with self.assertRaisesRegex(ValueError, "Checksum mismatch"):
+            self.package(lambda root, stem: (root / "macos" / f"{stem}-macos-universal.dmg").write_bytes(b"modified"))
+
+    def test_missing_license_blocks_publication(self):
+        with self.assertRaisesRegex(ValueError, "license bundle is missing"):
+            self.package(lambda root, stem: (root / "windows" / f"{stem}-THIRD-PARTY-LICENSES.txt").write_text("MIT License", encoding="utf8"))
+
+    def test_unexpected_checksum_entry_blocks_publication(self):
+        def extra(root, stem):
+            path = root / "macos" / "checksums.txt"
+            path.write_text(path.read_text(encoding="ascii") + "0" * 64 + "  extra.dmg\n", encoding="ascii")
+        with self.assertRaisesRegex(ValueError, "unexpected inputs"):
+            self.package(extra)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MagicSpot upstream interface review</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui;background:#101217;color:#eef0f4}body{max-width:1320px;margin:auto;padding:24px}h1{font-size:26px}p{line-height:1.5;color:#bbc2ce}.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:24px 0}label{display:grid;gap:6px}button,select{font:inherit;padding:9px;background:#202530;color:inherit;border:1px solid #536070;border-radius:6px}button{cursor:pointer}button[aria-pressed=true]{background:#eef0f4;color:#101217}img{width:100%;height:auto;border:1px solid #536070}figure{margin:0}figcaption{padding:12px 0;color:#bbc2ce}a{color:#a6c8ff}
+</style>
+<h1>Upstream interface review for MagicSpot 2.0.1</h1>
+<p id="source"></p>
+<p>#648 adds an optional Linux title bar, off by default. Enabled captures check desktop-configured left/right buttons and reserved space above lyrics, navigation and queue. The settings capture checks its switch. Playlist/radio views check contributor labels, retained shuffle styling and song naming. Transport loading, hover and held slider interactions are covered by deterministic regression tests; static captures do not establish those timing behaviors. No live Spotify account is used.</p>
+<div class="controls">
+<label>PR and state<select id="state"></select></label>
+<button id="prev">Previous</button><button id="next">Next</button>
+<label>Theme<select id="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+<label>Size<select id="size"><option value="normal">1280 × 800</option><option value="narrow">1024 × 768</option></select></label>
+<button id="before" aria-pressed="false">Before</button><button id="after" aria-pressed="true">After</button>
+</div>
+<figure><img id="shot" alt="Native MagicSpot demo comparison"><figcaption id="caption"></figcaption></figure>
+<p id="links"></p>
+<script>
+const metadata=/*CAPTURE_METADATA*/;
+let phase='after'; const get=id=>document.getElementById(id);
+get('source').textContent=`Matching native ${metadata.host} captures. Before: ${metadata.before}. After: ${metadata.after}. Both settle for five seconds with isolated demo profiles and identical fixture inputs.`;
+for(const item of metadata.cases){let option=document.createElement('option');option.value=item.key;option.textContent=item.label;get('state').append(option);}
+function render(){let key=[phase,get('theme').value,get('size').value,get('state').value].join('-');get('shot').src=key+'.png';get('caption').textContent=[metadata.host,phase,...['state','theme','size'].map(id=>get(id).selectedOptions[0].text)].join(' · ');for(const p of ['before','after'])get(p).setAttribute('aria-pressed',String(p===phase));get('links').replaceChildren();for(const p of ['before','after']){let link=document.createElement('a');link.href=[p,get('theme').value,get('size').value,get('state').value].join('-')+'.png';link.textContent=`Open ${p} capture`;get('links').append(link,' ');}}
+for(const id of ['state','theme','size'])get(id).onchange=render;
+for(const p of ['before','after'])get(p).onclick=()=>{phase=p;render()};
+for(const [id,delta] of [['prev',-1],['next',1]])get(id).onclick=()=>{get('state').selectedIndex=(get('state').selectedIndex+delta+metadata.cases.length)%metadata.cases.length;render()};render();
+</script></html>

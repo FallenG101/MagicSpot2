@@ -1,18 +1,25 @@
-"""Verify CI's MagicSpot 2.0 downloads before publication."""
+"""Verify CI's authorized MagicSpot downloads before publication."""
 
 import hashlib
 from pathlib import Path
 import shutil
 import struct
 import sys
+import tomllib
+
+AUTHORIZED_VERSION = "2.0.1"
 
 
 def prepare(root: Path) -> None:
-    stem = "magicspot2-v2.0.0"
+    manifest = Path(__file__).resolve().parents[2] / "Cargo.toml"
+    version = tomllib.loads(manifest.read_text(encoding="utf8"))["package"]["version"]
+    if version != AUTHORIZED_VERSION:
+        raise ValueError("Package version does not match the authorized release")
+    stem = f"magicspot2-v{version}"
     assets = {
         "windows": [
             f"{stem}-x86_64-pc-windows-msvc.exe",
-            f"magicspot2-v2.0.0-THIRD-PARTY-LICENSES.txt",
+            f"{stem}-THIRD-PARTY-LICENSES.txt",
         ],
         "macos": [f"{stem}-macos-universal.dmg"],
     }

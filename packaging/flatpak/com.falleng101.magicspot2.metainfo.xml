@@ -5,12 +5,15 @@
   <summary>A native Spotify client</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
-  <description><p>A native Spotify client based on Spotifast, with bold lyrics and OLED Blue. Local playback requires Spotify Premium.</p></description>
+  <description><p>A native Spotify client based on Spotifast, with bold lyrics and a neutral OLED theme. Local playback requires Spotify Premium.</p></description>
   <launchable type="desktop-id">com.falleng101.magicspot2.desktop</launchable>
   <url type="homepage">https://github.com/FallenG101/MagicSpot2</url>
   <url type="bugtracker">https://github.com/FallenG101/MagicSpot2/issues</url>
   <content_rating type="oars-1.1" />
   <releases>
+    <release version="2.0.1" date="2026-10-10" type="stable">
+      <url>https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.1</url>
+    </release>
     <release version="2.0.0" date="2026-10-05" type="stable">
       <url>https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0</url>
     </release>

@@ -1,4 +1,17 @@
-# MagicSpot 2.0 status
+# MagicSpot status
+
+## 2.0.1 candidate
+
+All 23 upstream commits through `dd2d5e3` are integrated on linear main. The
+local OLED, rapid-lyrics and playlist-retry improvements are preserved in focused
+commits. The optional Linux title bar is approved by the maintainer, subject to
+reviewing matching Linux light/dark and narrow/normal captures. Publication
+requires the recalculated MagicSpot Nix vendor hash, all twelve exact-main CI
+jobs, verified Windows x64 EXE and universal DMG, and written release notes.
+See the [October sync record](upstream-sync-2026-10.md) for provenance and validation.
+Live Spotify validation remains separate and has not been performed.
+
+## Published 2.0.0 history
 
 The regular [MagicSpot 2.0 release](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) is public and marked **Latest** on the repository home page. It offers a standalone Windows x64 EXE, a universal Apple Silicon and Intel DMG, third-party license notices and SHA-256 checksums. There is no ZIP or preview release. Windows is unsigned; the Mac app is ad-hoc signed without notarization. Linux remains a source and CI target.
 

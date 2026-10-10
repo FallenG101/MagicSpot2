@@ -1,4 +1,4 @@
-name: Publish MagicSpot 2.0
+name: Publish MagicSpot 2.0.1
 
 on:
   workflow_run:
@@ -33,14 +33,14 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - name: Check this is the authorized 2.0.0 release
+      - name: Check this is the authorized 2.0.1 release
         id: candidate
         shell: bash
         run: |
           set -euo pipefail
           version=$(python3 -c 'import tomllib; print(tomllib.load(open("Cargo.toml", "rb"))["package"]["version"])')
-          # This authorization covers 2.0.0, not future versions.
-          if [ "$version" != '2.0.0' ]; then exit 0; fi
+          # This authorization covers 2.0.1, not future versions.
+          if [ "$version" != '2.0.1' ]; then exit 0; fi
           current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
           if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
           if gh release view "v$version" >/dev/null 2>&1; then exit 0; fi
@@ -56,6 +56,12 @@ jobs:
           fi
           test -s "packaging/release-notes/v$version.md"
           echo 'publish=true' >> "$GITHUB_OUTPUT"
+      - name: Require every CI job on this exact release commit
+        if: steps.candidate.outputs.publish == 'true'
+        run: |
+          gh api "repos/$GH_REPO/actions/runs/$CI_RUN" > ci-run.json
+          gh api --paginate --slurp "repos/$GH_REPO/actions/runs/$CI_RUN/jobs?per_page=100" > ci-jobs.json
+          python3 .github/scripts/validate-release-ci.py ci-run.json ci-jobs.json "$RELEASE_SHA" "$GH_REPO"
       - name: Download the verified normal Windows and Mac builds
         if: steps.candidate.outputs.publish == 'true'
         run: |
@@ -64,7 +70,7 @@ jobs:
       - name: Verify every download and prepare combined checksums
         if: steps.candidate.outputs.publish == 'true'
         run: python3 packaging/magicspot/prepare-release.py dist
-      - name: Publish MagicSpot 2.0
+      - name: Publish MagicSpot 2.0.1
         if: steps.candidate.outputs.publish == 'true'
         shell: bash
         run: |
@@ -72,8 +78,8 @@ jobs:
           # A newer push must not let an older successful run publish.
           current=$(gh api "repos/$GH_REPO/git/ref/heads/main" --jq .object.sha)
           if [ "$current" != "$RELEASE_SHA" ]; then exit 0; fi
-          gh release create v2.0.0 \
+          gh release create v2.0.1 \
             --target "$RELEASE_SHA" --latest \
-            --title 'MagicSpot 2.0' \
-            --notes-file packaging/release-notes/v2.0.0.md \
+            --title 'MagicSpot 2.0.1' \
+            --notes-file packaging/release-notes/v2.0.1.md \
             dist/release/*.exe dist/release/*THIRD-PARTY-LICENSES.txt dist/release/*.dmg dist/release/checksums.txt

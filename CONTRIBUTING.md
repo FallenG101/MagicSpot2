@@ -155,7 +155,7 @@ Documentation is indexed in [docs/README.md](docs/README.md). CI validates the J
 
 When changing `Cargo.lock` or `flake.nix`, also verify `nix build .#default`
 on a Nix host or wait for the Nix CI job. A package-version-only lockfile
-change can change the vendor hash. Publication requires every required CI job to pass on the current main commit. Version 2.0.0 uses the guarded workflow in [PACKAGING.md](PACKAGING.md); future releases need a separate scoped change.
+change can change the vendor hash. Publication requires every required CI job to pass on the current main commit. Version 2.0.1 uses the guarded workflow in [PACKAGING.md](PACKAGING.md); future releases need a separate scoped change.
 
 By contributing, you agree that your contribution is licensed under the
 project's MIT License.
