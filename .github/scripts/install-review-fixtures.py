@@ -36,3 +36,11 @@ for directory in sys.argv[1:]:
     if source.count(ANCHOR) != 1 or '"review-blend"' in source:
         raise SystemExit(f"Review fixture anchor changed: {path}")
     path.write_text(source.replace(ANCHOR, FIXTURE + ANCHOR), encoding="utf8")
+    # Lyrics controls make the full Appearance group taller than a narrow
+    # capture. Use the real settings search so the new switch is visible.
+    entrypoint = root / "src/entrypoint.rs"
+    source = entrypoint.read_text(encoding="utf8")
+    needle = 'gettext(app.locale, "Appearance").into_owned()'
+    if source.count(needle) != 1:
+        raise SystemExit(f"Settings search fixture anchor changed: {entrypoint}")
+    entrypoint.write_text(source.replace(needle, 'gettext(app.locale, "Custom title bar").into_owned()'), encoding="utf8")

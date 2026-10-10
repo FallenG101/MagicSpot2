@@ -26,3 +26,5 @@ only to two throwaway source checkouts, so #745 can be compared with the same
 Spotify-owned playlist and contributors on both sides. The product UI is
 unchanged by that fixture. Its source is in
 `.github/scripts/install-review-fixtures.py`; it is not part of ordinary builds.
+Both throwaway builds also use the real Settings search for “Custom title bar”
+instead of the full Appearance group, keeping its switch visible at both sizes.

@@ -11,7 +11,7 @@ CASES = [
     ("default", "#648: default title bar off", "playlist:pl1", "lyrics", False, ":minimize,maximize,close"),
     ("right", "#648: right buttons and lyrics", "playlist:pl1", "lyrics", True, ":minimize,maximize,close"),
     ("left", "#648: left buttons and queue", "playlist:pl1", "queue", True, "close,minimize,maximize:"),
-    ("appearance", "#648: Appearance setting", "settings", "appearance", False, ":close"),
+    ("appearance", "#648: title-bar setting search", "settings", "appearance", False, ":close"),
     ("playlist", "#722/#744/#745: playlist contributors and shuffle", "playlist:pl1", "", False, ":close"),
     ("radio", "#659: song radio", "radio:spotify:track:trk0", "", False, ":close"),
     ("blend", "#745: Blend contributor column and byline", "playlist:pl1", "review-blend", False, ":close"),
