@@ -55,7 +55,7 @@ The regular 2.0.0 packages and platform checks passed on [CI run 37405687141](ht
 | --- | --- | --- |
 | Bootstrap documentation | `README.md`, `UPSTREAM.md`, `docs/magicspot/` | Record project direction, provenance, acceptance checks and actual validation |
 | Publishing and triage guards | `.github/workflows/` except `ci.yml` and `upstream-drift.yml` | Keep inherited deployment, release, packaging and external triage jobs restricted to their upstream repository |
-| Build validation | `.github/workflows/ci.yml` | Retain upstream checks and add release/demo compilation on each supported OS |
+| Build validation | `.github/workflows/ci.yml` | Windows/macOS release/demo builds, macOS/Windows x64/Windows ARM tests and shared quality/docs checks; Linux/Nix jobs removed by maintainer decision |
 | Upstream drift reporting | `.github/workflows/upstream-drift.yml`, `.github/scripts/upstream-drift.py` | Report upstream movement and overlapping changes without merging, publishing or posting comments |
 | Lyrics sidebar | `src/ui/lyrics.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Larger stable text, song header, soft edges and action-based follow/seek behavior |
 | Lyrics appearance options | `src/ui/lyrics.rs`, `src/ui/settings.rs`, `src/settings.rs`, `src/theme.rs`, `src/model.rs`, `src/app.rs`, `src/demo.rs` | Persisted font choices, subtle active-line glow, larger cover card and cached artwork background |

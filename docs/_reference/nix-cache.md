@@ -1,36 +1,23 @@
 ---
-title: Nix Binary Cache
-description: Status and maintainer setup for publishing Nix builds.
+title: Nix Source Builds (Best Effort)
+description: Inherited Nix packaging outside MagicSpot's maintained release support.
 ---
 
-An official public binary cache is not active yet. Nix installations may still
-build MagicSpot from source. The GitHub Actions cache speeds up CI only; it is
-not a public Nix substituter.
+MagicSpot maintains Windows and macOS downloads. Inherited Nix packaging is
+best effort, without a maintained Linux build or public MagicSpot binary cache.
+The maintainer removed the Linux/Nix jobs from release CI on October 10, 2026.
+The earlier successful 2.0.1 Nix build remains in the
+[October validation record](https://github.com/FallenG101/MagicSpot2/blob/main/docs/magicspot/upstream-sync-2026-10.md).
 
-## Maintainer setup
+## Inherited source recipe
 
-1. Create a public cache in a maintainer-owned
-   [Cachix account](https://app.cachix.org/). Use Cachix-managed signing and
-   create a token with permission to push to that cache.
-2. Add the token as the GitHub repository secret `CACHIX_AUTH_TOKEN`. Do not
-   put it in an issue, configuration file, or public documentation.
-3. Set the repository variable `CACHIX_CACHE` to the cache's name. Leaving
-   this variable unset keeps the existing CI build and cache behavior.
-4. Push a checked change to `main`. After `nix build .#default` succeeds,
-   the Nix CI job publishes the result and its dependency closure. A configured
-   cache without its upload token fails publication instead of claiming success.
-5. Verify the uploaded package can be substituted on a separate Nix machine.
-   Then replace the pending notice here, and add to the Download page, the actual
-   cache URL, public signing key, and user setup instructions from Cachix.
+From a checkout, `nix build .#magicspot2` selects the inherited package;
+`.#default` and `.#spotifast` are aliases. `nix develop` supplies a source-build
+environment. Declared flake architectures do not establish validation.
 
-Pull requests and manual workflow runs only read the public cache. The upload
-token is supplied only to the publication step on a push to `main`.
+Anyone updating this packaging should recalculate the vendor hash after a
+lockfile or package-version change and verify it on a Nix host. That work is
+separate from MagicSpot's Windows/macOS release gates.
 
-The current Nix job builds `x86_64-linux`. It does not populate macOS or ARM64
-packages. A different flake revision, system, or build override can still need
-a local build even after the cache is active. This cache does not publish a
-GitHub application release or change its download artifacts.
-
-See the [Cachix action documentation](https://github.com/cachix/cachix-action)
-for how the cache is added as a substituter. The workflow uses the action only
-for read access and explicitly pushes the successful package closure afterward.
+There is no MagicSpot Nix publisher to enable with repository variables or
+secrets. Actual supported downloads are listed on [GitHub Releases](https://github.com/FallenG101/MagicSpot2/releases/latest).

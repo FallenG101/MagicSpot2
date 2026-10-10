@@ -1,0 +1,103 @@
+{
+  "sha": "d3fc2b9fa977ee7539b01783b26ce51a23e9a953",
+  "ci_run": "38087545774",
+  "ci_conclusion": "success",
+  "jobs": [
+    {
+      "name": "docs",
+      "conclusion": "success"
+    },
+    {
+      "name": "quality",
+      "conclusion": "success"
+    },
+    {
+      "name": "macOS universal DMG",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (windows-11-arm)",
+      "conclusion": "success"
+    },
+    {
+      "name": "release and demo (macos-latest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (macos-latest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "release and demo (windows-latest)",
+      "conclusion": "success"
+    },
+    {
+      "name": "test (windows-latest)",
+      "conclusion": "success"
+    }
+  ],
+  "release": "https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.1",
+  "tag_sha": "d3fc2b9fa977ee7539b01783b26ce51a23e9a953",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "name": "checksums.txt",
+      "size": 324,
+      "digest": "sha256:44c7def6fff9c0e9dcc5d8ea9086b71ed38b59456333ae9e138259e9875211d5"
+    },
+    {
+      "name": "magicspot2-v2.0.1-macos-universal.dmg",
+      "size": 30388143,
+      "digest": "sha256:1f8ce05a92fda357e474144d8bd7bac7658fb7c6d1e5910b67cac998a26b8013"
+    },
+    {
+      "name": "magicspot2-v2.0.1-THIRD-PARTY-LICENSES.txt",
+      "size": 38318,
+      "digest": "sha256:722169ec10aeac3b92ce68c57fae3776b1e476230b778c63008f75e3aa3c3ed0"
+    },
+    {
+      "name": "magicspot2-v2.0.1-x86_64-pc-windows-msvc.exe",
+      "size": 30285312,
+      "digest": "sha256:f77c54719184084c01d8c8684a3bab413e2ea1fc3590bdb352c857d7f1f5cf01"
+    }
+  ],
+  "anonymous_http": [
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2",
+      "status": 200
+    },
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.1",
+      "status": 200
+    },
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2/releases/download/v2.0.1/checksums.txt",
+      "status": 200,
+      "sha256": "44c7def6fff9c0e9dcc5d8ea9086b71ed38b59456333ae9e138259e9875211d5"
+    },
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2/releases/download/v2.0.1/magicspot2-v2.0.1-macos-universal.dmg",
+      "status": 200,
+      "sha256": "1f8ce05a92fda357e474144d8bd7bac7658fb7c6d1e5910b67cac998a26b8013"
+    },
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2/releases/download/v2.0.1/magicspot2-v2.0.1-THIRD-PARTY-LICENSES.txt",
+      "status": 200,
+      "sha256": "722169ec10aeac3b92ce68c57fae3776b1e476230b778c63008f75e3aa3c3ed0"
+    },
+    {
+      "url": "https://github.com/FallenG101/MagicSpot2/releases/download/v2.0.1/magicspot2-v2.0.1-x86_64-pc-windows-msvc.exe",
+      "status": 200,
+      "sha256": "f77c54719184084c01d8c8684a3bab413e2ea1fc3590bdb352c857d7f1f5cf01"
+    }
+  ],
+  "homepage_panel": {
+    "anonymous": true,
+    "url": "https://github.com/FallenG101/MagicSpot2",
+    "release": "MagicSpot 2.0.1\nLatest",
+    "latest_visible": true,
+    "about_homepage": "https://github.com/FallenG101/MagicSpot2/releases/latest"
+  },
+  "about_description": "A small Spotifast fork focused on readable lyrics and neutral OLED themes, with native Windows and macOS downloads."
+}

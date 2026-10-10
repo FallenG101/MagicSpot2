@@ -10,11 +10,14 @@ uses the same package types and is checked in the place users actually see it.
 - Keep the Windows app license notices in a separate text asset beside the
   executable. Include SHA-256 checksums for both.
 - Keep macOS as a universal Apple Silicon and Intel `.dmg`.
+- Maintain Windows and macOS. Windows ARM remains a test target without a
+  download; inherited Linux source/Nix packaging are best effort without
+  maintained builds or release support (October 10, 2026 decision).
 - Build the normal app with Spotifast's default features, including MilkDrop.
   Demo data is excluded. Include projectM's LGPL notice with both packages.
 - Do not add an installer, shortcuts, URL handler, app registration or automatic
   updater unless the maintainer requests that distribution behavior.
-- The release version is **2.0.0**, with no preview suffix in the tag, app
+- The current release version is **2.0.1**, with no preview suffix in the tag, app
   version, title or download filenames. Publish it as a regular GitHub release
   marked **Latest** so it appears in the repository home page's Releases panel.
   Check both that panel and the direct release URL; use the direct URL in
@@ -37,7 +40,7 @@ Before calling a release published:
    `prerelease: false` and Latest status, and lists the EXE, license sidecar,
    DMG and checksums. Confirm each direct asset link works without authentication.
 5. Open the repository home page without authentication. Its Releases panel
-   must show MagicSpot 2.0 with a link to the release. Open that direct release URL
+   must show MagicSpot 2.0.1 with a link to the release. Open that direct release URL
    as well and use it in user-facing download instructions.
 6. Once the regular release is verified, remove any superseded preview release
    and tag so the project has one clear public download.
@@ -49,4 +52,4 @@ Ask the maintainer only when a future request leaves a material choice open,
 such as standalone executable versus installer, supported Windows architecture,
 signing, or whether another version should have a different GitHub release type.
 
-The first release is [MagicSpot 2.0](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0), publicly marked Latest with the verified assets above.
+The first release is [MagicSpot 2.0](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0), which was marked Latest when published. The current release is [MagicSpot 2.0.1](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.1), with the same package types.

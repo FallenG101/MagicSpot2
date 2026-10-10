@@ -1,13 +1,13 @@
 title: MagicSpot
-magicspot_version: "2.0.0"
+magicspot_version: "2.0.1"
 upstream_version: "0.12.0"
-description: A native Spotify app with improved lyrics and OLED Blue.
+description: A native Spotify app with improved lyrics and a neutral OLED theme.
 lang: en-US
 timezone: America/New_York
 url: ""
 baseurl: ""
 logo: /assets/images/logo.svg
-image: /magicspot/lyrics-oled.png
+image: /magicspot/oled-review/after-oled-normal.png
 
 markdown: kramdown
 kramdown:
@@ -29,7 +29,7 @@ defaults:
       path: ""
     values:
       layout: default
-      image: /magicspot/lyrics-oled.png
+      image: /magicspot/oled-review/after-oled-normal.png
       topics:
         - Spotify client
         - Rust
@@ -50,8 +50,8 @@ jekyll_vitepress:
   seo:
     page_type: TechArticle
     image:
-      path: /magicspot/lyrics-oled.png
-      alt: MagicSpot lyrics sidebar in OLED Blue (native Windows demo capture)
+      path: /magicspot/oled-review/after-oled-normal.png
+      alt: MagicSpot lyrics sidebar in neutral OLED (native Windows demo capture)
     publisher:
       type: Person
       name: FallenG101

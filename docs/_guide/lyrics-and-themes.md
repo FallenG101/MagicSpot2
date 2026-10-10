@@ -10,7 +10,7 @@ Choose the microphone button in the player bar, or press **L**. Drag the sidebar
 
 Synced lyrics highlight the current line and follow playback smoothly. Scroll or drag to read ahead; **Follow** returns to the current line. Click a timed line to seek. Plain lyrics have no timing, so they do not highlight a current line or support seeking. Missing lyrics and load errors keep their normal empty or retry controls.
 
-The unreleased source update shortens scrolling and highlighting transitions for rapid lines in both the sidebar and full-screen view. Each view wakes at the next lyric timestamp. Timing still depends on the transcription supplied by Spotify or LRCLIB; plain lyrics can only scroll approximately through the song.
+Version 2.0.1 shortens scrolling and highlighting transitions for rapid lines in both the sidebar and full-screen view. Each view wakes at the next lyric timestamp. Timing still depends on the transcription supplied by Spotify or LRCLIB; plain lyrics can only scroll approximately through the song.
 
 ## Fonts, size and glow
 
@@ -29,8 +29,8 @@ The expand button opens the inherited full-screen lyrics view. Its layout remain
 
 ## OLED
 
-Choose **Settings > Appearance > Theme > OLED**. Main surfaces are black, with neutral gray controls and white accents. Turn **Lyrics artwork background** off for a pure-black lyrics surface. With it on, the sidebar keeps the song's artwork colors. Existing saved OLED selections remain compatible. This source update is not yet included in the published 2.0.0 downloads, which call the theme OLED Blue.
+Choose **Settings > Appearance > Theme > OLED**. Main surfaces are black, with neutral gray controls and white accents. Turn **Lyrics artwork background** off for a pure-black lyrics surface. With it on, the sidebar keeps the song's artwork colors. Existing saved OLED selections remain compatible. Version 2.0.1 includes this palette; 2.0.0 used OLED Blue.
 
-![Native Windows demo capture of the MagicSpot sidebar](/magicspot/lyrics-oled.png)
+![Native Windows demo capture of the MagicSpot sidebar](/magicspot/oled-review/after-oled-normal.png)
 
 The image uses sample data for visual review. Release downloads use normal Spotify sign-in and playback.

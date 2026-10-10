@@ -16,7 +16,7 @@ body:
     id: version
     attributes:
       label: MagicSpot version and how you installed it
-      placeholder: "2.0.0 from the Windows x64 EXE / universal macOS DMG / source build"
+      placeholder: "2.0.1 from the Windows x64 EXE / universal macOS DMG / source build"
     validations:
       required: true
   - type: dropdown

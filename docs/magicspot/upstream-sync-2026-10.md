@@ -110,14 +110,13 @@ passed all ten platform/build/docs/Nix jobs on `5c4928f`, including native ARM
 tests, credential-store round trips, standalone Windows runtime checks and
 universal DMG verification. Its two new checks exposed stale translation
 references and a missing Linux capture runtime library, both corrected in
-subsequent focused commits. The current
+subsequent focused commits. The subsequent
 [CI 38085687912](https://github.com/FallenG101/MagicSpot2/actions/runs/38085687912)
-has passed quality, docs, Linux/macOS tests, Linux/macOS release/demo builds,
-universal DMG verification and the complete Nix package build with MagicSpot's
-recalculated hash. Its Windows and cache-finalization jobs are still finishing
-at the time of this record. The downloaded Windows EXE and universal DMG also
-pass the combined package verifier. They are candidate artifacts, not published
-downloads.
+passed every substantive quality, docs, platform test, release/demo build,
+universal DMG, Linux visual and Nix check. It was superseded during the final
+Windows test cache upload when the Windows/macOS-only candidate was pushed.
+Its downloaded Windows EXE and universal DMG passed the combined verifier;
+those preliminary artifacts were not published.
 
 After this review, the maintainer explicitly chose “Yes, make 2.0.1
 Windows/macOS only” on October 10. Linux release/demo builds, platform tests,
@@ -135,3 +134,15 @@ The final candidate must pass all eight jobs on current main before publication.
 No live Spotify account sign-in, playback or Connect
 validation has been performed; automated and deterministic demo checks do not
 establish it.
+
+## Published candidate
+
+All eight jobs in [CI 38087545774](https://github.com/FallenG101/MagicSpot2/actions/runs/38087545774)
+passed on current main `d3fc2b9fa977ee7539b01783b26ce51a23e9a953`.
+[Publisher 38090033352](https://github.com/FallenG101/MagicSpot2/actions/runs/38090033352)
+then created regular Latest release `v2.0.1` at that exact commit. Both normal
+download artifacts passed independent package verification. Anonymous public
+downloads of all four assets returned HTTP 200 and matched the tested hashes.
+The [verification record](release-verification-2.0.1.json) stores exact job,
+tag and download results. The post-release README and About update follows
+publication, with the broader documentation and build-time discussion deferred.

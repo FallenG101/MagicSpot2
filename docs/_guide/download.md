@@ -4,12 +4,12 @@ description: MagicSpot Windows executable, universal macOS DMG and source builds
 nav_order: 2
 ---
 
-The [MagicSpot 2.0 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0) lists the verified downloads. GitHub also shows it as **Latest** under Releases on the repository home page.
+The [MagicSpot 2.0.1 release page](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.1) lists the verified downloads. GitHub also shows it as **Latest** under Releases on the repository home page.
 
-| Platform | 2.0.0 asset | Installation |
+| Platform | 2.0.1 asset | Installation |
 | --- | --- | --- |
-| Windows x64 (Intel/AMD) | `magicspot2-v2.0.0-x86_64-pc-windows-msvc.exe` | Download and open the executable directly. It runs without extracting an archive or installing an app. |
-| macOS Apple Silicon and Intel | `magicspot2-v2.0.0-macos-universal.dmg` | Open the DMG and drag **MagicSpot** to **Applications**. Eject the DMG, then open the installed app. |
+| Windows x64 (Intel/AMD) | `magicspot2-v2.0.1-x86_64-pc-windows-msvc.exe` | Download and open the executable directly. It runs without extracting an archive or installing an app. |
+| macOS Apple Silicon and Intel | `magicspot2-v2.0.1-macos-universal.dmg` | Open the DMG and drag **MagicSpot** to **Applications**. Eject the DMG, then open the installed app. |
 | Linux | Unsupported, best-effort source | No maintained Linux build or download. Inherited build instructions remain in [Getting Started](/getting-started/#build-from-source). |
 
 These are normal applications with Spotify sign-in, playback, Connect and MilkDrop enabled. Local playback requires Spotify Premium. The downloads omit demo mode. Windows on ARM, a Windows installer, AppImage, Flatpak, AUR and Homebrew packages are not offered for this release.

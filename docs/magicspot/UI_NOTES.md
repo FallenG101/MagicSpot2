@@ -39,7 +39,7 @@ System, Light, Dark and custom choices remain available; no defaults are changed
 The October 6, 2026 request replaces the original blue palette and shortens its
 display name. [The OLED comparison](oled-review/index.html) provides matched
 Windows captures at normal and narrow sizes, light-theme checks and Appearance
-controls. This change is not yet included in the published 2.0.0 downloads.
+controls. This change ships in 2.0.1. The 2.0.0 downloads retain OLED Blue.
 
 Demo preview:
 
@@ -47,7 +47,7 @@ Demo preview:
 cargo run --locked --release --no-default-features --features demo -- --demo --demo-show lyrics,oled
 ```
 
-## Review and validation
+## Historical 2.0.0 review and validation
 
 Before-and-after evidence is saved locally in `.cache/lyrics-review/index.html`,
 with theme, size and state selectors. Before is commit `225a65c`, using the same
