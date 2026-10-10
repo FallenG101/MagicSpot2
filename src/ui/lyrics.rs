@@ -41,6 +41,26 @@ fn show_sung_line_at(
 /// How long a line takes to light up or fade.
 const LIGHT_UP_SECONDS: f32 = 0.3;
 
+// Finish moving and lighting the current line before the next one starts,
+// even in rapid passages or when a frame arrives late in a line.
+fn transition_seconds(lyrics: &crate::lyrics::Lyrics, position_ms: u32, maximum: f32) -> f32 {
+    lyrics
+        .next_line_delay(position_ms)
+        .map_or(maximum, |delay| maximum.min(delay.as_secs_f32() * 0.5))
+}
+
+fn repaint_at_next_line(
+    ui: &egui::Ui,
+    lyrics: &crate::lyrics::Lyrics,
+    now: &crate::app::NowPlaying,
+) {
+    if now.playing
+        && let Some(delay) = lyrics.next_line_delay(now.position_ms)
+    {
+        ui.ctx().request_repaint_after(delay);
+    }
+}
+
 fn blend(from: egui::Color32, to: egui::Color32, t: f32) -> egui::Color32 {
     let t = t.clamp(0.0, 1.0);
     egui::Color32::from(egui::Rgba::from(from) * (1.0 - t) + egui::Rgba::from(to) * t)
@@ -282,6 +302,8 @@ fn contents(app: &mut App, ui: &mut egui::Ui, palette: &theme::Palette, art_back
     };
 
     let active = lyrics.active_line(now.position_ms);
+    repaint_at_next_line(ui, &lyrics, &now);
+    let light_up_seconds = transition_seconds(&lyrics, now.position_ms, LIGHT_UP_SECONDS);
     if !app
         .actions
         .iter()
@@ -308,9 +330,9 @@ fn contents(app: &mut App, ui: &mut egui::Ui, palette: &theme::Palette, art_back
     } else {
         palette.secondary
     };
-    let animation = app
-        .lyrics_line_shown
-        .map(|_| egui::style::ScrollAnimation::duration(0.38));
+    let animation = app.lyrics_line_shown.map(|_| {
+        egui::style::ScrollAnimation::duration(transition_seconds(&lyrics, now.position_ms, 0.38))
+    });
     ui.spacing_mut().scroll.fade.strength = 0.0;
     let scroll = crate::autoscroll::show(
         ui,
@@ -338,7 +360,7 @@ fn contents(app: &mut App, ui: &mut egui::Ui, palette: &theme::Palette, art_back
                 let lit = ui.ctx().animate_bool_with_time(
                     egui::Id::new("lyric-line").with(("sidebar", &now.uri, index)),
                     is_active,
-                    LIGHT_UP_SECONDS,
+                    light_up_seconds,
                 );
                 let color = if lyrics.synced {
                     blend(quiet, palette.text, lit)
@@ -840,6 +862,8 @@ fn fullscreen_contents(app: &mut App, ui: &mut egui::Ui) {
     };
 
     let active = lyrics.active_line(now.position_ms);
+    repaint_at_next_line(ui, &lyrics, &now);
+    let light_up_seconds = transition_seconds(&lyrics, now.position_ms, LIGHT_UP_SECONDS);
     // A Follow click resets the remembered line after drawing. Other frames
     // record the shown line before any line-click action restores following.
     if !app
@@ -857,11 +881,12 @@ fn fullscreen_contents(app: &mut App, ui: &mut egui::Ui) {
         });
     let following = app.lyrics_following && !manual_scroll;
     let follow = following && app.lyrics_line_shown != Some(active);
-    let animation = egui::style::ScrollAnimation::duration(0.45);
+    let animation =
+        egui::style::ScrollAnimation::duration(transition_seconds(&lyrics, now.position_ms, 0.45));
     let size = (ui.available_width() * 0.046).clamp(28.0, 42.0);
     // The line being sung brightens; all lines keep the same font metrics
     // so highlighting cannot rewrap the words during a transition.
-    // A line takes 300 ms to light up or fade.
+    // Rapid lines light up before the next line starts.
     let quiet = palette.text.gamma_multiply(0.68);
     ui.spacing_mut().scroll.fade.strength = 0.0;
     egui::ScrollArea::vertical()
@@ -894,7 +919,7 @@ fn fullscreen_contents(app: &mut App, ui: &mut egui::Ui) {
                 let lit = ui.ctx().animate_bool_with_time(
                     egui::Id::new("lyric-line").with(("fullscreen", &now.uri, index)),
                     is_active,
-                    0.3,
+                    light_up_seconds,
                 );
                 let color = if lyrics.synced {
                     blend(quiet, palette.text, lit)
@@ -968,24 +993,83 @@ fn fullscreen_contents(app: &mut App, ui: &mut egui::Ui) {
     if manual_scroll && app.lyrics_following {
         app.actions.push(Action::PauseLyricsFollow);
     }
-    if now.playing
-        && lyrics.synced
-        && let Some(next) = lyrics
-            .lines
-            .iter()
-            .filter_map(|line| line.at_ms)
-            .find(|at| *at > now.position_ms)
-    {
-        ui.ctx()
-            .request_repaint_after(std::time::Duration::from_millis(u64::from(
-                next - now.position_ms,
-            )));
-    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::{fullscreen_content_width, preferred_backdrop_art};
+
+    #[test]
+    fn rapid_lines_reach_the_follow_position_before_the_next_line() {
+        let lyrics = crate::lyrics::Lyrics {
+            lines: (0..30)
+                .map(|index| crate::lyrics::Line {
+                    at_ms: Some(index * 120),
+                    text: format!("Line {index}"),
+                })
+                .collect(),
+            synced: true,
+            instrumental: false,
+        };
+        for (maximum, fraction) in [
+            (0.38, super::SIDEBAR_SUNG_LINE_AT),
+            (0.45, super::SUNG_LINE_AT),
+        ] {
+            let ctx = egui::Context::default();
+            let mut shown = None;
+            for position in (0..2_400).step_by(10) {
+                let active = lyrics.active_line(position);
+                let mut distance = 0.0;
+                let mut output = ctx.run_ui(
+                    egui::RawInput {
+                        time: Some(f64::from(position) / 1_000.0),
+                        screen_rect: Some(egui::Rect::from_min_size(
+                            egui::Pos2::ZERO,
+                            egui::vec2(400.0, 400.0),
+                        )),
+                        ..Default::default()
+                    },
+                    |ui| {
+                        egui::CentralPanel::default().show(ui, |ui| {
+                            let viewport = ui.available_rect_before_wrap();
+                            egui::ScrollArea::vertical().show(ui, |ui| {
+                                ui.add_space(viewport.height() * fraction - 20.0);
+                                for index in 0..30 {
+                                    let (_, rect) = ui.allocate_space(egui::vec2(200.0, 40.0));
+                                    if active == Some(index) {
+                                        distance = rect.center().y
+                                            - (viewport.top() + viewport.height() * fraction);
+                                        if shown != active {
+                                            super::show_sung_line_at(
+                                                ui,
+                                                rect,
+                                                Some(egui::style::ScrollAnimation::duration(
+                                                    super::transition_seconds(
+                                                        &lyrics, position, maximum,
+                                                    ),
+                                                )),
+                                                fraction,
+                                            );
+                                        }
+                                    }
+                                    ui.add_space(22.0);
+                                }
+                                ui.add_space(viewport.height());
+                            });
+                        });
+                    },
+                );
+                output.textures_delta.clear();
+                shown = active;
+                if position % 120 == 100 {
+                    assert!(
+                        distance.abs() < 5.0,
+                        "line at {position} ms still {distance} points behind (maximum {maximum})"
+                    );
+                }
+            }
+        }
+    }
 
     #[test]
     fn fullscreen_backdrop_prefers_small_art_with_large_art_as_fallback() {

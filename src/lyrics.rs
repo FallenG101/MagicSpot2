@@ -49,6 +49,18 @@ pub struct Lyrics {
 }
 
 impl Lyrics {
+    /// Time until the next line starts, including before the first line.
+    pub fn next_line_delay(&self, position_ms: u32) -> Option<Duration> {
+        if !self.synced {
+            return None;
+        }
+        self.lines
+            .iter()
+            .filter_map(|line| line.at_ms)
+            .find(|at| *at > position_ms)
+            .map(|at| Duration::from_millis(u64::from(at - position_ms)))
+    }
+
     /// The line being sung at `position_ms`, or `None` before the first one
     /// starts and for lyrics without timing.
     pub fn active_line(&self, position_ms: u32) -> Option<usize> {
@@ -729,6 +741,32 @@ mod tests {
             instrumental: false,
         };
         assert_eq!(plain.active_line(5_000), None);
+    }
+
+    #[test]
+    fn rapid_lines_and_seeks_schedule_the_next_timestamp() {
+        let mut lyrics = Lyrics {
+            lines: parse_lrc("[00:01.00]a\n[00:01.08]b\n[00:01.08]c\n[00:01.20]d"),
+            synced: true,
+            instrumental: false,
+        };
+        for (position, active, delay) in [
+            (0, None, Some(1_000)),
+            (1_000, Some(0), Some(80)),
+            (1_079, Some(0), Some(1)),
+            (1_080, Some(2), Some(120)),
+            (1_199, Some(2), Some(1)),
+            (1_200, Some(3), None),
+            (1_010, Some(0), Some(70)),
+        ] {
+            assert_eq!(lyrics.active_line(position), active);
+            assert_eq!(
+                lyrics.next_line_delay(position),
+                delay.map(Duration::from_millis)
+            );
+        }
+        lyrics.synced = false;
+        assert_eq!(lyrics.next_line_delay(1_000), None);
     }
 
     #[test]

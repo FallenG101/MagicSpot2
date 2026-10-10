@@ -10,6 +10,8 @@ Choose the microphone button in the player bar, or press **L**. Drag the sidebar
 
 Synced lyrics highlight the current line and follow playback smoothly. Scroll or drag to read ahead; **Follow** returns to the current line. Click a timed line to seek. Plain lyrics have no timing, so they do not highlight a current line or support seeking. Missing lyrics and load errors keep their normal empty or retry controls.
 
+The unreleased source update shortens scrolling and highlighting transitions for rapid lines in both the sidebar and full-screen view. Each view wakes at the next lyric timestamp. Timing still depends on the transcription supplied by Spotify or LRCLIB; plain lyrics can only scroll approximately through the song.
+
 ## Fonts, size and glow
 
 Open **Settings > Appearance**:
