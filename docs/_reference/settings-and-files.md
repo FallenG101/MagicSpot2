@@ -397,9 +397,9 @@ the light/dark appearance comes from the desktop portal's `color-scheme`
 setting (GNOME, KDE and Flatpak), and since 0.10.0, the app follows
 it when it changes. Saved Dark,
 Light and custom choices are preserved when updating. The picker starts with
-**Follow system**, **Light**, **Dark**, and **OLED Blue**, then a separator. **Omarchy** comes
+**Follow system**, **Light**, **Dark**, and **OLED**, then a separator. **Omarchy** comes
 next when the integration is available, followed by the other local palettes.
-Themes change colors and keep the app's existing fonts.
+Themes change colors and keep the app's existing fonts. OLED uses black surfaces and white/gray accents. Its saved key remains `oled_blue` for compatibility with existing profiles; published 2.0.0 downloads use the previous OLED Blue appearance.
 **How to make a theme**, beside the picker, opens this section. The
 **Open themes folder** icon button beside the picker creates the folder if
 needed and opens it in your file
@@ -462,4 +462,4 @@ window; Winamp skins remain separate. This first format controls colors only.
 
 MagicSpot retains the upstream desktop-theme reader and the internal `spotifast` theme slug for compatibility. Its Nix package does not install the inherited Spotifast hook. That hook and `contrib/omarchy/spotifast.json.tpl` target the original app's profile; do not install them expecting a MagicSpot profile integration.
 
-For an independent MagicSpot palette, add a JSON file to MagicSpot's own `themes` folder, run `magicspot2 reload-themes`, and select it in Appearance. Desktop-theme integration and custom JSON themes are separate from the built-in OLED Blue option.
+For an independent MagicSpot palette, add a JSON file to MagicSpot's own `themes` folder, run `magicspot2 reload-themes`, and select it in Appearance. Desktop-theme integration and custom JSON themes are separate from the built-in OLED option.

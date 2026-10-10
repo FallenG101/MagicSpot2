@@ -1,4 +1,4 @@
-# Lyrics sidebar and OLED Blue
+# Lyrics sidebar and OLED
 
 Requested October 5, 2026: an Apple Music-inspired lyrics sidebar and an OLED
 theme with blue accents. This visual scope was requested directly by the
@@ -21,20 +21,25 @@ maintainer. No additional shell/navigation redesign is included.
   fetched and blurred through the existing asynchronous cache; the previous cover
   stays until the next is ready. Glow and artwork are enabled by default and can
   be turned off in Appearance. Without artwork, the selected theme supplies the
-  background, including pure black for OLED Blue.
+  background, including pure black for OLED.
 - Smooth following and gentle scroll-edge fades. Manual wheel/drag scrolling
   releases following; Follow and click-to-seek remain available.
 - Loading, missing, instrumental, error/retry and untimed content retain their
   existing meanings. Plain lyrics use readable text without a false active line.
 - Full-window lyrics retain their layout.
 
-## OLED Blue
+## OLED
 
-Choose **Settings > Appearance > Theme > OLED Blue**. Window, library/sidebar
-and player surfaces are black, with blue selection, focus and hover accents.
-Raised controls use very dark cool surfaces so they remain distinguishable.
+Choose **Settings > Appearance > Theme > OLED**. Window, library/sidebar
+and player surfaces are black, with white/gray selection, focus and hover accents.
+Raised controls use very dark neutral gray surfaces so they remain distinguishable.
 The built-in choice is saved as `oled_blue` and needs no theme file. Existing
 System, Light, Dark and custom choices remain available; no defaults are changed.
+
+The October 6, 2026 request replaces the original blue palette and shortens its
+display name. [The OLED comparison](oled-review/index.html) provides matched
+Windows captures at normal and narrow sizes, light-theme checks and Appearance
+controls. This change is not yet included in the published 2.0.0 downloads.
 
 Demo preview:
 

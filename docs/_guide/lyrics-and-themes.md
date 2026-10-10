@@ -1,6 +1,6 @@
 ---
 title: Lyrics & Themes
-description: Choose lyric fonts and sizes, artwork backgrounds and OLED Blue.
+description: Choose lyric fonts and sizes, artwork backgrounds and OLED.
 nav_order: 4
 ---
 
@@ -25,9 +25,9 @@ These choices are saved between launches. Changing size or font reflows the side
 
 The expand button opens the inherited full-screen lyrics view. Its layout remains separate from the new sidebar typography controls. Press **Esc** or choose the shrink button to return.
 
-## OLED Blue
+## OLED
 
-Choose **Settings > Appearance > Theme > OLED Blue**. Main surfaces are black, with cool dark controls and blue accents (`#4d9eff`). Turn **Lyrics artwork background** off for a pure-black lyrics surface. With it on, the sidebar keeps the song's artwork colors.
+Choose **Settings > Appearance > Theme > OLED**. Main surfaces are black, with neutral gray controls and white accents. Turn **Lyrics artwork background** off for a pure-black lyrics surface. With it on, the sidebar keeps the song's artwork colors. Existing saved OLED selections remain compatible. This source update is not yet included in the published 2.0.0 downloads, which call the theme OLED Blue.
 
 ![Native Windows demo capture of the MagicSpot sidebar](/magicspot/lyrics-oled.png)
 

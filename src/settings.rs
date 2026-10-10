@@ -194,7 +194,7 @@ impl ThemeChoice {
             Self::Dark => pgettext(locale, "theme", "Dark"),
             Self::Light => pgettext(locale, "theme", "Light"),
             Self::System => gettext(locale, "Follow system"),
-            Self::OledBlue => "OLED Blue".into(),
+            Self::OledBlue => "OLED".into(),
         }
     }
 }
@@ -1006,6 +1006,10 @@ mod tests {
 
     #[test]
     fn oled_blue_is_saved_and_restores_its_palette_without_a_theme_file() {
+        assert_eq!(
+            super::ThemeChoice::OledBlue.label(crate::i18n::Locale::English),
+            "OLED"
+        );
         let path = std::env::temp_dir().join(format!("spotifast-oled-{}.json", std::process::id()));
         let settings = Settings {
             theme: super::ThemeChoice::OledBlue,

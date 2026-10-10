@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OLED theme comparison</title>
+<style>
+body{margin:24px;background:#161616;color:#eee;font:16px system-ui}h1{font-size:24px}p{max-width:900px;line-height:1.5}button,select{font:inherit;padding:8px;margin:4px;background:#333;color:#fff;border:1px solid #666;border-radius:5px}button[aria-pressed=true]{background:#eee;color:#111}img{display:block;width:100%;height:auto;border:1px solid #555;margin-top:16px}nav{display:flex;flex-wrap:wrap;align-items:center}small{color:#bbb}
+</style>
+<h1>OLED: white and gray accents</h1>
+<p>The requested change renames OLED Blue to OLED and replaces its blue palette with neutral white and gray. Layout, artwork, other themes, and the saved <code>oled_blue</code> preference remain compatible. Captures use identical demo data, page, window size and five-second delay on native Windows.</p>
+<p><small>Before: pre-update release demo binary from October 6. After: local source validated October 10, including the OLED palette update. This is source preview evidence; published 2.0.0 downloads retain OLED Blue. Light captures verify the unchanged theme. Appearance shows the selected theme label and controls.</small></p>
+<nav>
+<label>Theme <select id="theme"><option value="oled">OLED (dark)</option><option value="light">Light</option></select></label>
+<label>Size <select id="size"><option value="normal">1440 Ã— 900</option><option value="narrow">1024 Ã— 768</option></select></label>
+<label>View <select id="view"><option value="lyrics">Playlist and lyrics</option><option value="settings">Appearance controls (OLED, 1440 Ã— 900)</option></select></label>
+<button id="before" aria-pressed="false">Before</button><button id="after" aria-pressed="true">After</button>
+</nav>
+<p id="caption"></p><img id="capture" alt="Theme comparison capture">
+<script>
+let phase='after';const controls=['theme','size','view'].map(id=>document.getElementById(id));
+function update(){const [theme,size,view]=controls.map(node=>node.value);const state=view==='settings'?'settings':`${theme}-${size}`;document.getElementById('capture').src=`${phase}-${state}.png`;document.getElementById('caption').textContent=`${phase==='before'?'Before':'After'} Â· ${view==='settings'?'Appearance controls':`${theme.toUpperCase()} Â· ${size==='normal'?'1440 Ã— 900':'1024 Ã— 768'}`}`;for(const id of ['before','after'])document.getElementById(id).setAttribute('aria-pressed',String(id===phase));}
+for(const node of controls)node.addEventListener('change',update);for(const id of ['before','after'])document.getElementById(id).addEventListener('click',()=>{phase=id;update()});update();
+</script>
+</html>

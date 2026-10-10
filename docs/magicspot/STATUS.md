@@ -16,4 +16,14 @@ Live Spotify account sign-in, playback and Connect have **not** been exercised i
 
 ## Maintenance
 
+### OLED palette update (unreleased)
+
+The October 6, 2026 source update renames OLED Blue to **OLED** and replaces
+blue accents and tinted controls with white and neutral gray. Black primary
+surfaces, artwork colors, layout and the legacy `oled_blue` saved preference
+remain compatible. This update is separate from the published 2.0.0 downloads.
+The maintainer directly requested this visual scope. The
+[native Windows comparison](oled-review/index.html) covers OLED at two window
+sizes, unchanged Light views and Appearance controls.
+
 The [release decisions](RELEASE_DECISIONS.md) record the required package types and public checks. [PACKAGING.md](../../PACKAGING.md) gives the build and publication procedure. The [upstream sync guide](MAINTENANCE.md) keeps future lyric and theme changes separate from fork identity. The drift workflow reports upstream changes without merging or publishing them.

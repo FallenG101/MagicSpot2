@@ -2,14 +2,14 @@
 layout: home
 permalink: /
 title: MagicSpot 2
-description: A native Spotify desktop app with spacious lyrics and OLED Blue.
+description: A native Spotify desktop app with spacious lyrics and OLED.
 hero:
   name: MagicSpot 2
   text: Lyrics with room to breathe.
-  tagline: A focused Spotifast fork with lyric fonts, a subtle glow, cover colors and an OLED Blue theme.
+  tagline: A focused Spotifast fork with lyric fonts, a subtle glow, cover colors and an OLED theme.
   image:
     src: /magicspot/lyrics-oled.png
-    alt: MagicSpot lyrics sidebar in OLED Blue, native Windows demo capture
+    alt: MagicSpot lyrics sidebar in OLED, native Windows demo capture
   actions:
     - theme: brand
       text: Get started
@@ -21,8 +21,8 @@ features:
   - title: Your lyrics style
     details: Inter, System or Monospace, Auto or 18–48 points, smooth following and a slight current-line glow.
     link: /lyrics-and-themes/
-  - title: Cover colors and OLED Blue
-    details: A blurred artwork sidebar, a cover that grows with its width, and black main surfaces with blue accents.
+  - title: Cover colors and OLED
+    details: A blurred artwork sidebar, a cover that grows with its width, and black main surfaces with white/gray accents in current source.
     link: /lyrics-and-themes/
   - title: Native Spotify foundation
     details: Built on Spotifast main after v0.12.0. Spotify sign-in, playback, library and Connect retain the upstream engine.

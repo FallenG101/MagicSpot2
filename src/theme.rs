@@ -79,25 +79,26 @@ impl Palette {
         }
     }
 
-    /// True-black primary surfaces with blue controls and cool neutral text.
+    /// True-black primary surfaces with white accents and neutral gray controls.
+    /// The legacy method name matches the saved theme key for compatibility.
     pub fn oled_blue() -> Self {
         Self {
             dark: true,
             window: Color32::BLACK,
             panel: Color32::BLACK,
-            surface: Color32::from_rgb(0x09, 0x0d, 0x14),
-            surface_hover: Color32::from_rgb(0x12, 0x1c, 0x2b),
-            surface_active: Color32::from_rgb(0x19, 0x2d, 0x46),
-            outline: Color32::from_rgb(0x21, 0x2b, 0x3b),
-            text: Color32::from_rgb(0xf5, 0xf7, 0xfa),
-            secondary: Color32::from_rgb(0xad, 0xb7, 0xc6),
-            dim: Color32::from_rgb(0x79, 0x88, 0xa0),
-            accent: Color32::from_rgb(0x4d, 0x9e, 0xff),
-            accent_hover: Color32::from_rgb(0x80, 0xba, 0xff),
-            on_accent: Color32::from_rgb(0x02, 0x0b, 0x16),
+            surface: Color32::from_gray(0x0c),
+            surface_hover: Color32::from_gray(0x19),
+            surface_active: Color32::from_gray(0x29),
+            outline: Color32::from_gray(0x30),
+            text: Color32::from_gray(0xf5),
+            secondary: Color32::from_gray(0xb7),
+            dim: Color32::from_gray(0x88),
+            accent: Color32::WHITE,
+            accent_hover: Color32::from_gray(0xd8),
+            on_accent: Color32::BLACK,
             danger: Color32::from_rgb(0xff, 0x75, 0x8a),
             warning: Color32::from_rgb(0xff, 0xc6, 0x6d),
-            overlay: Color32::from_rgb(0x09, 0x0d, 0x14),
+            overlay: Color32::from_gray(0x0c),
             shadow: Color32::from_black_alpha(200),
         }
     }
@@ -988,7 +989,7 @@ mod tests {
     }
 
     #[test]
-    fn oled_blue_keeps_primary_surfaces_black_and_text_legible() {
+    fn oled_keeps_surfaces_neutral_and_text_legible() {
         fn luminance(color: Color32) -> f32 {
             let [r, g, b, _] = color.to_srgba_unmultiplied();
             let linear = |channel: u8| {
@@ -1005,7 +1006,25 @@ mod tests {
         assert!(palette.dark);
         assert_eq!(palette.window, Color32::BLACK);
         assert_eq!(palette.panel, Color32::BLACK);
-        assert!(palette.accent.b() > palette.accent.g());
+        assert_eq!(palette.accent, Color32::WHITE);
+        for color in [
+            palette.window,
+            palette.panel,
+            palette.surface,
+            palette.surface_hover,
+            palette.surface_active,
+            palette.outline,
+            palette.text,
+            palette.secondary,
+            palette.dim,
+            palette.accent,
+            palette.accent_hover,
+            palette.on_accent,
+            palette.overlay,
+        ] {
+            assert_eq!(color.r(), color.g());
+            assert_eq!(color.g(), color.b());
+        }
         for (foreground, background) in [
             (palette.text, palette.panel),
             (palette.secondary, palette.surface),

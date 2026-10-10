@@ -1,17 +1,17 @@
 # MagicSpot 2.0
 
-A native Spotify desktop app based on the latest [Spotifast](https://github.com/crmne/spotifast) foundation, with an Apple Music-inspired lyrics sidebar and OLED Blue.
+A native Spotify desktop app based on the latest [Spotifast](https://github.com/crmne/spotifast) foundation, with an Apple Music-inspired lyrics sidebar and OLED.
 
 **[Download MagicSpot 2.0](https://github.com/FallenG101/MagicSpot2/releases/tag/v2.0.0).** Run the standalone Windows x64 `.exe` directly, or open the universal macOS DMG and drag MagicSpot to Applications. These are normal apps with Spotify sign-in and playback. Local playback requires Spotify Premium.
 
 ## What's new
 
 - Bold, spacious lyrics with a larger song card, a subtle glow on the current line, smooth following and soft scroll edges. The sidebar background follows the album artwork. Scroll manually to read ahead, press Follow to return, or click a timed line to seek.
-- **Settings > Appearance** offers Inter, System and Monospace lyrics fonts, an adjustable 18–48 point size with Auto mode, plus switches for the glow and artwork background. These choices are saved. The cover grows as you widen the sidebar.
-- **Settings > Appearance > Theme > OLED Blue** selects black main surfaces and blue accents. Your choice is saved.
+- **Settings > Appearance** offers Inter, System and Monospace lyrics fonts, an adjustable 18â€“48 point size with Auto mode, plus switches for the glow and artwork background. These choices are saved. The cover grows as you widen the sidebar.
+- **Settings > Appearance > Theme > OLED** selects black main surfaces and white/gray accents. Your choice is saved. This source update is not yet included in the published 2.0.0 downloads.
 - A separate MagicSpot 2 profile, secure-store identity and release feed. Replacements use manual downloads; the inherited checker queries GitHub releases. Sign in afresh; Spotifast and discontinued MagicSpot v3 settings and credentials are not imported.
 
-![MagicSpot lyrics sidebar in OLED Blue, native Windows demo capture](docs/magicspot/lyrics-oled.png)
+![MagicSpot lyrics sidebar in OLED, native Windows demo capture](docs/magicspot/lyrics-oled.png)
 
 Version `2.0.0` targets Windows x64 and macOS (Apple Silicon and Intel), including upstream's MilkDrop visualizer. Windows is unsigned; macOS is ad-hoc signed without notarization and may need approval in System Settings > Privacy & Security on first launch. Linux remains a source/CI target. Live Spotify account sign-in/playback and Connect have not been exercised in this development session; the inherited flows remain enabled. See the [release notes](packaging/release-notes/v2.0.0.md) and [validation status](docs/magicspot/STATUS.md).
 
