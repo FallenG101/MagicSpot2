@@ -17,9 +17,13 @@ def report():
     base = match.group(1)
     upstream = git("rev-parse", "upstream/main")
     head = git("rev-parse", "HEAD")
-    for revision in (head, upstream):
-        subprocess.run(["git", "merge-base", "--is-ancestor", base, revision], check=True)
-    ahead, behind = git("rev-list", "--left-right", "--count", "HEAD...upstream/main").split()
+    # Reviewed cherry-picks preserve patches and author credit, not ancestry.
+    # Only upstream must descend from the recorded integration snapshot.
+    if subprocess.run(
+        ["git", "merge-base", "--is-ancestor", base, upstream], check=False
+    ).returncode:
+        raise SystemExit("Recorded base is not on upstream/main; review upstream history first")
+    pending = git("rev-list", "--count", f"{base}..{upstream}")
     local_files = set(git("diff", "--name-only", base, head).splitlines())
     upstream_files = set(git("diff", "--name-only", base, upstream).splitlines())
     overlap = sorted(local_files & upstream_files)
@@ -27,7 +31,8 @@ def report():
     print(f"\nRecorded base: `{base}`")
     print(f"\nMagicSpot tip: `{head}`")
     print(f"\nUpstream tip: `{upstream}`")
-    print(f"\nMagicSpot is {ahead} commits ahead and {behind} commits behind upstream.")
+    print(f"\nUpstream has {pending} commits after the reviewed integration snapshot.")
+    print("\nMagicSpot uses reviewed cherry-picks; graph ahead/behind counts are not patch drift.")
     print(f"\nChanged paths since base: {len(local_files)} local, {len(upstream_files)} upstream.")
     print("\n## Changed-file overlap\n")
     if overlap:
