@@ -235,7 +235,7 @@ main fields are:
 | `custom_theme_cache` | absent | Last accepted custom palette; preserves appearance if its file is missing or invalid |
 | `system_theme_cache` | absent | Last accepted Omarchy palette for Follow system; retained across restarts |
 | `lyrics_font` | `inter` | Sidebar font: `inter`, `system`, or `monospace` |
-| `lyrics_font_size` | `null` | Auto sidebar size, or 18–48 points |
+| `lyrics_font_size` | `null` | Auto sidebar size, or 18â€“48 points |
 | `lyrics_glow` | `true` | Subtle glow on the synced current sidebar line |
 | `lyrics_art_background` | `true` | Blurred cover background in the sidebar |
 | `lyrics_width` | `360` | Preferred sidebar width in points, capped to the available window |
@@ -251,7 +251,7 @@ main fields are:
 | `middle_click_autoscroll` | `false` | Linux only: middle-click a list to autoscroll it. Windows always autoscrolls and macOS never does |
 | `winamp_window` | `false` | The window is the Winamp mini player |
 | `winamp_show_taskbar` | `true` | Windows since 0.8.0, and Linux X11 sessions: show the Winamp window's taskbar button; the main window always keeps its button. Wayland and macOS ignore it |
-| `custom_titlebar` | `false` | Windows only, since 0.10.0: draw MagicSpot's own title bar and window buttons instead of the standard Windows ones |
+| `custom_titlebar` | `false` | Windows and Linux: draw MagicSpot's own title bar and window buttons instead of the desktop's |
 | `skin` | none | File or folder name in the skins folder; blank uses the built-in skin |
 | `random_skin` | `false` | Since 0.11.0: pick a different skin (built-in or installed) each time the mini player opens; `skin` holds the one picked |
 | `skin_scale` | by display | Screen pixels per skin pixel, 1 to 4 |
@@ -289,7 +289,7 @@ main fields are:
 ```
 magicspot2 [OPTIONS] [LINK]
 
-  LINK                  A Spotify link to open: spotify:track:…, or an
+  LINK                  A Spotify link to open: spotify:track:â€¦, or an
                         open.spotify.com address
   --device-name <NAME>  Spotify Connect name for this session
   -v, --verbose         More logs from librespot and the API client
@@ -389,9 +389,9 @@ the folder records which it has already put there.
 
 To make your own, add JSON files to the `themes` folder.
 Run `magicspot2 reload-themes` if the app is already open, then select it
-under **Settings → Appearance → Theme**, where it is listed by its filename
+under **Settings â†’ Appearance â†’ Theme**, where it is listed by its filename
 without `.json`.
-The default is **Follow system**. It uses your desktop’s light/dark appearance,
+The default is **Follow system**. It uses your desktopâ€™s light/dark appearance,
 or the current Omarchy palette on an Omarchy desktop. On Linux,
 the light/dark appearance comes from the desktop portal's `color-scheme`
 setting (GNOME, KDE and Flatpak), and since 0.10.0, the app follows
