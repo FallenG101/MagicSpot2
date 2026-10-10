@@ -26,4 +26,16 @@ The maintainer directly requested this visual scope. The
 [native Windows comparison](oled-review/index.html) covers OLED at two window
 sizes, unchanged Light views and Appearance controls.
 
+### Lyric timing and playlist recovery (unreleased)
+
+Rapid lyric lines now shorten their scroll and highlight transitions, and the
+sidebar wakes at the next timestamp. A failed playlist-library page keeps its
+loaded rows and offers Retry at the failed offset. The
+[validation notes and native Windows comparison](bugfix-review/README.md)
+record 960 passing library tests and the other passing targets with MilkDrop
+disabled. Full-feature checks require the missing Windows vcpkg setup; docs and
+Linux launcher checks also need tools absent from this host. Live Spotify and
+native macOS/Linux validation remain outstanding. These fixes are not included
+in the published 2.0.0 downloads.
+
 The [release decisions](RELEASE_DECISIONS.md) record the required package types and public checks. [PACKAGING.md](../../PACKAGING.md) gives the build and publication procedure. The [upstream sync guide](MAINTENANCE.md) keeps future lyric and theme changes separate from fork identity. The drift workflow reports upstream changes without merging or publishing them.

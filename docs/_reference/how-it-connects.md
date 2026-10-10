@@ -167,6 +167,14 @@ rows are placeholders until their page arrives; scrolling never starts playback.
 
 ## When Spotify pushes back
 
+In the unreleased source update, a playlist-library page that fails leaves a
+persistent error and **Retry** in the Library. Already loaded playlists stay
+visible. Retry resumes from the failed page, then loads the remaining pages
+one at a time. If the first page failed, Retry starts a fresh load. Repeated
+clicks do not start duplicate requests. These reads use the existing shared
+Web API grant and its cooldown; there is no automatic retry loop after the
+normal request retry budget is exhausted.
+
 Each Web API session has separate concurrency and rate limits. A `Retry-After`
 response pauses only that session. MagicSpot routes each request once and
 does not retry it through the other app. A playlist read the librespot session

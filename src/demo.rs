@@ -774,6 +774,23 @@ pub fn apply_flags(app: &mut App, page: Option<&str>, show: Option<&str>) {
                 };
             }
             "queue" => app.show_queue_panel = true,
+            "playlists-error" => {
+                app.library.playlists = Loadable::Failed("Connection interrupted".into());
+            }
+            "playlists-partial-error" | "playlists-retrying" => {
+                if let Some(playlists) = app.library.playlists.get_mut() {
+                    playlists.truncate(3);
+                }
+                app.library.playlists_next = Some(3);
+                app.library.playlists_error = Some(
+                    "Couldn't load more playlists: Spotify rate limit. Try again shortly.".into(),
+                );
+                if surface == "playlists-retrying" {
+                    app.library.playlists_next = None;
+                    app.library.playlists_asked = Some(3);
+                    app.library.playlists_error = None;
+                }
+            }
             "playing-next" => {
                 app.show_queue_panel = true;
                 if let Loadable::Loaded(queue) = &app.queue {

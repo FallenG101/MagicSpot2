@@ -3606,6 +3606,7 @@ impl App {
         self.library.playlists = Loadable::Loading;
         self.library.playlists_next = None;
         self.library.playlists_asked = None;
+        self.library.playlists_error = None;
         self.library.playlists_generation += 1;
         self.backend.api(ApiRequest::MyPlaylists {
             offset: 0,
@@ -3993,6 +3994,10 @@ impl App {
                 }
             }
             Page::Home => {
+                if self.library.playlists_asked.is_some() || self.library.playlists_error.is_some()
+                {
+                    return;
+                }
                 if let Some(offset) = self.library.playlists_next.take() {
                     self.library.playlists_asked = Some(offset);
                     self.backend.api(ApiRequest::MyPlaylists {
@@ -5181,6 +5186,7 @@ impl App {
             ApiResponse::MyPlaylists { offset, result, .. } => match result {
                 Ok(page) => {
                     self.library.playlists_asked = None;
+                    self.library.playlists_error = None;
                     let next_offset = page.next_offset();
                     match &mut self.library.playlists {
                         Loadable::Loaded(existing) if offset > 0 => existing.extend(page.items),
@@ -5214,7 +5220,8 @@ impl App {
                     if offset == 0 {
                         self.library.playlists = Loadable::Failed(error.to_string());
                     } else {
-                        self.toast_error(
+                        self.library.playlists_next = Some(offset);
+                        self.library.playlists_error = Some(
                             // Translators: {error} is an error message.
                             gettext(self.locale, "Couldn't load more playlists: {error}")
                                 .replace("{error}", &error.to_string()),
@@ -8843,6 +8850,13 @@ impl App {
             Action::LoadMore(page) => self.load_more(page),
             Action::LoadWindow { page, position } => self.load_window(page, position),
             Action::RetryWindow(page) => self.retry_window(page),
+            Action::RetryPlaylists => {
+                if self.library.playlists_error.take().is_some() {
+                    self.load_more(Page::Home);
+                } else if matches!(self.library.playlists, Loadable::Failed(_)) {
+                    self.load_playlists();
+                }
+            }
             Action::LoadMoreRecents => self.load_more_recents(),
             Action::ReloadRecents => self.reload_recents(),
             Action::SetQueueTab(tab) => {
@@ -11691,6 +11705,87 @@ mod tests {
             result: Ok(playlist_page(&["c"], 2, 3)),
         });
         assert_eq!(listed_playlists(&app), playlist_ids(&["a", "b"]));
+    }
+
+    #[test]
+    fn retrying_a_failed_playlist_page_keeps_rows_and_resumes_paging() {
+        let mut app = headless_app();
+        app.backend.set_offline(true);
+        let ctx = egui::Context::default();
+        app.load_playlists();
+        let generation = app.library.playlists_generation;
+        app.handle_api(ApiResponse::MyPlaylists {
+            offset: 0,
+            generation,
+            result: Ok(playlist_page(&["a", "b"], 0, 5)),
+        });
+        for _ in 0..2 {
+            app.handle_api(ApiResponse::MyPlaylists {
+                offset: 2,
+                generation,
+                result: Err(crate::api::ApiError::RateLimited),
+            });
+            assert_eq!(listed_playlists(&app), playlist_ids(&["a", "b"]));
+            assert_eq!(app.library.playlists_next, Some(2));
+            assert!(app.library.playlists_error.is_some());
+            app.load_more(Page::Home);
+            assert_eq!(
+                app.library.playlists_asked, None,
+                "a failed page waits for Retry"
+            );
+            app.apply(Action::RetryPlaylists, &ctx);
+            assert_eq!(app.library.playlists_asked, Some(2));
+            assert!(app.library.playlists_error.is_none());
+            assert_eq!(app.library.playlists_generation, generation);
+            app.apply(Action::RetryPlaylists, &ctx);
+            app.load_more(Page::Home);
+            assert_eq!(
+                app.library.playlists_asked,
+                Some(2),
+                "duplicate actions cannot advance the request"
+            );
+        }
+        app.handle_api(ApiResponse::MyPlaylists {
+            offset: 2,
+            generation,
+            result: Ok(playlist_page(&["c", "d"], 2, 5)),
+        });
+        assert_eq!(listed_playlists(&app), playlist_ids(&["a", "b", "c", "d"]));
+        assert_eq!(app.library.playlists_asked, Some(4));
+        app.handle_api(ApiResponse::MyPlaylists {
+            offset: 4,
+            generation,
+            result: Ok(playlist_page(&["e"], 4, 5)),
+        });
+        assert_eq!(
+            listed_playlists(&app),
+            playlist_ids(&["a", "b", "c", "d", "e"])
+        );
+        assert_eq!(app.library.playlists_next, None);
+        assert!(app.library.playlists_error.is_none());
+    }
+
+    #[test]
+    fn retrying_the_first_playlist_page_starts_a_fresh_load() {
+        let mut app = headless_app();
+        app.backend.set_offline(true);
+        app.load_playlists();
+        let generation = app.library.playlists_generation;
+        app.handle_api(ApiResponse::MyPlaylists {
+            offset: 0,
+            generation,
+            result: Err(crate::api::ApiError::RateLimited),
+        });
+        assert!(matches!(app.library.playlists, Loadable::Failed(_)));
+        app.apply(Action::RetryPlaylists, &egui::Context::default());
+        assert!(app.library.playlists.is_loading());
+        assert!(app.library.playlists_generation > generation);
+        app.handle_api(ApiResponse::MyPlaylists {
+            offset: 0,
+            generation,
+            result: Ok(playlist_page(&["stale"], 0, 1)),
+        });
+        assert!(app.library.playlists.is_loading());
     }
 
     /// Signing out forgets the library, but not which load came last: a

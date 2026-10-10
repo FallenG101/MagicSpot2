@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MagicSpot lyric timing and playlist retry review</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui;background:#101217;color:#eef0f4}body{max-width:1320px;margin:auto;padding:24px}h1{font-size:24px}p{line-height:1.5;color:#bbc2ce}.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:24px 0}label{display:grid;gap:6px}button,select{font:inherit;padding:9px;background:#202530;color:inherit;border:1px solid #536070;border-radius:6px}button{cursor:pointer}button[aria-pressed=true]{background:#eef0f4;color:#101217}figure{margin:0}img{width:100%;height:auto;border:1px solid #536070}figcaption{padding:12px 0;color:#bbc2ce}
+</style>
+<h1>Lyric timing and playlist recovery</h1>
+<p>The Library keeps loaded playlists visible when a later page fails. A persistent error and Retry button resume that page. A first-page failure also offers Retry. A loading indicator appears during the request. Navigation, sizing, theme palettes and playlist order retain their existing behavior.</p>
+<p>Native Windows demo captures at matching sizes and with matching sample data. Before uses the sidebar rendering from commit <code>3ddd309</code>, with the new failure fixtures and the same working-tree theme. After uses the updated sidebar. The static lyrics captures check layout; the 120 ms line regression test checks timing in both lyric views. No live Spotify account was used.</p>
+<div class="controls">
+<label>Theme<select id="theme"><option value="dark">Dark</option><option value="light">Light</option></select></label>
+<label>Size<select id="size"><option value="normal">1280 × 800</option><option value="narrow">1024 × 768</option></select></label>
+<label>State<select id="state"><option value="partial">Later page failed</option><option value="first">First page failed</option><option value="retrying">Retry in progress</option><option value="lyrics">Lyrics layout</option></select></label>
+<button id="before" aria-pressed="false">Before</button><button id="after" aria-pressed="true">After</button>
+</div>
+<figure><img id="shot" alt="Native Windows MagicSpot demo capture"><figcaption id="caption"></figcaption></figure>
+<script>
+let phase='after';const controls=['theme','size','state'];function render(){const values=controls.map(id=>document.getElementById(id).value);document.getElementById('shot').src=`${phase}-${values.join('-')}.png`;document.getElementById('caption').textContent=[phase==='before'?'Before':'After',...controls.map(id=>document.getElementById(id).selectedOptions[0].text)].join(' · ');for(const p of ['before','after'])document.getElementById(p).setAttribute('aria-pressed',String(p===phase));}for(const id of controls)document.getElementById(id).onchange=render;for(const p of ['before','after'])document.getElementById(p).onclick=()=>{phase=p;render()};render();
+</script>
+</html>

@@ -569,6 +569,8 @@ pub struct Library {
     /// The later playlist page on its way, so a second answer for a page
     /// already taken adds nothing.
     pub playlists_asked: Option<u32>,
+    /// A failed continuation keeps its offset and loaded rows until retried.
+    pub playlists_error: Option<String>,
     pub liked: PagedList<SavedTrack>,
     pub albums: PagedList<SavedAlbum>,
     pub artists: CursorList<Artist>,
@@ -1062,6 +1064,7 @@ pub enum Action {
         position: u32,
     },
     RetryWindow(Page),
+    RetryPlaylists,
     LoadMoreRecents,
     ReloadRecents,
     SetQueueTab(QueueTab),

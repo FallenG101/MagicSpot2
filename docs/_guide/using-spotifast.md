@@ -309,6 +309,11 @@ uses recent plays. Other sections keep their supplied Library order until you
 select a sort. Choosing a sort loads the rest of that Library section in the
 background. If loading fails, choose the order again to retry.
 
+In the unreleased source update, playlist loading failures show **Retry**
+directly in the Library. Loaded playlists stay visible; Retry requests the
+failed page and continues loading the rest. A spinner marks the request while
+it waits, including Spotify's normal rate-limit cooldown.
+
 Liked Songs starts pinned at the top. Drag it between pins to choose its
 position, or below the pin block to unpin it and put it in **Local custom
 order**. Other pins can sit above it. Its right-click menu also offers **Unpin**

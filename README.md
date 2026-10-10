@@ -7,8 +7,8 @@ A native Spotify desktop app based on the latest [Spotifast](https://github.com/
 ## What's new
 
 - Bold, spacious lyrics with a larger song card, a subtle glow on the current line, smooth following and soft scroll edges. The sidebar background follows the album artwork. Scroll manually to read ahead, press Follow to return, or click a timed line to seek.
-- **Settings > Appearance** offers Inter, System and Monospace lyrics fonts, an adjustable 18â€“48 point size with Auto mode, plus switches for the glow and artwork background. These choices are saved. The cover grows as you widen the sidebar.
-- Unreleased source fixes: synced lyrics adapt to rapid line changes in both views.
+- **Settings > Appearance** offers Inter, System and Monospace lyrics fonts, an adjustable 18–48 point size with Auto mode, plus switches for the glow and artwork background. These choices are saved. The cover grows as you widen the sidebar.
+- Unreleased source fixes: synced lyrics adapt to rapid line changes in both views. If playlist loading stops, **Retry** in the Library resumes the failed page while keeping loaded playlists visible.
 - **Settings > Appearance > Theme > OLED** selects black main surfaces and white/gray accents. Your choice is saved. This source update is not yet included in the published 2.0.0 downloads.
 - A separate MagicSpot 2 profile, secure-store identity and release feed. Replacements use manual downloads; the inherited checker queries GitHub releases. Sign in afresh; Spotifast and discontinued MagicSpot v3 settings and credentials are not imported.
 

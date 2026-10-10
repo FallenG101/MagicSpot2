@@ -1041,8 +1041,11 @@ fn contents(app: &mut App, ui: &mut egui::Ui, grid_art: Option<Rect>) {
                 folder_rows(app, &user_id, &mut entries);
             }
             match &app.library.playlists {
-                Loadable::Loaded(_) if show_folders => {}
+                Loadable::Loaded(_) if show_folders => {
+                    error = app.library.playlists_error.clone();
+                }
                 Loadable::Loaded(playlists) => {
+                    error = app.library.playlists_error.clone();
                     for (index, playlist) in playlists.iter().enumerate() {
                         if !needle.is_empty() && !playlist.name.to_lowercase().contains(&needle) {
                             continue;
@@ -1060,6 +1063,7 @@ fn contents(app: &mut App, ui: &mut egui::Ui, grid_art: Option<Rect>) {
                 Loadable::Loading | Loadable::NotLoaded => loading = true,
                 Loadable::Failed(message) => error = Some(message.clone()),
             }
+            loading |= app.library.playlists_asked.is_some();
         }
         Filter::Albums => {
             for saved in &app.library.albums.items {
@@ -1197,7 +1201,31 @@ fn contents(app: &mut App, ui: &mut egui::Ui, grid_art: Option<Rect>) {
                 super::widgets::loading_row(ui, &palette, app.locale);
             }
             if let Some(error) = &error {
-                super::widgets::error_row(ui, app, error, None);
+                if filter == Filter::Playlists {
+                    let message = crate::bidi::layout(
+                        ui.painter(),
+                        error,
+                        theme::regular(13.0),
+                        palette.secondary,
+                        ui.available_width(),
+                        usize::MAX,
+                        None,
+                    );
+                    ui.add(egui::Label::new(message));
+                    if theme::soft_button(
+                        ui,
+                        &palette,
+                        Some(Icon::Refresh),
+                        &gettext(app.locale, "Retry"),
+                        false,
+                    )
+                    .clicked()
+                    {
+                        app.actions.push(Action::RetryPlaylists);
+                    }
+                } else {
+                    super::widgets::error_row(ui, app, error, None);
+                }
             }
             if entries.is_empty() && !loading && error.is_none() {
                 ui.add_space(12.0);
@@ -2108,6 +2136,79 @@ mod ordering_tests {
 
     fn uri(id: &str) -> String {
         format!("spotify:playlist:{id}")
+    }
+
+    #[test]
+    fn playlist_errors_offer_retry_without_hiding_loaded_rows() {
+        let mut app = app("playlist-retry");
+        for (show, grid) in [
+            ("playlists-error", false),
+            ("playlists-partial-error", false),
+            ("playlists-partial-error", true),
+        ] {
+            let ctx = egui::Context::default();
+            app.attach(&ctx);
+            crate::demo::populate(&mut app);
+            crate::demo::apply_flags(&mut app, None, Some(show));
+            app.settings.sidebar_grid = grid;
+            let mut output = ctx.run_ui(
+                egui::RawInput {
+                    screen_rect: Some(Rect::from_min_size(
+                        egui::Pos2::ZERO,
+                        Vec2::new(1280.0, 800.0),
+                    )),
+                    ..Default::default()
+                },
+                |ui| crate::ui::show(&mut app, ui),
+            );
+            output.textures_delta.clear();
+            let retry = output
+                .shapes
+                .iter()
+                .find_map(|shape| match &shape.shape {
+                    egui::Shape::Text(text) if text.galley.job.text == "Retry" => {
+                        Some(text.pos + text.galley.size() / 2.0)
+                    }
+                    _ => None,
+                })
+                .expect("playlist errors display Retry");
+            if show == "playlists-partial-error" {
+                assert_eq!(app.library.playlists.get().unwrap().len(), 3);
+            }
+            app.actions.clear();
+            let mut output = ctx.run_ui(
+                egui::RawInput {
+                    screen_rect: Some(Rect::from_min_size(
+                        egui::Pos2::ZERO,
+                        Vec2::new(1280.0, 800.0),
+                    )),
+                    events: vec![
+                        egui::Event::PointerMoved(retry),
+                        egui::Event::PointerButton {
+                            pos: retry,
+                            button: egui::PointerButton::Primary,
+                            pressed: true,
+                            modifiers: egui::Modifiers::NONE,
+                        },
+                        egui::Event::PointerButton {
+                            pos: retry,
+                            button: egui::PointerButton::Primary,
+                            pressed: false,
+                            modifiers: egui::Modifiers::NONE,
+                        },
+                    ],
+                    ..Default::default()
+                },
+                |ui| crate::ui::show(&mut app, ui),
+            );
+            output.textures_delta.clear();
+            assert!(
+                app.actions
+                    .iter()
+                    .any(|action| matches!(action, Action::RetryPlaylists))
+            );
+        }
+        app.backend.shutdown();
     }
 
     fn rows(app: &App) -> Vec<Entry> {
