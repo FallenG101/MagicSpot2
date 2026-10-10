@@ -18,7 +18,7 @@
 <figure><img id="shot" alt="Native MagicSpot demo comparison"><figcaption id="caption"></figcaption></figure>
 <p id="links"></p>
 <script>
-const data={"host": "Windows", "before": "8491cf3", "after": "500db5fb7697543f47e1972d786c72a517b007b2", "settle_ms": 5000, "cases": [{"key": "playlist", "label": "#722/#744/#745: playlist contributors and shuffle"}, {"key": "radio", "label": "#659: song radio"}], "source_tree": "8a884daaa6d2fcb2708a4a28b3b81aab3c63294a"};
+const data=[{"host": "Linux", "before": "8491cf3", "after": "97d955fc168a4f05504b834e9eec954264deb572", "settle_ms": 5000, "cases": [{"key": "default", "label": "#648: default title bar off"}, {"key": "right", "label": "#648: right buttons and lyrics"}, {"key": "left", "label": "#648: left buttons and queue"}, {"key": "appearance", "label": "#648: title-bar setting search"}, {"key": "playlist", "label": "#722/#744/#745: playlist contributors and shuffle"}, {"key": "radio", "label": "#659: song radio"}, {"key": "blend", "label": "#745: Blend contributor column and byline"}], "source_tree": "8a884daaa6d2fcb2708a4a28b3b81aab3c63294a", "path": "linux/"}, {"host": "Windows", "before": "8491cf3", "after": "500db5fb7697543f47e1972d786c72a517b007b2", "settle_ms": 5000, "cases": [{"key": "playlist", "label": "#722/#744/#745: playlist contributors and shuffle"}, {"key": "radio", "label": "#659: song radio"}], "source_tree": "8a884daaa6d2fcb2708a4a28b3b81aab3c63294a", "path": "windows/"}];
 const sources=Array.isArray(data)?data:[data]; let metadata=sources[0];
 let phase='after'; const get=id=>document.getElementById(id);
 for(const [i,item] of sources.entries()){let option=document.createElement('option');option.value=String(i);option.textContent=item.host;get('platform').append(option);}

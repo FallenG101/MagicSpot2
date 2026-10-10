@@ -1,0 +1,30 @@
+{
+  "version": "2.0.1",
+  "linux_visual_review": "passed",
+  "source_tree": "8a884daaa6d2fcb2708a4a28b3b81aab3c63294a",
+  "capture_sha": "97d955fc168a4f05504b834e9eec954264deb572",
+  "before_sha": "8491cf3",
+  "inspected_on": "2026-10-10",
+  "ci_run": "https://github.com/FallenG101/MagicSpot2/actions/runs/38085687912",
+  "captures_inspected": 56,
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "sizes": [
+    "1280x800",
+    "1024x768"
+  ],
+  "cases": [
+    "default",
+    "right",
+    "left",
+    "appearance",
+    "playlist",
+    "radio",
+    "blend"
+  ],
+  "environment": "Native Linux eframe under Xvfb and private D-Bus, isolated GNOME keyfile button layouts, identical demo-only review fixtures",
+  "findings": "Default-off layout retained. Left/right buttons leave clear navigation and lyrics/queue space. Setting and contributor labels fit. No adjustment required.",
+  "limitations": "Static layout inspection and deterministic tests; no physical desktop interaction or live Spotify account validation."
+}

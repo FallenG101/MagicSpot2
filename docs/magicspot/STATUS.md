@@ -5,7 +5,10 @@
 All 23 upstream commits through `dd2d5e3` are integrated on linear main. The
 local OLED, rapid-lyrics and playlist-retry improvements are preserved in focused
 commits. The optional Linux title bar is approved by the maintainer, subject to
-reviewing matching Linux light/dark and narrow/normal captures. Publication
+reviewing matching Linux light/dark and narrow/normal captures. Those 56 Linux
+captures and sixteen Windows captures have now been inspected; the
+[comparison index](upstream-review/index.html) and [scope ledger](TRIAGE.md)
+record the evidence and approval separately from automated gates. Publication
 requires the recalculated MagicSpot Nix vendor hash, all twelve exact-main CI
 jobs, verified Windows x64 EXE and universal DMG, and written release notes.
 See the [October sync record](upstream-sync-2026-10.md) for provenance and validation.

@@ -81,7 +81,7 @@ MSVC/Ninja and libclang. On the 2.0.1 source, all-feature tests passed with
 Default-feature tests passed with 986 library tests (two ignored), twelve binary
 tests and every other target. Clippy passed for both configurations; all-feature
 doctests and warning-free Rustdoc passed. Formatting, four release-name tests,
-four Flatpak metadata tests, five package-verifier tests, five exact-commit CI
+four Flatpak metadata tests, five package-verifier tests, six exact-commit CI
 gate tests and three drift tests also passed.
 
 The first candidate CI run, [38083199342](https://github.com/FallenG101/MagicSpot2/actions/runs/38083199342),
@@ -97,6 +97,29 @@ after applying the reviewed hunks. Neither failed run could publish.
 
 [Native Windows evidence](upstream-review/windows/index.html) has sixteen
 matching light/dark, narrow/normal playlist and radio captures, all inspected.
-Linux/macOS/Windows ARM CI, native Linux evidence and final Nix verification
-remain pending. No live Spotify account sign-in, playback or Connect validation
-has been performed; automated and deterministic demo checks do not establish it.
+[Native Linux evidence](upstream-review/linux/index.html) has 56 matching
+captures from `97d955fc168a4f05504b834e9eec954264deb572`, all inspected on
+October 10. Default-off layout, both window-button placements, lyrics/queue
+space, the setting, playlist/radio and Blend contributors fit in both themes
+at both sizes. The [combined comparison](upstream-review/index.html) links each
+case and platform. The matching application source tree is recorded in
+`upstream-review/linux/REVIEW.json` and is checked by publication.
+
+[CI 38083468357](https://github.com/FallenG101/MagicSpot2/actions/runs/38083468357)
+passed all ten platform/build/docs/Nix jobs on `5c4928f`, including native ARM
+tests, credential-store round trips, standalone Windows runtime checks and
+universal DMG verification. Its two new checks exposed stale translation
+references and a missing Linux capture runtime library, both corrected in
+subsequent focused commits. The current
+[CI 38085687912](https://github.com/FallenG101/MagicSpot2/actions/runs/38085687912)
+has passed quality, docs, Linux/macOS tests, Linux/macOS release/demo builds,
+universal DMG verification and the complete Nix package build with MagicSpot's
+recalculated hash. Its Windows and cache-finalization jobs are still finishing
+at the time of this record. The downloaded Windows EXE and universal DMG also
+pass the combined package verifier. They are candidate artifacts, not published
+downloads.
+
+The final evidence commit must pass all twelve jobs again on current main
+before publication. No live Spotify account sign-in, playback or Connect
+validation has been performed; automated and deterministic demo checks do not
+establish it.
